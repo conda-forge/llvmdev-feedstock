@@ -23,7 +23,7 @@ source:
     - llvm-lto-static.patch  # [win]
 
 build:
-  number: 0
+  number: 1
   skip: true  # [(unix and py3k) or (win and py<35)]
   features:   # [win and py35]
     - vc14    # [win and py35]
@@ -49,7 +49,7 @@ test:
     - $PREFIX/bin/llvm-config --libs                         # [not win]
     - $PREFIX/bin/llc -version                               # [not win]
 
-    - if not exist %LIBRARY_INC%\\include\\llvm\\Pass.h exit 1     # [win]
+    - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1     # [win]
 
     - test -f $PREFIX/include/llvm/Pass.h                    # [unix]
     - test -f $PREFIX/lib/libLLVMCore.a                      # [not win]
