@@ -54,6 +54,7 @@ test:
 
 about:
   home: http://llvm.org/
+  dev_url: https://github.com/llvm-mirror/llvm
   license: NCSA
   license_file: LICENSE.TXT
   summary: Development headers and libraries for LLVM
