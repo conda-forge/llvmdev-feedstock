@@ -41,14 +41,6 @@ conda clean --lock
 conda install --yes --quiet conda-forge-build-setup
 source run_conda_forge_build_setup
 
-
-# Install the yum requirements defined canonically in the
-# "recipe/yum_requirements.txt" file. After updating that file,
-# run "conda smithy rerender" and this line be updated
-# automatically.
-yum install -y oprofile-devel
-
-
 # Embarking on 1 case(s).
     set -x
     export CONDA_PY=27

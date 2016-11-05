@@ -1,8 +1,8 @@
 # (Mostly) blatant copy of https://github.com/numba/llvmlite/tree/master/conda-recipes/llvmdev
 
-{% set shortversion = "3.8" %}
-{% set version = "3.8.1" %}
-{% set sha256 = "6e82ce4adb54ff3afc18053d6981b6aed1406751b8742582ed50f04b5ab475f9" %}
+{% set shortversion = "3.9" %}
+{% set version = "3.9.0" %}
+{% set sha256 = "66c73179da42cee1386371641241f79ded250e117a79f571bbd69e56daa48948" %}
 
 package:
   name: llvmdev
@@ -15,8 +15,6 @@ source:
   patches:
     # https://llvm.org/bugs/show_bug.cgi?id=15356
     - llvm-elf-relocation.patch
-    # https://llvm.org/bugs/show_bug.cgi?id=25788
-    - llvm-parse-fp-constants.patch
     # https://llvm.org/bugs/show_bug.cgi?id=25565
     - llvm-build-race-condition.patch
     # http://lists.llvm.org/pipermail/llvm-dev/2016-January/094520.html
@@ -56,6 +54,7 @@ test:
 
 about:
   home: http://llvm.org/
+  dev_url: https://github.com/llvm-mirror/llvm
   license: NCSA
   license_file: LICENSE.TXT
   summary: Development headers and libraries for LLVM
