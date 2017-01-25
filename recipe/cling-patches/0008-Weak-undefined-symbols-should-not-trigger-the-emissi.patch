@@ -1,0 +1,29 @@
+From 4a1debcb0371ce81ad52f15c669b59dfeb53c9f6 Mon Sep 17 00:00:00 2001
+From: Axel Naumann <Axel.Naumann@cern.ch>
+Date: Wed, 18 May 2016 16:15:36 +0200
+Subject: [PATCH 08/10] Weak undefined symbols should not trigger the emission
+ of a weak symbol.
+
+---
+ lib/ExecutionEngine/RuntimeDyld/RuntimeDyld.cpp | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/lib/ExecutionEngine/RuntimeDyld/RuntimeDyld.cpp b/lib/ExecutionEngine/RuntimeDyld/RuntimeDyld.cpp
+index 44d0b27..874b798 100644
+--- a/lib/ExecutionEngine/RuntimeDyld/RuntimeDyld.cpp
++++ b/lib/ExecutionEngine/RuntimeDyld/RuntimeDyld.cpp
+@@ -210,7 +210,10 @@ RuntimeDyldImpl::loadObjectImpl(const object::ObjectFile &Obj) {
+ 
+     if (Flags & SymbolRef::SF_Common)
+       CommonSymbols.push_back(*I);
+-    else if (Flags & SymbolRef::SF_Weak) {
++    else if ((Flags & SymbolRef::SF_Weak)
++             && !(Flags & SymbolRef::SF_Undefined)) {
++      // Weak *undefined* symbols are not in any section.
++      // Treat them as ordinary symbols below.
+       ErrorOr<section_iterator> SIOrErr = I->getSection();
+       Check(SIOrErr.getError());
+       section_iterator SI = *SIOrErr;
+-- 
+2.7.4
+

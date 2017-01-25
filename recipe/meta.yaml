@@ -4,6 +4,8 @@
 {% set version = "3.9.1" %}
 {% set sha256 = "1fd90354b9cf19232e8f168faf2220e79be555df3aa743242700879e8fd329ee" %}
 
+{% set llvm_variant = os.environ.get('LLVM_VARIANT', 'default') %}
+
 package:
   name: llvmdev
   version: {{ version }}
@@ -19,12 +21,35 @@ source:
     - llvm-build-race-condition.patch
     # http://lists.llvm.org/pipermail/llvm-dev/2016-January/094520.html
     - llvm-lto-static.patch  # [win]
+{% if llvm_variant == "cling" %}
+    - cling-patches/0001-Add-interface-to-create-DyLib-from-dlopen-handle.patch
+    - cling-patches/0002-Add-cling-as-tool-to-be-built.patch
+    - cling-patches/0003-Do-NOT-remove-original-functions-after-inlining-them.patch
+    - cling-patches/0004-From-Lang-Hames-first-step-towards-RuntimeDyld-resol.patch
+    - cling-patches/0005-Weak-symbols-can-be-functions-too.patch
+    - cling-patches/0006-Update-DEBUG-to-current-llvm-API.patch
+    - cling-patches/0007-Mark-weak-symbols-weak-apparently-NFC.patch
+    - cling-patches/0008-Weak-undefined-symbols-should-not-trigger-the-emissi.patch
+    - cling-patches/0009-Adapt-to-llvm-r272382.patch
+    - cling-patches/0010-Enable-unicode-output-on-terminals.patch
+{% endif %}
 
 build:
-  number: 0
-  skip: true  # [(unix and py3k) or (win and py<35)]
-  features:   # [win and py35]
-    - vc14    # [win and py35]
+  number: 1
+  string: {{ llvm_variant }}
+
+{% if llvm_variant == "cling" %}
+  features:
+    - cling
+    - vc14    # [win and py36]
+  track_features:
+    - clingllvm
+{% endif %}
+
+{% if llvm_variant == "default" %}
+  features:   # [win and py36]
+    - vc14    # [win and py36]
+{% endif %}
 
 requirements:
   build:
@@ -36,8 +61,14 @@ requirements:
     # Needed to build LLVM
     - python
     - system  # [linux and not armv7l]
+{% if llvm_variant == "cling" %}
+    - cling-patches
+{% endif %}
   run:
     - system  # [linux and not armv7l]
+{% if llvm_variant == "cling" %}
+    - cling-patches
+{% endif %}
 
 test:
   requires:                                                  # [win]

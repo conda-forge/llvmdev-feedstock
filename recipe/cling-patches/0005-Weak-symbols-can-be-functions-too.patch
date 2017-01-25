@@ -1,0 +1,24 @@
+From 18a7e0d0f2ed28454a07c22ded74fa6df1cfd184 Mon Sep 17 00:00:00 2001
+From: Axel Naumann <Axel.Naumann@cern.ch>
+Date: Wed, 4 May 2016 11:08:57 +0200
+Subject: [PATCH 05/10] Weak symbols can be functions, too.
+
+---
+ lib/ExecutionEngine/RuntimeDyld/RuntimeDyldELF.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/ExecutionEngine/RuntimeDyld/RuntimeDyldELF.cpp b/lib/ExecutionEngine/RuntimeDyld/RuntimeDyldELF.cpp
+index 8065fa3..f2a46b8 100644
+--- a/lib/ExecutionEngine/RuntimeDyld/RuntimeDyldELF.cpp
++++ b/lib/ExecutionEngine/RuntimeDyld/RuntimeDyldELF.cpp
+@@ -1257,6 +1257,7 @@ RuntimeDyldELF::processRelocationRef(
+       Value.Addend = Addend;
+       break;
+     }
++    case SymbolRef::ST_Function:
+     case SymbolRef::ST_Data:
+     case SymbolRef::ST_Unknown: {
+       Value.SymbolName = TargetName.data();
+-- 
+2.7.4
+
