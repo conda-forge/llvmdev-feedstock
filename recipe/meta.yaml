@@ -1,8 +1,8 @@
 # (Mostly) blatant copy of https://github.com/numba/llvmlite/tree/master/conda-recipes/llvmdev
 
 {% set shortversion = "3.9" %}
-{% set version = "3.9.0" %}
-{% set sha256 = "66c73179da42cee1386371641241f79ded250e117a79f571bbd69e56daa48948" %}
+{% set version = "3.9.1" %}
+{% set sha256 = "1fd90354b9cf19232e8f168faf2220e79be555df3aa743242700879e8fd329ee" %}
 
 package:
   name: llvmdev
@@ -21,7 +21,7 @@ source:
     - llvm-lto-static.patch  # [win]
 
 build:
-  number: 2
+  number: 0
   skip: true  # [(unix and py3k) or (win and py<35)]
   features:   # [win and py35]
     - vc14    # [win and py35]
