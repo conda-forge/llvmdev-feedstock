@@ -1,10 +1,7 @@
-if "%ARCH%" == "32" (set PLATFORM=x86) else (set PLATFORM=x64)
-call "%VS120COMNTOOLS%\..\..\VC\vcvarsall.bat" %PLATFORM%
-
 mkdir build
 cd build
 
-cmake -G "NMake Makefiles" ^
+cmake -G "%CMAKE_GENERATOR%" ^
     -DCMAKE_BUILD_TYPE="Release" ^
     -DCMAKE_PREFIX_PATH=%LIBRARY_PREFIX% ^
     -DCMAKE_INSTALL_PREFIX:PATH=%LIBRARY_PREFIX% ^
@@ -17,8 +14,8 @@ cmake -G "NMake Makefiles" ^
 
 if errorlevel 1 exit 1
 
-nmake
+cmake --build . --config "%BUILD_CONFIG%"
 if errorlevel 1 exit 1
 
-nmake install
+cmake --build . --config "%BUILD_CONFIG%" --target install
 if errorlevel 1 exit 1
