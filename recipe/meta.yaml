@@ -35,21 +35,22 @@ source:
 {% endif %}
 
 build:
-  number: 1
+  number: 2
   string: {{ llvm_variant }}
 
 {% if llvm_variant == "cling" %}
   features:
     - cling
     - vc14    # [win and py36]
-  track_features:
-    - clingllvm
 {% endif %}
 
 {% if llvm_variant == "default" %}
   features:   # [win and py36]
     - vc14    # [win and py36]
 {% endif %}
+
+  track_features:
+    - llvm{{ llvm_variant }}
 
 requirements:
   build:
