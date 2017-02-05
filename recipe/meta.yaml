@@ -5,6 +5,8 @@
 {% set sha256 = "1fd90354b9cf19232e8f168faf2220e79be555df3aa743242700879e8fd329ee" %}
 
 {% set llvm_variant = os.environ.get('LLVM_VARIANT', 'default') %}
+{% set build_number = "2" %}
+{% set build_string = "{}_{}".format(llvm_variant, build_number) %}
 
 package:
   name: llvmdev
@@ -35,8 +37,8 @@ source:
 {% endif %}
 
 build:
-  number: 2
-  string: {{ llvm_variant }}
+  number: {{ build_number }}
+  string: {{ build_string }}
 
 {% if llvm_variant == "cling" %}
   features:
