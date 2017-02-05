@@ -1,5 +1,3 @@
-# (Mostly) blatant copy of https://github.com/numba/llvmlite/tree/master/conda-recipes/llvmdev
-
 {% set shortversion = "3.9" %}
 {% set version = "3.9.1" %}
 {% set sha256 = "1fd90354b9cf19232e8f168faf2220e79be555df3aa743242700879e8fd329ee" %}
