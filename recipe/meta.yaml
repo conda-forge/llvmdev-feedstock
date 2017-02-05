@@ -37,6 +37,7 @@ source:
 build:
   number: {{ build_number }}
   string: {{ build_string }}
+  skip:  true  # [py<36]
 
 {% if llvm_variant == "cling" %}
   features:

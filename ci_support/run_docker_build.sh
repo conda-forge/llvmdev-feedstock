@@ -44,14 +44,14 @@ source run_conda_forge_build_setup
 # Embarking on 2 case(s).
     set -x
     export LLVM_VARIANT=cling
-    export CONDA_PY=27
+    export CONDA_PY=36
     set +x
     conda build /recipe_root --quiet || exit 1
     upload_or_check_non_existence /recipe_root conda-forge --channel=main || exit 1
 
     set -x
     export LLVM_VARIANT=default
-    export CONDA_PY=27
+    export CONDA_PY=36
     set +x
     conda build /recipe_root --quiet || exit 1
     upload_or_check_non_existence /recipe_root conda-forge --channel=main || exit 1
