@@ -12,7 +12,7 @@ cmake -G "NMake Makefiles" ^
     -DLLVM_INCLUDE_UTILS=OFF ^
     -DLLVM_INCLUDE_DOCS=OFF ^
     -DLLVM_ENABLE_RTTI=ON ^
-    -DLLVM_INCLUDE_EXAMPLES=OFF
+    -DLLVM_INCLUDE_EXAMPLES=OFF ^
     %SRC_DIR%
 
 if errorlevel 1 exit 1

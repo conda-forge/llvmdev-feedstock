@@ -39,16 +39,8 @@ build:
   string: {{ build_string }}
   skip:  true  # [py<36]
 
-{% if llvm_variant == "cling" %}
-  features:
-    - cling
-    - vc14    # [win and py36]
-{% endif %}
-
-{% if llvm_variant == "default" %}
   features:   # [win and py36]
     - vc14    # [win and py36]
-{% endif %}
 
   track_features:
     - llvm{{ llvm_variant }}
@@ -63,14 +55,8 @@ requirements:
     # Needed to build LLVM
     - python
     - system  # [linux and not armv7l]
-{% if llvm_variant == "cling" %}
-    - cling-patches
-{% endif %}
   run:
     - system  # [linux and not armv7l]
-{% if llvm_variant == "cling" %}
-    - cling-patches
-{% endif %}
 
 test:
   requires:                                                  # [win]
@@ -80,7 +66,7 @@ test:
     - $PREFIX/bin/llvm-config --libs                         # [not win]
     - $PREFIX/bin/llc -version                               # [not win]
 
-    - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1     # [win]
+    - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1        # [win]
 
     - test -f $PREFIX/include/llvm/Pass.h                    # [unix]
     - test -f $PREFIX/lib/libLLVMCore.a                      # [not win]
