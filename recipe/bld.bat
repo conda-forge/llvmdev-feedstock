@@ -1,6 +1,3 @@
-if "%ARCH%" == "32" (set PLATFORM=x86) else (set PLATFORM=x64)
-call "%VS120COMNTOOLS%\..\..\VC\vcvarsall.bat" %PLATFORM%
-
 mkdir build
 cd build
 
