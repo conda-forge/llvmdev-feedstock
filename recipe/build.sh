@@ -1,7 +1,3 @@
-# Note you may need to enable RH devtoolset-2 if building on an
-# old RH or CentOS system
-
-# Use CMake-based build procedure
 mkdir build
 cd build
 
@@ -16,5 +12,5 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DLLVM_ENABLE_TERMINFO=OFF \
       ..
 
-make -j 8
+make -j${CPU_COUNT}
 make install
