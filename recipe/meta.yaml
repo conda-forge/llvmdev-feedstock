@@ -3,7 +3,7 @@
 {% set sha256 = "1fd90354b9cf19232e8f168faf2220e79be555df3aa743242700879e8fd329ee" %}
 
 {% set llvm_variant = os.environ.get('LLVM_VARIANT', 'default') %}
-{% set build_number = "2" %}
+{% set build_number = "3" %}
 {% set build_string = "{}_{}".format(llvm_variant, build_number) %}
 
 package:
@@ -57,6 +57,7 @@ requirements:
     - system  # [linux and not armv7l]
   run:
     - system  # [linux and not armv7l]
+    - vs2015_runtime  # [win and py36]
 
 test:
   requires:                                                  # [win]
