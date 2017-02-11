@@ -3,8 +3,7 @@
 {% set sha256 = "1fd90354b9cf19232e8f168faf2220e79be555df3aa743242700879e8fd329ee" %}
 
 {% set llvm_variant = os.environ.get('LLVM_VARIANT', 'default') %}
-{% set build_number = "2" %}
-{% set build_string = "{}_{}".format(llvm_variant, build_number) %}
+{% set build_number = "3" %}
 
 package:
   name: llvmdev
@@ -36,11 +35,11 @@ source:
 
 build:
   number: {{ build_number }}
-  string: {{ build_string }}
+  string: {{ llvm_variant }}_{{ build_number }}
   skip:  true  # [py<36]
 
-  features:   # [win and py36]
-    - vc14    # [win and py36]
+  features:    # [win and py36]
+    - vc14     # [win and py36]
 
   track_features:
     - llvm{{ llvm_variant }}
@@ -52,11 +51,19 @@ requirements:
     # Needed to unpack the source tarball
     - m2-xz  # [py27 and win32]
     - m2w64-xz  # [py27 and win64]
+    - ninja  # [win]
     # Needed to build LLVM
     - python
     - system  # [linux and not armv7l]
+{% if llvm_variant == "cling" %}		
+    - cling-patches		
+{% endif %}
   run:
     - system  # [linux and not armv7l]
+    - vs2015_runtime  # [win]
+{% if llvm_variant == "cling" %}		
+    - cling-patches		
+{% endif %}
 
 test:
   requires:                                                  # [win]
