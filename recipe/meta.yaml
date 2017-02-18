@@ -36,7 +36,6 @@ source:
 build:
   number: {{ build_number }}
   string: {{ llvm_variant }}_{{ build_number }}
-  skip:  true  # [py<36]
 
   features:    # [win and py36]
     - vc14     # [win and py36]
@@ -49,18 +48,20 @@ requirements:
     - toolchain
     - cmake
     # Needed to unpack the source tarball
-    - m2-xz  # [py27 and win32]
-    - m2w64-xz  # [py27 and win64]
-    - ninja  # [win]
+    - m2-xz           # [py27 and win32]
+    - m2w64-xz        # [py27 and win64]
+    - ninja           # [win]
     # Needed to build LLVM
     - python
-    - system  # [linux and not armv7l]
+    - system          # [linux and not armv7l]
+    - libcxx          # [not win]
 {% if llvm_variant == "cling" %}		
     - cling-patches		
 {% endif %}
   run:
-    - system  # [linux and not armv7l]
+    - system          # [linux and not armv7l]
     - vs2015_runtime  # [win]
+    - libcxx          # [not win]
 {% if llvm_variant == "cling" %}		
     - cling-patches		
 {% endif %}
