@@ -3,7 +3,7 @@
 {% set sha256 = "1fd90354b9cf19232e8f168faf2220e79be555df3aa743242700879e8fd329ee" %}
 
 {% set llvm_variant = os.environ.get('LLVM_VARIANT', 'default') %}
-{% set build_number = "3" %}
+{% set build_number = "4" %}
 
 package:
   name: llvmdev
@@ -38,11 +38,14 @@ build:
   string: {{ llvm_variant }}_{{ build_number }}
   skip:  true  # [py<36]
 
+{% if llvm_variant == "cling" %}
+  features:
+    - cling
+    - vc14     # [win and py36]
+{% else %}
   features:    # [win and py36]
     - vc14     # [win and py36]
-
-  track_features:
-    - llvm{{ llvm_variant }}
+{% endif %}
 
 requirements:
   build:
@@ -55,19 +58,19 @@ requirements:
     # Needed to build LLVM
     - python
     - system  # [linux and not armv7l]
-{% if llvm_variant == "cling" %}		
-    - cling-patches		
-{% endif %}
   run:
     - system  # [linux and not armv7l]
     - vs2015_runtime  # [win]
-{% if llvm_variant == "cling" %}		
-    - cling-patches		
-{% endif %}
 
 test:
+{% if llvm_variant == "cling" %}
+  requires:
+    - cling-patches
+    - python {{ environ['PY_VER'] + '*' }}                   # [win]
+{% else %}
   requires:                                                  # [win]
     - python {{ environ['PY_VER'] + '*' }}                   # [win]
+{% endif %}
 
   commands:
     - $PREFIX/bin/llvm-config --libs                         # [not win]
