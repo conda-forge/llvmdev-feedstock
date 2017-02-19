@@ -3,7 +3,7 @@
 {% set sha256 = "1fd90354b9cf19232e8f168faf2220e79be555df3aa743242700879e8fd329ee" %}
 
 {% set llvm_variant = os.environ.get('LLVM_VARIANT', 'default') %}
-{% set build_number = "1" %}
+{% set build_number = "4" %}
 
 package:
   name: llvmdev
