@@ -6,6 +6,10 @@ checkout:
 machine:
   services:
     - docker
+  environment:
+    # It's possible that CircleCI set CC/CXX, in which case we're clobbering them.
+    CC: ccache cc
+    CXX: ccache c++
 
 dependencies:
   # Note, we used to use the naive caching of docker images, but found that it was quicker
