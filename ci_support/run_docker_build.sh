@@ -48,6 +48,8 @@ conda install --yes --quiet ccache
     set -x
     export LLVM_VARIANT=cling
     export CONDA_PY=36
+    export CC="ccache cc"
+    export CXX="ccache c++"
     set +x
     conda build /recipe_root --quiet || exit 1
     upload_or_check_non_existence /recipe_root conda-forge --channel=main || exit 1
