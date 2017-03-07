@@ -6,6 +6,8 @@ language: generic
 os: osx
 osx_image: xcode6.4
 
+cache: ccache
+
 env:
   matrix:
     

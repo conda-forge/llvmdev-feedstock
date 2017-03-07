@@ -2,6 +2,7 @@ checkout:
   post:
     - ./ci_support/checkout_merge_commit.sh
 
+
 machine:
   services:
     - docker
@@ -11,6 +12,8 @@ dependencies:
   # just to pull each time. #rollondockercaching
   override:
     - docker pull condaforge/linux-anvil
+  cache_directories:
+    - "~/.ccache"
 
 test:
   override:
