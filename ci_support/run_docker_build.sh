@@ -41,6 +41,9 @@ conda clean --lock
 conda install --yes --quiet conda-forge-build-setup
 source run_conda_forge_build_setup
 
+# Install ccache
+conda install --yes --quiet ccache
+
 # Embarking on 2 case(s).
     set -x
     export LLVM_VARIANT=cling
