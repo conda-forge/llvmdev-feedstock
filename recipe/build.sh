@@ -11,5 +11,6 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DLLVM_ENABLE_TERMINFO=OFF \
       ..
 
+echo "Building -j${CPU_COUNT}"
 make -j${CPU_COUNT}
 make install
