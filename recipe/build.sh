@@ -20,6 +20,7 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DLLVM_ENABLE_TERMINFO=OFF \
       ..
 
-echo "Building -j3" # TODO: test hack
+export CPU_COUNT=3
+echo "Building -j${CPU_COUNT}" # TODO: test hack
 make -j${CPU_COUNT}
 make install
