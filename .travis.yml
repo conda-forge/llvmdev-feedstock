@@ -55,6 +55,6 @@ install:
       source run_conda_forge_build_setup
 
 script:
-  - conda build ./recipe
+  - travis_wait conda build ./recipe
 
   - upload_or_check_non_existence ./recipe conda-forge --channel=main
