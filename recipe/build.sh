@@ -22,5 +22,10 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
 
 export CPU_COUNT=3
 echo "Building -j${CPU_COUNT}" # TODO: test hack
+date
 make -j${CPU_COUNT}
+date
+echo "Build done"
 make install
+date
+echo "Install done"
