@@ -1,8 +1,8 @@
-From f1451066d61fcfa88513e4f66b3a60d363ab8518 Mon Sep 17 00:00:00 2001
+From 87b9ad8bac0594a3aaf5f6ee4c46d61d3fdfa210 Mon Sep 17 00:00:00 2001
 From: Axel Naumann <Axel.Naumann@cern.ch>
 Date: Wed, 4 May 2016 11:01:25 +0200
-Subject: [PATCH 04/10] From Lang Hames: first step towards RuntimeDyld
- resolving weak symbols.
+Subject: [PATCH 4/9] From Lang Hames: first step towards RuntimeDyld resolving
+ weak symbols.
 
 ---
  lib/ExecutionEngine/MCJIT/MCJIT.cpp               |  5 +-
@@ -12,10 +12,10 @@ Subject: [PATCH 04/10] From Lang Hames: first step towards RuntimeDyld
  4 files changed, 75 insertions(+), 5 deletions(-)
 
 diff --git a/lib/ExecutionEngine/MCJIT/MCJIT.cpp b/lib/ExecutionEngine/MCJIT/MCJIT.cpp
-index 30f18db..186451f 100644
+index ff8749f..6924131 100644
 --- a/lib/ExecutionEngine/MCJIT/MCJIT.cpp
 +++ b/lib/ExecutionEngine/MCJIT/MCJIT.cpp
-@@ -203,6 +203,9 @@ void MCJIT::generateCodeForModule(Module *M) {
+@@ -201,6 +201,9 @@ void MCJIT::generateCodeForModule(Module *M) {
  
    // If the cache did not contain a suitable object, compile the object
    if (!ObjectToLoad) {
@@ -25,7 +25,7 @@ index 30f18db..186451f 100644
      ObjectToLoad = emitObject(M);
      assert(ObjectToLoad && "Compilation did not produce an object.");
    }
-@@ -228,8 +231,6 @@ void MCJIT::generateCodeForModule(Module *M) {
+@@ -226,8 +229,6 @@ void MCJIT::generateCodeForModule(Module *M) {
  
    Buffers.push_back(std::move(ObjectToLoad));
    LoadedObjects.push_back(std::move(*LoadedObject));
@@ -35,24 +35,23 @@ index 30f18db..186451f 100644
  
  void MCJIT::finalizeLoadedModules() {
 diff --git a/lib/ExecutionEngine/MCJIT/MCJIT.h b/lib/ExecutionEngine/MCJIT/MCJIT.h
-index e25f76c..dd5b4de 100644
+index daf578f..6ff60a1 100644
 --- a/lib/ExecutionEngine/MCJIT/MCJIT.h
 +++ b/lib/ExecutionEngine/MCJIT/MCJIT.h
-@@ -34,10 +34,10 @@ public:
+@@ -34,9 +34,9 @@ public:
  
-   RuntimeDyld::SymbolInfo findSymbol(const std::string &Name) override;
+   JITSymbol findSymbol(const std::string &Name) override;
  
 -  // MCJIT doesn't support logical dylibs.
 +  // Defer to the client resolver for lookup in logical dylibs.
-   RuntimeDyld::SymbolInfo
-   findSymbolInLogicalDylib(const std::string &Name) override {
+   JITSymbol findSymbolInLogicalDylib(const std::string &Name) override {
 -    return nullptr;
 +    return ClientResolver->findSymbolInLogicalDylib(Name);
    }
  
  private:
 diff --git a/lib/ExecutionEngine/RuntimeDyld/RuntimeDyld.cpp b/lib/ExecutionEngine/RuntimeDyld/RuntimeDyld.cpp
-index 60479d4..4397a7b 100644
+index 63b56f7..1fbdc57 100644
 --- a/lib/ExecutionEngine/RuntimeDyld/RuntimeDyld.cpp
 +++ b/lib/ExecutionEngine/RuntimeDyld/RuntimeDyld.cpp
 @@ -199,6 +199,9 @@ RuntimeDyldImpl::loadObjectImpl(const object::ObjectFile &Obj) {
@@ -65,7 +64,7 @@ index 60479d4..4397a7b 100644
    // Parse symbols
    DEBUG(dbgs() << "Parse symbols:\n");
    for (symbol_iterator I = Obj.symbol_begin(), E = Obj.symbol_end(); I != E;
-@@ -207,7 +210,13 @@ RuntimeDyldImpl::loadObjectImpl(const object::ObjectFile &Obj) {
+@@ -211,7 +214,13 @@ RuntimeDyldImpl::loadObjectImpl(const object::ObjectFile &Obj) {
  
      if (Flags & SymbolRef::SF_Common)
        CommonSymbols.push_back(*I);
@@ -80,7 +79,7 @@ index 60479d4..4397a7b 100644
  
        // Get the symbol type.
        object::SymbolRef::Type SymType;
-@@ -283,6 +292,9 @@ RuntimeDyldImpl::loadObjectImpl(const object::ObjectFile &Obj) {
+@@ -301,6 +310,9 @@ RuntimeDyldImpl::loadObjectImpl(const object::ObjectFile &Obj) {
      }
    }
  
@@ -90,7 +89,7 @@ index 60479d4..4397a7b 100644
    // Allocate common symbols
    if (auto Err = emitCommonSymbols(Obj, CommonSymbols))
      return std::move(Err);
-@@ -565,6 +577,54 @@ void RuntimeDyldImpl::writeBytesUnaligned(uint64_t Value, uint8_t *Dst,
+@@ -583,6 +595,54 @@ void RuntimeDyldImpl::writeBytesUnaligned(uint64_t Value, uint8_t *Dst,
    }
  }
  
@@ -146,10 +145,10 @@ index 60479d4..4397a7b 100644
                                           CommonSymbolList &CommonSymbols) {
    if (CommonSymbols.empty())
 diff --git a/lib/ExecutionEngine/RuntimeDyld/RuntimeDyldImpl.h b/lib/ExecutionEngine/RuntimeDyld/RuntimeDyldImpl.h
-index 76bd3fc..64ac4d3 100644
+index 279d0de..8b06147 100644
 --- a/lib/ExecutionEngine/RuntimeDyld/RuntimeDyldImpl.h
 +++ b/lib/ExecutionEngine/RuntimeDyld/RuntimeDyldImpl.h
-@@ -250,6 +250,10 @@ protected:
+@@ -268,6 +268,10 @@ protected:
    // Keep a map of common symbols to their info pairs
    typedef std::vector<SymbolRef> CommonSymbolList;
  
@@ -160,7 +159,7 @@ index 76bd3fc..64ac4d3 100644
    // For each symbol, keep a list of relocations based on it. Anytime
    // its address is reassigned (the JIT re-compiled the function, e.g.),
    // the relocations get re-resolved.
-@@ -345,6 +349,11 @@ protected:
+@@ -365,6 +369,11 @@ protected:
    /// Dst.
    void writeBytesUnaligned(uint64_t Value, uint8_t *Dst, unsigned Size) const;
  
@@ -173,5 +172,5 @@ index 76bd3fc..64ac4d3 100644
    /// new section for them and update the symbol mappings in the object and
    /// symbol table.
 -- 
-2.7.4
+2.6.0
 

@@ -1,0 +1,34 @@
+From 60e69c8e3a85dcd1c5343b3f1152068f472a7177 Mon Sep 17 00:00:00 2001
+From: Axel Naumann <Axel.Naumann@cern.ch>
+Date: Wed, 4 May 2016 11:40:00 +0200
+Subject: [PATCH 5/9] Update DEBUG to current llvm API.
+
+---
+ lib/ExecutionEngine/RuntimeDyld/RuntimeDyld.cpp | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/lib/ExecutionEngine/RuntimeDyld/RuntimeDyld.cpp b/lib/ExecutionEngine/RuntimeDyld/RuntimeDyld.cpp
+index 1fbdc57..06f9d51 100644
+--- a/lib/ExecutionEngine/RuntimeDyld/RuntimeDyld.cpp
++++ b/lib/ExecutionEngine/RuntimeDyld/RuntimeDyld.cpp
+@@ -631,11 +631,12 @@ void RuntimeDyldImpl::emitWeakSymbols(const ObjectFile &Obj,
+     unsigned SectionID = findOrEmitSection(Obj, *SI, IsCode, LocalSections);
+ 
+     DEBUG(
+-      object::SymbolRef::Type SymType = Sym.getType();
+-      dbgs() << "\tWeak symbol: Type: " << SymType << " Name: " << Name
+-             << " SID: " << SectionID << " Offset: "
+-             << format("%p", (uintptr_t)SectOffset)
+-             << " flags: " << Flags << "\n"
++          ErrorOr<object::SymbolRef::Type> SymTypeOrErr = Sym.getType();
++          object::SymbolRef::Type SymType = *SymTypeOrErr;
++          dbgs() << "\tType: " << SymType << " (absolute) Name: " << Name
++                 << " SID: " << SectionID << " Offset: "
++                 << format("%p", (uintptr_t)SectOffset)
++                 << " flags: " << Flags << "\n"
+     );
+     GlobalSymbolTable[Name] =
+       SymbolTableEntry(SectionID, SectOffset, RTDyldSymFlags);
+-- 
+2.6.0
+

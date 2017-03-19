@@ -1,9 +1,9 @@
-{% set shortversion = "3.9" %}
-{% set version = "3.9.1" %}
-{% set sha256 = "1fd90354b9cf19232e8f168faf2220e79be555df3aa743242700879e8fd329ee" %}
+{% set shortversion = "4.0" %}
+{% set version = "4.0.0" %}
+{% set sha256 = "8d10511df96e73b8ff9e7abbfb4d4d432edbdbe965f1f4f07afaf370b8a533be" %}
 
 {% set llvm_variant = os.environ.get('LLVM_VARIANT', 'default') %}
-{% set build_number = "4" %}
+{% set build_number = "0" %}
 
 package:
   name: llvmdev
@@ -16,21 +16,16 @@ source:
   patches:
     # https://llvm.org/bugs/show_bug.cgi?id=15356
     - llvm-elf-relocation.patch
-    # https://llvm.org/bugs/show_bug.cgi?id=25565
-    - llvm-build-race-condition.patch
-    # http://lists.llvm.org/pipermail/llvm-dev/2016-January/094520.html
-    - llvm-lto-static.patch  # [win]
 {% if llvm_variant == "cling" %}
     - cling-patches/0001-Add-interface-to-create-DyLib-from-dlopen-handle.patch
     - cling-patches/0002-Add-cling-as-tool-to-be-built.patch
     - cling-patches/0003-Do-NOT-remove-original-functions-after-inlining-them.patch
     - cling-patches/0004-From-Lang-Hames-first-step-towards-RuntimeDyld-resol.patch
-    - cling-patches/0005-Weak-symbols-can-be-functions-too.patch
-    - cling-patches/0006-Update-DEBUG-to-current-llvm-API.patch
-    - cling-patches/0007-Mark-weak-symbols-weak-apparently-NFC.patch
-    - cling-patches/0008-Weak-undefined-symbols-should-not-trigger-the-emissi.patch
-    - cling-patches/0009-Adapt-to-llvm-r272382.patch
-    - cling-patches/0010-Enable-unicode-output-on-terminals.patch
+    - cling-patches/0005-Update-DEBUG-to-current-llvm-API.patch
+    - cling-patches/0006-Mark-weak-symbols-weak-apparently-NFC.patch
+    - cling-patches/0007-Weak-undefined-symbols-should-not-trigger-the-emissi.patch
+    - cling-patches/0008-Adapt-to-llvm-r272382.patch
+    - cling-patches/0009-Enable-unicode-output-on-terminals.patch
 {% endif %}
 
 build:
