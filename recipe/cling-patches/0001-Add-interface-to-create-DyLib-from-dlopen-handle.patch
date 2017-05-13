@@ -1,7 +1,7 @@
-From 4ce8792df35ae09feb142244717a2ab93779b7d1 Mon Sep 17 00:00:00 2001
+From f8415f2eb094864e8983eae76691ae4d769664d4 Mon Sep 17 00:00:00 2001
 From: Axel Naumann <Axel.Naumann@cern.ch>
 Date: Mon, 26 Aug 2013 11:35:57 +0200
-Subject: [PATCH 01/10] Add interface to create DyLib from dlopen handle.
+Subject: [PATCH 1/9] Add interface to create DyLib from dlopen handle.
 
 ---
  include/llvm/Support/DynamicLibrary.h  |  2 ++
@@ -23,7 +23,7 @@ index a7d2221..cbe799e 100644
      /// Use this instead of getPermanentLibrary() when you won't need to get
      /// symbols from the library itself.
 diff --git a/lib/Support/DynamicLibrary.cpp b/lib/Support/DynamicLibrary.cpp
-index 9a7aeb5..18cb3c6 100644
+index ced21e4..3b418f3 100644
 --- a/lib/Support/DynamicLibrary.cpp
 +++ b/lib/Support/DynamicLibrary.cpp
 @@ -69,7 +69,10 @@ DynamicLibrary DynamicLibrary::getPermanentLibrary(const char *filename,
@@ -60,5 +60,5 @@ index 0506894..7e90e5d 100644
 +
  }
 -- 
-2.7.4
+2.6.0
 

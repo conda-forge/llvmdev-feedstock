@@ -1,7 +1,7 @@
-From 98a95867939ce7a36c770927eb76f558f4fb9136 Mon Sep 17 00:00:00 2001
+From 67d99ba6ea709a708bdcce58b37555ec4879e91b Mon Sep 17 00:00:00 2001
 From: Axel Naumann <Axel.Naumann@cern.ch>
 Date: Thu, 9 Jun 2016 15:56:06 +0200
-Subject: [PATCH 03/10] Do NOT remove original functions after inlining them.
+Subject: [PATCH 3/9] Do NOT remove original functions after inlining them.
 
 This can be removed once we emit incremental modules.
 ---
@@ -9,18 +9,18 @@ This can be removed once we emit incremental modules.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/lib/Transforms/IPO/Inliner.cpp b/lib/Transforms/IPO/Inliner.cpp
-index 79535ca..8a535b0 100644
+index 3f4731c..c297784 100644
 --- a/lib/Transforms/IPO/Inliner.cpp
 +++ b/lib/Transforms/IPO/Inliner.cpp
-@@ -525,7 +525,7 @@ bool Inliner::inlineCalls(CallGraphSCC &SCC) {
-       
+@@ -593,7 +593,7 @@ inlineCallsImpl(CallGraphSCC &SCC, CallGraph &CG,
+ 
        // If we inlined or deleted the last possible call site to the function,
        // delete the function body now.
 -      if (Callee && Callee->use_empty() && Callee->hasLocalLinkage() &&
 +      if (false && Callee && Callee->use_empty() && Callee->hasLocalLinkage() &&
            // TODO: Can remove if in SCC now.
            !SCCFunctions.count(Callee) &&
-           
+ 
 -- 
-2.7.4
+2.6.0
 
