@@ -1,5 +1,4 @@
 matrix:
-- [[LLVM_VARIANT, cling]]
 - [[LLVM_VARIANT, default]]
 travis:
   secure:
