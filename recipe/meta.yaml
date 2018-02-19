@@ -3,7 +3,7 @@
 {% set sha256 = "e35dcbae6084adcf4abb32514127c5eabd7d63b733852ccdb31e06f1373136da" %}
 
 {% set llvm_variant = os.environ.get('LLVM_VARIANT', 'default') %}
-{% set build_number = "0" %}
+{% set build_number = "1" %}
 
 package:
   name: llvmdev
@@ -55,7 +55,8 @@ requirements:
     - system  # [linux and not armv7l]
   run:
     - system  # [linux and not armv7l]
-    - vs2015_runtime  # [win]
+    - vc 14  # [win]
+    - llvm-meta {{ version }}|{{ version }}.*
 
 test:
 {% if llvm_variant == "cling" %}
