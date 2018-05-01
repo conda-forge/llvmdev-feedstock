@@ -15,6 +15,7 @@ source:
   patches:
     - llvm-lto-static.patch   # [win]
     - export_LLVMInitializeInstCombine.diff
+    - twine_cfg_undefined_behavior.patch
 {% if llvm_variant == "cling" %}
     - cling-patches/0001-Add-interface-to-create-DyLib-from-dlopen-handle.patch
     - cling-patches/0002-Add-cling-as-tool-to-be-built.patch
