@@ -2,7 +2,7 @@
 {% set sha256 = "1ff53c915b4e761ef400b803f07261ade637b0c269d99569f18040f3dcee4408" %}
 
 {% set llvm_variant = os.environ.get('LLVM_VARIANT', 'default') %}
-{% set build_number = "2" %}
+{% set build_number = "3" %}
 
 package:
   name: llvmdev
@@ -16,6 +16,7 @@ source:
     - llvm-lto-static.patch   # [win]
     - export_LLVMInitializeInstCombine.diff
     - twine_cfg_undefined_behavior.patch
+    - D47188-svml.patch
 {% if llvm_variant == "cling" %}
     - cling-patches/0001-Add-interface-to-create-DyLib-from-dlopen-handle.patch
     - cling-patches/0002-Add-cling-as-tool-to-be-built.patch
