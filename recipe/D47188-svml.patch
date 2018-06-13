@@ -1,5 +1,23 @@
 From https://reviews.llvm.org/D47188
+With additional hot-fix in LoopVectorize.cpp for numba/numba#3016
 
+Index: lib/Transforms/Vectorize/LoopVectorize.cpp
+===================================================================
+--- lib/Transforms/Vectorize/LoopVectorize.cpp
++++ lib/Transforms/Vectorize/LoopVectorize.cpp
+@@ -3974,6 +3974,12 @@ static unsigned getVectorCallCost(CallInst *CI, unsigned VF,
+   if (!TLI || !TLI->isFunctionVectorizable(FnName, VF) || CI->isNoBuiltin())
+     return Cost;
+        
++  // this goes against LLVM coding philosophy, but it'll stop bleeding
++  bool IgnoreMe;
++  StringRef FuncName = TLI->getVectorizedFunction(FnName, VF, IgnoreMe, true);
++  if (FuncName.startswith("__svml") && !TTI.isTypeLegal(RetTy))
++    return Cost;
++
+   // If the corresponding vector cost is cheaper, return its cost.
+   unsigned VectorCallCost = TTI.getCallInstrCost(nullptr, RetTy, Tys);
+   if (VectorCallCost < Cost) {
 Index: include/llvm/Analysis/TargetLibraryInfo.h
 ===================================================================
 --- include/llvm/Analysis/TargetLibraryInfo.h
