@@ -67,6 +67,8 @@ test:
   requires:                                                  # [win]
     - python {{ environ['PY_VER'] + '*' }}                   # [win]
 {% endif %}
+  files:
+    - numba-3016.ll
 
   commands:
     - $PREFIX/bin/llvm-config --libs                         # [not win]
@@ -76,6 +78,9 @@ test:
 
     - test -f $PREFIX/include/llvm/Pass.h                    # [unix]
     - test -f $PREFIX/lib/libLLVMCore.a                      # [not win]
+
+    - opt -S -vector-library=SVML -mcpu=haswell -O3 numba-3016.ll -o out.ll
+    - grep __svml_sin4 out.ll
 
 about:
   home: http://llvm.org/
