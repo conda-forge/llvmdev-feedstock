@@ -59,13 +59,11 @@ requirements:
     - llvm-meta {{ version }}|{{ version }}.*
 
 test:
-{% if llvm_variant == "cling" %}
   requires:
+    - m2w64-grep                                             # [win]
+    - python {{ environ['PY_VER'] + '*' }}                   # [win]
+{% if llvm_variant == "cling" %}
     - cling-patches
-    - python {{ environ['PY_VER'] + '*' }}                   # [win]
-{% else %}
-  requires:                                                  # [win]
-    - python {{ environ['PY_VER'] + '*' }}                   # [win]
 {% endif %}
   files:
     - numba-3016.ll
