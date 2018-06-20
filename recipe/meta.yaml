@@ -60,7 +60,6 @@ requirements:
 
 test:
   requires:
-    - m2w64-grep                                             # [win]
     - python {{ environ['PY_VER'] + '*' }}                   # [win]
 {% if llvm_variant == "cling" %}
     - cling-patches
@@ -78,7 +77,8 @@ test:
     - test -f $PREFIX/lib/libLLVMCore.a                      # [not win]
 
     - opt -S -vector-library=SVML -mcpu=haswell -O3 numba-3016.ll -o out.ll
-    - grep __svml_sin4 out.ll
+    - findstr __svml_sin4 out.ll                             # [win]
+    - grep __svml_sin4 out.ll                                # [unix]
 
 about:
   home: http://llvm.org/
