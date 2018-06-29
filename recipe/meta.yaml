@@ -2,7 +2,7 @@
 {% set sha256 = "1ff53c915b4e761ef400b803f07261ade637b0c269d99569f18040f3dcee4408" %}
 
 {% set llvm_variant = os.environ.get('LLVM_VARIANT', 'default') %}
-{% set build_number = "3" %}
+{% set build_number = "4" %}
 
 package:
   name: llvmdev
@@ -59,14 +59,13 @@ requirements:
     - llvm-meta {{ version }}|{{ version }}.*
 
 test:
-{% if llvm_variant == "cling" %}
   requires:
+    - python {{ environ['PY_VER'] + '*' }}                   # [win]
+{% if llvm_variant == "cling" %}
     - cling-patches
-    - python {{ environ['PY_VER'] + '*' }}                   # [win]
-{% else %}
-  requires:                                                  # [win]
-    - python {{ environ['PY_VER'] + '*' }}                   # [win]
 {% endif %}
+  files:
+    - numba-3016.ll
 
   commands:
     - $PREFIX/bin/llvm-config --libs                         # [not win]
@@ -76,6 +75,10 @@ test:
 
     - test -f $PREFIX/include/llvm/Pass.h                    # [unix]
     - test -f $PREFIX/lib/libLLVMCore.a                      # [not win]
+
+    - opt -S -vector-library=SVML -mcpu=haswell -O3 numba-3016.ll -o out.ll
+    - findstr __svml_sin4 out.ll                             # [win]
+    - grep __svml_sin4 out.ll                                # [unix]
 
 about:
   home: http://llvm.org/
