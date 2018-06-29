@@ -14,7 +14,6 @@ source:
   sha256: {{ sha256 }}
   patches:
     - llvm-lto-static.patch   # [win]
-    - export_LLVMInitializeInstCombine.diff
     - twine_cfg_undefined_behavior.patch
     - D47188-svml.patch
 {% if llvm_variant == "cling" %}
