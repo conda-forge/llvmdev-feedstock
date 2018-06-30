@@ -1,7 +1,6 @@
 {% set version = "6.0.1" %}
 {% set sha256 = "b6d6c324f9c71494c0ccaf3dac1f16236d970002b42bb24a6c9e1634f7d0f4e2" %}
 
-{% set llvm_variant = os.environ.get('LLVM_VARIANT', 'default') %}
 {% set build_number = 0 %}
 
 package:
@@ -30,39 +29,28 @@ source:
 
 build:
   number: {{ build_number }}
-  string: {{ llvm_variant }}_{{ build_number }}
-  skip:  true  # [py<36]
-
-{% if llvm_variant == "cling" %}
+  skip:  true  # [vc<14]
   features:
-    - cling
-    - vc14     # [win and py36]
-{% else %}
-  features:    # [win and py36]
-    - vc14     # [win and py36]
-{% endif %}
+    - cling    # [llvm_variant == 'cling']
 
-requirements:
-  build:
-    - toolchain
-    - cmake
-    # Needed to unpack the source tarball
-    - m2w64-xz  # [py27 and win]
-    - ninja  # [win]
-    # Needed to build LLVM
-    - python
-    - system  # [linux and not armv7l]
-  run:
-    - system  # [linux and not armv7l]
-    - vc 14  # [win]
-    - llvm-meta {{ version }}|{{ version }}.*
+outputs:
+  - name: llvm-meta
+
+  - name: llvmdev
+    script: build_llvm.sh
+    requirements:
+      build:
+        - {{ compiler('cxx') }}
+        - cmake
+        - ninja     # [win]
+        - python
+      host:
+      run:
+        - {{ pin_subpackage("llvm-meta", exact=True) }}
 
 test:
   requires:
-    - python {{ environ['PY_VER'] + '*' }}                   # [win]
-{% if llvm_variant == "cling" %}
-    - cling-patches
-{% endif %}
+    - cling-patches    # [llvm_variant == 'cling']
   files:
     - numba-3016.ll
 
