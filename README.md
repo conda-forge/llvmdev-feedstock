@@ -14,14 +14,17 @@ Summary: Development headers and libraries for LLVM
 Current build status
 ====================
 
-Linux: [![Circle CI](https://circleci.com/gh/conda-forge/llvmdev-feedstock.svg?style=shield)](https://circleci.com/gh/conda-forge/llvmdev-feedstock)
-OSX: [![TravisCI](https://travis-ci.org/conda-forge/llvmdev-feedstock.svg?branch=master)](https://travis-ci.org/conda-forge/llvmdev-feedstock)
-Windows: [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/conda-forge/llvmdev-feedstock?svg=True)](https://ci.appveyor.com/project/conda-forge/llvmdev-feedstock/branch/master)
+[![Linux](https://img.shields.io/circleci/project/github/conda-forge/llvmdev-feedstock/master.svg?label=Linux)](https://circleci.com/gh/conda-forge/llvmdev-feedstock)
+[![OSX](https://img.shields.io/travis/conda-forge/llvmdev-feedstock/master.svg?label=macOS)](https://travis-ci.org/conda-forge/llvmdev-feedstock)
+[![Windows](https://img.shields.io/appveyor/ci/conda-forge/llvmdev-feedstock/master.svg?label=Windows)](https://ci.appveyor.com/project/conda-forge/llvmdev-feedstock/branch/master)
 
 Current release info
 ====================
-Version: [![Anaconda-Server Badge](https://anaconda.org/conda-forge/llvmdev/badges/version.svg)](https://anaconda.org/conda-forge/llvmdev)
-Downloads: [![Anaconda-Server Badge](https://anaconda.org/conda-forge/llvmdev/badges/downloads.svg)](https://anaconda.org/conda-forge/llvmdev)
+
+| Name | Downloads | Version | Platforms |
+| --- | --- | --- | --- |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-llvm--meta-green.svg)](https://anaconda.org/conda-forge/llvm-meta) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm-meta.svg)](https://anaconda.org/conda-forge/llvm-meta) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm-meta.svg)](https://anaconda.org/conda-forge/llvm-meta) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm-meta.svg)](https://anaconda.org/conda-forge/llvm-meta) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-llvmdev-green.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) |
 
 Installing llvmdev
 ==================
@@ -32,16 +35,16 @@ Installing `llvmdev` from the `conda-forge` channel can be achieved by adding `c
 conda config --add channels conda-forge
 ```
 
-Once the `conda-forge` channel has been enabled, `llvmdev` can be installed with:
+Once the `conda-forge` channel has been enabled, `llvm-meta, llvmdev` can be installed with:
 
 ```
-conda install llvmdev
+conda install llvm-meta llvmdev
 ```
 
-It is possible to list all of the versions of `llvmdev` available on your platform with:
+It is possible to list all of the versions of `llvm-meta` available on your platform with:
 
 ```
-conda search llvmdev --channel conda-forge
+conda search llvm-meta --channel conda-forge
 ```
 
 
