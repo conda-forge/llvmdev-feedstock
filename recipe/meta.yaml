@@ -33,21 +33,16 @@ build:
   features:
     - cling    # [llvm_variant == 'cling']
 
-outputs:
-  - name: llvm-meta
-
-  - name: llvmdev
-    script: build_llvm.sh
-    requirements:
-      build:
-        - {{ compiler('cxx') }}
-        - cmake
-        - ninja     # [win]
-        - python
-      host:
-        - {{ pin_subpackage("llvm-meta", exact=True) }}
-      run:
-        - {{ pin_subpackage("llvm-meta", exact=True) }}
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+    - cmake
+    - ninja     # [win]
+    - python
+  host:
+    - llvm-meta {{ version }}
+  run:
+    - llvm-meta {{ version }}
 
 test:
   requires:
