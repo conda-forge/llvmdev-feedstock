@@ -29,7 +29,7 @@ source:
 
 build:
   number: {{ build_number }}
-  skip:  true  # [vc<14]
+  skip:  true  # [win and vc<14]
   features:
     - cling    # [llvm_variant == 'cling']
 
@@ -45,6 +45,7 @@ outputs:
         - ninja     # [win]
         - python
       host:
+        - {{ pin_subpackage("llvm-meta", exact=True) }}
       run:
         - {{ pin_subpackage("llvm-meta", exact=True) }}
 
