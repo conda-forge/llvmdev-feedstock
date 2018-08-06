@@ -1,0 +1,12 @@
+cxx_compiler:
+- vs2015
+llvm_variant:
+- default
+pin_run_as_build:
+  vc:
+    max_pin: x
+vc:
+- '14'
+zip_keys:
+- - vc
+  - cxx_compiler
