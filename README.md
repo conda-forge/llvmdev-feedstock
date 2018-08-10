@@ -14,8 +14,7 @@ Summary: Development headers and libraries for LLVM
 Current build status
 ====================
 
-[![Linux](https://img.shields.io/circleci/project/github/conda-forge/llvmdev-feedstock/master.svg?label=Linux)](https://circleci.com/gh/conda-forge/llvmdev-feedstock)
-[![OSX](https://img.shields.io/travis/conda-forge/llvmdev-feedstock/master.svg?label=macOS)](https://travis-ci.org/conda-forge/llvmdev-feedstock)
+[![Linux,OSX](https://img.shields.io/circleci/project/github/conda-forge/llvmdev-feedstock/master.svg?label=Linux,OSX)](https://circleci.com/gh/conda-forge/llvmdev-feedstock)
 [![Windows](https://img.shields.io/appveyor/ci/conda-forge/llvmdev-feedstock/master.svg?label=Windows)](https://ci.appveyor.com/project/conda-forge/llvmdev-feedstock/branch/master)
 
 Current release info
