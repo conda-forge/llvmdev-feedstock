@@ -12,6 +12,7 @@ source:
   url: http://llvm.org/releases/{{ version }}/llvm-{{ version }}.src.tar.xz
   sha256: {{ sha256 }}
   patches:
+    - CodeView_registers.patch
     - llvm-lto-static.patch   # [win]
     - twine_cfg_undefined_behavior.patch
     - D47188-svml.patch
