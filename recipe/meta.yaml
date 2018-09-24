@@ -1,7 +1,7 @@
-{% set version = "6.0.1" %}
-{% set sha256 = "b6d6c324f9c71494c0ccaf3dac1f16236d970002b42bb24a6c9e1634f7d0f4e2" %}
+{% set version = "7.0.0" %}
+{% set sha256 = "8bc1f844e6cbde1b652c19c1edebc1864456fd9c78b8c1bea038e51b363fe222" %}
 
-{% set build_number = 2 %}
+{% set build_number = 0 %}
 
 package:
   name: llvmdev
@@ -12,7 +12,6 @@ source:
   url: http://llvm.org/releases/{{ version }}/llvm-{{ version }}.src.tar.xz
   sha256: {{ sha256 }}
   patches:
-    - CodeView_registers.patch
     - llvm-lto-static.patch   # [win]
     - twine_cfg_undefined_behavior.patch
     - D47188-svml.patch
