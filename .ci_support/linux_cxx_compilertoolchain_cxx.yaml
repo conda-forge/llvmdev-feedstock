@@ -8,8 +8,6 @@ cxx_compiler:
 - toolchain_cxx
 docker_image:
 - condaforge/linux-anvil
-llvm_variant:
-- default
 zip_keys:
 - - cxx_compiler
   - channel_sources

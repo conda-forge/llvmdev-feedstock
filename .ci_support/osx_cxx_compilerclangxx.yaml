@@ -8,8 +8,6 @@ channel_targets:
 - conda-forge gcc7
 cxx_compiler:
 - clangxx
-llvm_variant:
-- default
 macos_machine:
 - x86_64-apple-darwin13.4.0
 macos_min_version:

@@ -8,8 +8,6 @@ cxx_compiler:
 - gxx
 docker_image:
 - conda/c3i-linux-64
-llvm_variant:
-- default
 zip_keys:
 - - cxx_compiler
   - channel_sources
