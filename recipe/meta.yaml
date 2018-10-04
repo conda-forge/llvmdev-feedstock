@@ -1,7 +1,7 @@
 {% set version = "6.0.1" %}
 {% set sha256 = "b6d6c324f9c71494c0ccaf3dac1f16236d970002b42bb24a6c9e1634f7d0f4e2" %}
 
-{% set build_number = 2 %}
+{% set build_number = 1002 %}
 
 package:
   name: llvmdev
@@ -16,23 +16,10 @@ source:
     - llvm-lto-static.patch   # [win]
     - twine_cfg_undefined_behavior.patch
     - D47188-svml.patch
-{% if llvm_variant == "cling" %}
-    - cling-patches/0001-Add-interface-to-create-DyLib-from-dlopen-handle.patch
-    - cling-patches/0002-Add-cling-as-tool-to-be-built.patch
-    - cling-patches/0003-Do-NOT-remove-original-functions-after-inlining-them.patch
-    - cling-patches/0004-From-Lang-Hames-first-step-towards-RuntimeDyld-resol.patch
-    - cling-patches/0005-Update-DEBUG-to-current-llvm-API.patch
-    - cling-patches/0006-Mark-weak-symbols-weak-apparently-NFC.patch
-    - cling-patches/0007-Weak-undefined-symbols-should-not-trigger-the-emissi.patch
-    - cling-patches/0008-Adapt-to-llvm-r272382.patch
-    - cling-patches/0009-Enable-unicode-output-on-terminals.patch
-{% endif %}
 
 build:
   number: {{ build_number }}
   skip:  true  # [win and vc<14]
-  features:
-    - cling    # [llvm_variant == 'cling']
 
 requirements:
   build:
@@ -46,8 +33,6 @@ requirements:
     - llvm-meta {{ version }}
 
 test:
-  requires:
-    - cling-patches    # [llvm_variant == 'cling']
   files:
     - numba-3016.ll
 
