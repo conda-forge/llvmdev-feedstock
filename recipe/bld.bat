@@ -14,5 +14,8 @@ cmake -G "Ninja" ^
 
 if errorlevel 1 exit 1
 
-cmake --build . --target install
+ninja -j2
+if errorlevel 1 exit 1
+
+ninja install
 if errorlevel 1 exit 1
