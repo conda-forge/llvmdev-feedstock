@@ -1,6 +1,9 @@
 mkdir build
 cd build
 
+REM remove GL flag for now
+set "CXXFLAGS=-MD"
+
 cmake -G "Ninja" ^
     -DCMAKE_BUILD_TYPE="Release" ^
     -DCMAKE_PREFIX_PATH=%LIBRARY_PREFIX% ^
