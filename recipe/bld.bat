@@ -1,6 +1,9 @@
 mkdir build
 cd build
 
+REM remove GL flag for now
+set "CXXFLAGS=-MD"
+
 cmake -G "Ninja" ^
     -DCMAKE_BUILD_TYPE="Release" ^
     -DCMAKE_PREFIX_PATH=%LIBRARY_PREFIX% ^
@@ -14,5 +17,8 @@ cmake -G "Ninja" ^
 
 if errorlevel 1 exit 1
 
-cmake --build . --target install
+ninja
+if errorlevel 1 exit 1
+
+ninja install
 if errorlevel 1 exit 1
