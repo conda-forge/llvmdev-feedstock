@@ -1,17 +1,21 @@
 mkdir build
 cd build
 
+[[ $(uname) == Linux ]] && conditional_args="
+      -DLLVM_USE_INTEL_JITEVENTS=ON
+"
 cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
       -DLLVM_TARGETS_TO_BUILD=host \
       -DLLVM_ENABLE_RTTI=ON \
-      -DLLVM_INCLUDE_TESTS=OFF \
-      -DLLVM_INCLUDE_UTILS=OFF \
+      -DLLVM_INCLUDE_TESTS=ON \
+      -DLLVM_INCLUDE_GO_TESTS=OFF \
+      -DLLVM_INCLUDE_UTILS=ON \
       -DLLVM_INCLUDE_DOCS=OFF \
       -DLLVM_INCLUDE_EXAMPLES=OFF \
       -DLLVM_ENABLE_TERMINFO=OFF \
       -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly \
-      ..
+      ${conditional_args} ..
 
-make -j${CPU_COUNT}
+make -j${CPU_COUNT} check-llvm
 make install
