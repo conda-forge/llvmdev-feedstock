@@ -13,6 +13,7 @@ source:
   sha256: {{ sha256 }}
   patches:
     - llvm-lto-static.patch   # [win]
+    - partial-testing.patch
     - twine_cfg_undefined_behavior.patch
     - D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
 
@@ -43,10 +44,6 @@ test:
 
     - test -f $PREFIX/include/llvm/Pass.h                    # [unix]
     - test -f $PREFIX/lib/libLLVMCore.a                      # [not win]
-
-    - opt -S -vector-library=SVML -mcpu=haswell -O3 numba-3016.ll -o out.ll
-    - findstr __svml_sin4 out.ll                             # [win]
-    - grep __svml_sin4 out.ll                                # [unix]
 
 about:
   home: http://llvm.org/

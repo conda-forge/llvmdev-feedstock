@@ -1,3 +1,4 @@
+set -x
 mkdir build
 cd build
 
@@ -8,7 +9,7 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
       -DLLVM_TARGETS_TO_BUILD=host \
       -DLLVM_ENABLE_RTTI=ON \
-      -DLLVM_INCLUDE_TESTS=ON \
+      -DLLVM_INCLUDE_TESTS=OFF \
       -DLLVM_INCLUDE_GO_TESTS=OFF \
       -DLLVM_INCLUDE_UTILS=ON \
       -DLLVM_INCLUDE_DOCS=OFF \
@@ -17,5 +18,8 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly \
       ${conditional_args} ..
 
-make -j${CPU_COUNT} check-llvm
-make install
+make -j${CPU_COUNT}
+make install || exit $?
+bin/opt -S -vector-library=SVML -mcpu=haswell -O3 $RECIPE_DIR/numba-3016.ll | bin/FileCheck $RECIPE_DIR/numba-3016.ll || exit $?
+cd ../test
+../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
