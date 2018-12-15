@@ -7,7 +7,13 @@ channel_targets:
 cxx_compiler:
 - gxx
 docker_image:
-- conda/c3i-linux-64
+- condaforge/linux-anvil-comp7
+pin_run_as_build:
+  python:
+    min_pin: x.x
+    max_pin: x.x
+python:
+- '2.7'
 zip_keys:
 - - cxx_compiler
   - channel_sources
