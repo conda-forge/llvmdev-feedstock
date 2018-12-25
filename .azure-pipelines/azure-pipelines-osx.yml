@@ -6,18 +6,10 @@ jobs:
   strategy:
     maxParallel: 8
     matrix:
-      osx_cxx_compilerclangxxpython2.7:
-        CONFIG: osx_cxx_compilerclangxxpython2.7
-      osx_cxx_compilerclangxxpython3.6:
-        CONFIG: osx_cxx_compilerclangxxpython3.6
-      osx_cxx_compilerclangxxpython3.7:
-        CONFIG: osx_cxx_compilerclangxxpython3.7
-      osx_cxx_compilertoolchain_cxxpython2.7:
-        CONFIG: osx_cxx_compilertoolchain_cxxpython2.7
-      osx_cxx_compilertoolchain_cxxpython3.6:
-        CONFIG: osx_cxx_compilertoolchain_cxxpython3.6
-      osx_cxx_compilertoolchain_cxxpython3.7:
-        CONFIG: osx_cxx_compilertoolchain_cxxpython3.7
+      osx_cxx_compilerclangxx:
+        CONFIG: osx_cxx_compilerclangxx
+      osx_cxx_compilertoolchain_cxx:
+        CONFIG: osx_cxx_compilertoolchain_cxx
 
   steps:
   # TODO: Fast finish on azure pipelines?
