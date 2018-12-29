@@ -7,7 +7,7 @@ channel_targets:
 cxx_compiler:
 - gxx
 docker_image:
-- conda/c3i-linux-64
+- condaforge/linux-anvil-comp7
 zip_keys:
 - - cxx_compiler
   - channel_sources
