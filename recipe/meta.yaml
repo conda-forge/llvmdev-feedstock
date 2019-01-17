@@ -26,9 +26,10 @@ requirements:
     - {{ compiler('cxx') }}
     - cmake
     - ninja     # [win]
-    - python
+    - python    3.7
   host:
     - llvm-meta {{ version }}
+    - libcxx    4.0.1  # [osx]
   run:
     - llvm-meta {{ version }}
 
