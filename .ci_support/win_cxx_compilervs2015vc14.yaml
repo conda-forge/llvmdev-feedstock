@@ -5,16 +5,10 @@ channel_targets:
 cxx_compiler:
 - vs2015
 pin_run_as_build:
-  python:
-    min_pin: x.x
-    max_pin: x.x
   vc:
     max_pin: x
-python:
-- '3.6'
 vc:
 - '14'
 zip_keys:
-- - python
-  - vc
+- - vc
   - cxx_compiler
