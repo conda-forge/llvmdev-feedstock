@@ -18,6 +18,7 @@ Summary: Development headers and libraries for LLVM
 Current build status
 ====================
 
+[![Windows](https://img.shields.io/appveyor/ci/conda-forge/llvmdev-feedstock/master.svg?label=Windows)](https://ci.appveyor.com/project/conda-forge/llvmdev-feedstock/branch/master)
 
 Current release info
 ====================
