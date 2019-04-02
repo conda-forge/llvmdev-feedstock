@@ -13,7 +13,7 @@ source:
   sha256: {{ sha256 }}
   patches:
     - llvm-lto-static.patch   # [win]
-    - partial-testing.patch
+    - partial-testing.patch   # [not win]
     - D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
 
 build:
