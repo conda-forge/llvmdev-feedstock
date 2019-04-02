@@ -14,7 +14,6 @@ source:
   patches:
     - llvm-lto-static.patch   # [win]
     - partial-testing.patch
-    - twine_cfg_undefined_behavior.patch
     - D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
 
 build:
