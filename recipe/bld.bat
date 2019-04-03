@@ -5,6 +5,8 @@ REM remove GL flag for now
 set "CXXFLAGS=-MD"
 
 cmake -G "Ninja" ^
+    -DCMAKE_C_COMPILER=cl.exe ^
+    -DCMAKE_CXX_COMPILER=cl.exe ^
     -DCMAKE_BUILD_TYPE="Release" ^
     -DCMAKE_PREFIX_PATH=%LIBRARY_PREFIX% ^
     -DCMAKE_INSTALL_PREFIX:PATH=%LIBRARY_PREFIX% ^
