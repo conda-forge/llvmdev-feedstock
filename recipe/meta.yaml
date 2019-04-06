@@ -1,7 +1,7 @@
-{% set version = "7.0.1" %}
-{% set sha256 = "a38dfc4db47102ec79dcc2aa61e93722c5f6f06f0a961073bd84b78fb949419b" %}
+{% set version = "8.0.0" %}
+{% set sha256 = "8872be1b12c61450cacc82b3d153eab02be2546ef34fa3580ed14137bb26224c" %}
 
-{% set build_number = 1002 %}
+{% set build_number = 0 %}
 
 package:
   name: llvmdev
@@ -13,8 +13,7 @@ source:
   sha256: {{ sha256 }}
   patches:
     - llvm-lto-static.patch   # [win]
-    - partial-testing.patch
-    - twine_cfg_undefined_behavior.patch
+    # TODO add back for sake of llvm-lit: - partial-testing.patch
     - D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
 
 build:
