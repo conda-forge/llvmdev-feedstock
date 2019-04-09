@@ -1,7 +1,7 @@
 {% set version = "8.0.0" %}
 {% set sha256 = "8872be1b12c61450cacc82b3d153eab02be2546ef34fa3580ed14137bb26224c" %}
 
-{% set build_number = 0 %}
+{% set build_number = 1 %}
 
 package:
   name: llvmdev
@@ -27,9 +27,8 @@ requirements:
     - ninja     # [win]
     - python    3.7
   host:
-    - llvm-meta {{ version }}
     - libcxx    4.0.1  # [osx]
-  run:
+  run_constrained:
     - llvm-meta {{ version }}
 
 test:
