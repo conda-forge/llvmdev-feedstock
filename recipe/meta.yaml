@@ -27,9 +27,8 @@ requirements:
     - ninja     # [win]
     - python    3.7
   host:
-    - llvm-meta {{ version }}
     - libcxx    4.0.1  # [osx]
-  run:
+  run_constrained:
     - llvm-meta {{ version }}
 
 test:
