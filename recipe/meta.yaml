@@ -26,6 +26,7 @@ requirements:
     - cmake
     - ninja     # [win]
     - python    3.7
+    - make
   host:
     - libcxx    4.0.1  # [osx]
   run_constrained:
