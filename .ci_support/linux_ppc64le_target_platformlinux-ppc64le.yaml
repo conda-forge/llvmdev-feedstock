@@ -8,3 +8,5 @@ cxx_compiler_version:
 - '8'
 docker_image:
 - condaforge/linux-anvil-ppc64le
+target_platform:
+- linux-ppc64le
