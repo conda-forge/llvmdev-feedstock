@@ -51,8 +51,8 @@ fi
 mkdir -p "$ARTIFACTS"
 DONE_CANARY="$ARTIFACTS/conda-forge-build-done-${CONFIG}"
 rm -f "$DONE_CANARY"
-# Not all providers run with a real tty.  Disable using one
-DOCKER_RUN_ARGS=" "
+# Enable running in interactive mode attached to a tty
+DOCKER_RUN_ARGS=" -it "
 
 export UPLOAD_PACKAGES="${UPLOAD_PACKAGES:-True}"
 docker run ${DOCKER_RUN_ARGS} \
