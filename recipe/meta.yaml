@@ -2,7 +2,7 @@
 {% set version = "5.0.0" %}
 {% set sha256 = "e35dcbae6084adcf4abb32514127c5eabd7d63b733852ccdb31e06f1373136da" %}
 
-{% set build_number = 1001 %}
+{% set build_number = 1002 %}
 
 package:
   name: llvmdev
@@ -26,7 +26,8 @@ requirements:
     - {{ compiler('cxx') }}
     - cmake
     - ninja     # [win]
-    - python
+    - python    3.7
+    - make      # [unix]
   host:
     - llvm-meta {{ version }}
   run:

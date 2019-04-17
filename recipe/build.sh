@@ -1,7 +1,10 @@
 mkdir build
 cd build
 
-cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
+export CXXFLAGS="${CXXFLAGS} -fvisibility=hidden"
+
+cmake -LAH \
+      -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
       -DLLVM_TARGETS_TO_BUILD=host \
       -DLLVM_ENABLE_RTTI=ON \
