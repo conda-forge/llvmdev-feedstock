@@ -42,6 +42,7 @@ test:
     - test -f $PREFIX/lib/libLLVMCore.a                      # [not win]
 
 outputs:
+  # Contains everything
   - name: llvmdev
     script: install_llvm.sh                         # [not win]
     script: install_llvm.bat                        # [win]
@@ -52,11 +53,13 @@ outputs:
         - ninja     # [win]
         - python    3.7
       run:
-        - llvm{{ major_ver }} {{ version }}
+        - libllvm{{ major_ver }} {{ version }}
       run_constrained:
         - llvm-meta {{ version }}
 
-  - name: llvm{{ major_ver }}
+  # Contains the shared libraries. To make different LLVM libraries co-installable
+  # soversion is appended to the package name
+  - name: libllvm{{ major_ver }}
     script: install_llvm.sh                         # [not win]
     script: install_llvm.bat                        # [win]
     files:
@@ -70,13 +73,19 @@ outputs:
         - ninja     # [win]
         - python    3.7
 
+  # Contains LLVM tools and shared libraries
   - name: llvm
     build:
       run_exports:
-        - llvm{{ major_ver }}
+        - libllvm{{ major_ver }}
+    files:
+      - dummy
     requirements:
       run:
-        - llvm{{ major_ver }}
+        - libllvm{{ major_ver }}
+      run_constrained:
+        - llvm-meta {{ version }}
+        - llvmdev   {{ version }}
 
 about:
   home: http://llvm.org/
