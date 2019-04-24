@@ -17,10 +17,11 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DLLVM_ENABLE_LIBXML2=OFF \
       -DLLVM_ENABLE_ZLIB=OFF \
       -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly \
+      -DLLVM_BUILD_LLVM_DYLIB=yes \
+      -DLLVM_LINK_LLVM_DYLIB=yes \
       ${conditional_args} ..
 
 make -j${CPU_COUNT}
-make install || exit $?
 
 if [[ "${target_platform}" == "linux-64" || "${target_platform}" == "osx-64" ]]; then
     export TEST_CPU_FLAG="-mcpu=haswell"

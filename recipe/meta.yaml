@@ -1,19 +1,19 @@
 {% set version = "8.0.0" %}
 {% set sha256 = "8872be1b12c61450cacc82b3d153eab02be2546ef34fa3580ed14137bb26224c" %}
 
-{% set build_number = 1 %}
+{% set build_number = 2 %}
+{% set major_ver = version.split(".")[0] %}
 
 package:
-  name: llvmdev
+  name: llvm
   version: {{ version }}
 
 source:
-  fn: llvm-{{ version }}.src.tar.xz
   url: http://llvm.org/releases/{{ version }}/llvm-{{ version }}.src.tar.xz
   sha256: {{ sha256 }}
   patches:
     - llvm-lto-static.patch   # [win]
-    # TODO add back for sake of llvm-lit: - partial-testing.patch
+    # TODO add back for sake of llvm-lit - partial-testing.patch
     - D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
 
 build:
@@ -27,10 +27,6 @@ requirements:
     - ninja     # [win]
     - python    3.7
     - make
-  host:
-    - libcxx    4.0.1  # [osx]
-  run_constrained:
-    - llvm-meta {{ version }}
 
 test:
   files:
@@ -44,6 +40,43 @@ test:
 
     - test -f $PREFIX/include/llvm/Pass.h                    # [unix]
     - test -f $PREFIX/lib/libLLVMCore.a                      # [not win]
+
+outputs:
+  - name: llvmdev
+    script: install_llvm.sh                         # [not win]
+    script: install_llvm.bat                        # [win]
+    requirements:
+      build:
+        - {{ compiler('cxx') }}
+        - cmake
+        - ninja     # [win]
+        - python    3.7
+      run:
+        - llvm{{ major_ver }} {{ version }}
+      run_constrained:
+        - llvm-meta {{ version }}
+
+  - name: llvm{{ major_ver }}
+    script: install_llvm.sh                         # [not win]
+    script: install_llvm.bat                        # [win]
+    files:
+      - lib/libLLVM-{{ major_ver }}.so              # [linux]
+      - lib/libLLVM-{{ major_ver }}.dylib           # [osx]
+      - Library/bin/LLVM-{{ major_ver }}.dll        # [win]
+    requirements:
+      build:
+        - {{ compiler('cxx') }}
+        - cmake
+        - ninja     # [win]
+        - python    3.7
+
+  - name: llvm
+    build:
+      run_exports:
+        - llvm{{ major_ver }}
+    requirements:
+      run:
+        - llvm{{ major_ver }}
 
 about:
   home: http://llvm.org/
