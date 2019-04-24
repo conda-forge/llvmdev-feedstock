@@ -24,6 +24,9 @@ cmake -G "Ninja" ^
 
 if errorlevel 1 exit 1
 
+cmake --build .
+if errorlevel 1 exit 1
+
 bin\opt -S -vector-library=SVML -mcpu=haswell -O3 %RECIPE_DIR%\numba-3016.ll | bin\FileCheck %RECIPE_DIR%\numba-3016.ll
 if errorlevel 1 exit 1
 
