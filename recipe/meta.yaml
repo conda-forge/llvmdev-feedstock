@@ -22,7 +22,7 @@ build:
 
 requirements:
   build:
-    - {{ compiler('cxx') }}
+    - {{ compiler('cxx') }}   # [not osx]
     - cmake
     - ninja     # [win]
     - python    3.7
@@ -48,12 +48,13 @@ outputs:
     script: install_llvm.bat                        # [win]
     requirements:
       build:
-        - {{ compiler('cxx') }}
+        - {{ compiler('cxx') }}    # [not osx]
         - cmake
         - ninja     # [win]
         - python    3.7
       run:
         - libllvm{{ major_ver }} {{ version }}
+        - libcxx >={{ cxx_compiler_version }}  # [osx]
       run_constrained:
         - llvm-meta {{ version }}
 
@@ -68,10 +69,12 @@ outputs:
       - Library/bin/LLVM-{{ major_ver }}.dll        # [win]
     requirements:
       build:
-        - {{ compiler('cxx') }}
+        - {{ compiler('cxx') }}    # [not osx]
         - cmake
         - ninja     # [win]
         - python    3.7
+      run:
+        - libcxx >={{ cxx_compiler_version }}  # [osx]
 
   # Contains LLVM tools and shared libraries
   - name: llvm
