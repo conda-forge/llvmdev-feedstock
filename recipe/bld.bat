@@ -20,6 +20,8 @@ cmake -G "Ninja" ^
     -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON ^
     -DLLVM_ENABLE_LIBXML2=OFF ^
     -DLLVM_ENABLE_ZLIB=OFF ^
+    -DLLVM_BUILD_LLVM_DYLIB=yes ^
+    -DLLVM_LINK_LLVM_DYLIB=yes ^
     %SRC_DIR%
 
 if errorlevel 1 exit 1
