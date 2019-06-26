@@ -10,10 +10,11 @@ env:
 
 matrix:
   include:
-    - env: CONFIG=linux_ppc64le_target_platformlinux-ppc64le UPLOAD_PACKAGES=True PLATFORM=linux-ppc64le
+    - env: CONFIG=linux_ppc64le_target_platformlinux-ppc64le UPLOAD_PACKAGES=True PLATFORM=linux-ppc64le DOCKER_IMAGE=condaforge/linux-anvil-ppc64le
       os: linux-ppc64le
 
 script:
+  - export CI=travis
 
 
-  - if [[ ${PLATFORM} =~ .*linux.* ]]; then pip install shyaml --user && ./.travis/run_docker_build.sh; fi
+  - if [[ ${PLATFORM} =~ .*linux.* ]]; then ./.travis/run_docker_build.sh; fi
