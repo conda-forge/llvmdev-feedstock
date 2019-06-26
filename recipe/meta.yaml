@@ -15,6 +15,10 @@ source:
     - llvm-lto-static.patch   # [win]
     # TODO add back for sake of llvm-lit: - partial-testing.patch
     - D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
+    # Revert an upstream change for Numba
+    # ref: https://github.com/numba/llvmlite/blob/v0.29.0/conda-recipes/0001-Revert-Limit-size-of-non-GlobalValue-name.patch
+    - 0001-Revert-Limit-size-of-non-GlobalValue-name.patch
+
 
 build:
   number: {{ build_number }}
