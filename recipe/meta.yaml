@@ -22,7 +22,7 @@ source:
 
 build:
   number: {{ build_number }}
-  skip:  true  # [win and vc<14]
+  skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
 
 requirements:
   build:
