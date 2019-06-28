@@ -1,7 +1,7 @@
 {% set version = "8.0.0" %}
 {% set sha256 = "8872be1b12c61450cacc82b3d153eab02be2546ef34fa3580ed14137bb26224c" %}
 
-{% set build_number = 1 %}
+{% set build_number = 2 %}
 
 package:
   name: llvmdev
@@ -15,10 +15,14 @@ source:
     - llvm-lto-static.patch   # [win]
     # TODO add back for sake of llvm-lit: - partial-testing.patch
     - D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
+    # Revert an upstream change for Numba
+    # ref: https://github.com/numba/llvmlite/blob/v0.29.0/conda-recipes/0001-Revert-Limit-size-of-non-GlobalValue-name.patch
+    - 0001-Revert-Limit-size-of-non-GlobalValue-name.patch
+
 
 build:
   number: {{ build_number }}
-  skip:  true  # [win and vc<14]
+  skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
 
 requirements:
   build:
