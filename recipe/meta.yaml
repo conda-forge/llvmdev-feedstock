@@ -65,7 +65,7 @@ outputs:
     script: install_llvm.sh                         # [not win]
     build:
       activate_in_script: True
-      run_exports:
+      run_exports:                                                 # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
     requirements:
       build:
@@ -83,12 +83,12 @@ outputs:
   # for run_exports
   - name: libllvm
     build:
-      run_exports:
+      run_exports:                                                 # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
-    requirements:
-      run:
+    requirements:                                                  # [not win]
+      run:                                                         # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
-      run_constrained:
+      run_constrained:                                             # [not win]
         - llvmdev   {{ version }}                                  # [not win]
     test:
       commands:
