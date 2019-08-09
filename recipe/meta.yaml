@@ -56,21 +56,19 @@ outputs:
         - cmake
         - ninja     # [win]
         - python    3.7
+      host:
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - {{ pin_subpackage("llvm-tools", exact=True) }}
       run:
-        - libllvm{{ major_ver }} {{ version }}
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - {{ pin_subpackage("llvm-tools", exact=True) }}
         - libcxx >={{ cxx_compiler_version }}  # [osx]
-      run_constrained:
-        - llvm-meta {{ version }}
 
   # Contains the shared libraries. To make different LLVM libraries co-installable
   # soversion is appended to the package name
   - name: libllvm{{ major_ver }}
     script: install_llvm.sh                         # [not win]
     script: install_llvm.bat                        # [win]
-    files:
-      - lib/libLLVM-{{ major_ver }}.so              # [linux]
-      - lib/libLLVM-{{ major_ver }}.dylib           # [osx]
-      - Library/bin/LLVM-{{ major_ver }}.dll        # [win]
     requirements:
       build:
         - {{ compiler('cxx') }}    # [not osx]
@@ -80,18 +78,21 @@ outputs:
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
 
-  # Contains LLVM tools and shared libraries
-  - name: llvm
-    build:
-      run_exports:
-        - libllvm{{ major_ver }}
-    files:
-      - dummy
+  # Contains LLVM tools
+  - name: llvm-tools
+    script: install_llvm.sh                         # [not win]
+    script: install_llvm.bat                        # [win]
     requirements:
+      build:
+        - {{ compiler('cxx') }}    # [not osx]
+        - cmake
+        - ninja     # [win]
+        - python    3.7
+      host:
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
       run:
-        - libllvm{{ major_ver }}
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
       run_constrained:
-        - llvm-meta {{ version }}
         - llvmdev   {{ version }}
 
 about:
