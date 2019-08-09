@@ -5,7 +5,7 @@
 {% set major_ver = version.split(".")[0] %}
 
 package:
-  name: llvm
+  name: llvm-package
   version: {{ version }}
 
 source:
@@ -76,6 +76,7 @@ outputs:
         - {{ compiler('cxx') }}    # [not (osx or win)]
         - cmake                    # [not win]
         - python    3.7            # [not win]
+      host:
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
@@ -88,7 +89,10 @@ outputs:
     build:
       run_exports:                                                 # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
-    requirements:                                                  # [not win]
+    requirements:
+      build:
+      host:
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
       run:                                                         # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
       run_constrained:                                             # [not win]
