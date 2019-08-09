@@ -16,5 +16,6 @@ if [[ "${PKG_NAME}" == libllvm* ]]; then
 elif [[ "${PKG_NAME}" == "llvm-tools" ]]; then
     rm -rf $PREFIX/lib
     rm -rf $PREFIX/include
+    rm $PREFIX/bin/llvm-config
 fi
 

@@ -32,19 +32,6 @@ requirements:
     - python    3.7
     - make
 
-test:
-  files:
-    - numba-3016.ll
-
-  commands:
-    - $PREFIX/bin/llvm-config --libs                         # [not win]
-    - $PREFIX/bin/llc -version                               # [not win]
-
-    - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1        # [win]
-
-    - test -f $PREFIX/include/llvm/Pass.h                    # [unix]
-    - test -f $PREFIX/lib/libLLVMCore.a                      # [not win]
-
 outputs:
   # Contains everything
   - name: llvmdev
@@ -65,6 +52,12 @@ outputs:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - libcxx >={{ cxx_compiler_version }}  # [osx]
+    test:
+      commands:
+        - $PREFIX/bin/llvm-config --libs                         # [not win]
+        - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1        # [win]
+        - test -f $PREFIX/include/llvm/Pass.h                    # [unix]
+        - test -f $PREFIX/lib/libLLVMCore.a                      # [not win]
 
   # Contains the shared libraries. To make different LLVM libraries co-installable
   # soversion is appended to the package name.
@@ -82,6 +75,9 @@ outputs:
         - python    3.7
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
+    test:
+      commands:
+        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}${SHLIB_EXT}  # [unix]
 
   # This is a meta package so that people can use the latest libllvm and also
   # for run_exports
@@ -113,6 +109,10 @@ outputs:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
       run_constrained:
         - llvmdev   {{ version }}
+    test:
+      commands:
+        - $PREFIX/bin/llc -version                               # [not win]
+        - "%LIBRARY_BIN%\llc" -version                           # [win]
 
 about:
   home: http://llvm.org/
