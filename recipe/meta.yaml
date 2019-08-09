@@ -50,6 +50,8 @@ outputs:
   - name: llvmdev
     script: install_llvm.sh                         # [not win]
     script: install_llvm.bat                        # [win]
+    build:
+      activate_in_script: True
     requirements:
       build:
         - {{ compiler('cxx') }}    # [not osx]
@@ -69,6 +71,7 @@ outputs:
   - name: libllvm{{ major_ver }}
     script: install_llvm.sh                         # [not win]
     build:
+      activate_in_script: True
       run_exports:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
     requirements:
@@ -96,6 +99,8 @@ outputs:
   - name: llvm-tools
     script: install_llvm.sh                         # [not win]
     script: install_llvm.bat                        # [win]
+    build:
+      activate_in_script: True
     requirements:
       build:
         - {{ compiler('cxx') }}    # [not osx]
