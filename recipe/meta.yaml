@@ -65,10 +65,12 @@ outputs:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
 
   # Contains the shared libraries. To make different LLVM libraries co-installable
-  # soversion is appended to the package name
+  # soversion is appended to the package name.
   - name: libllvm{{ major_ver }}
     script: install_llvm.sh                         # [not win]
-    script: install_llvm.bat                        # [win]
+    build:
+      run_exports:
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
     requirements:
       build:
         - {{ compiler('cxx') }}    # [not osx]
@@ -77,6 +79,18 @@ outputs:
         - python    3.7
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
+
+  # This is a meta package so that people can use the latest libllvm and also
+  # for run_exports
+  - name: libllvm
+    build:
+      run_exports:
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
+    requirements:
+      run:
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
+      run_constrained:
+        - llvmdev   {{ version }}                                  # [not win]
 
   # Contains LLVM tools
   - name: llvm-tools
