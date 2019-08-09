@@ -90,6 +90,9 @@ outputs:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
       run_constrained:
         - llvmdev   {{ version }}                                  # [not win]
+    test:
+      commands:
+        - echo "Hello World!"
 
   # Contains LLVM tools
   - name: llvm-tools
@@ -112,7 +115,8 @@ outputs:
     test:
       commands:
         - $PREFIX/bin/llc -version                               # [not win]
-        - "%LIBRARY_BIN%\llc" -version                           # [win]
+        - if not exist "%LIBRARY_BIN%"\\llc.exe exit 1           # [win]
+        - llc -version                                           # [win]
 
 about:
   home: http://llvm.org/
