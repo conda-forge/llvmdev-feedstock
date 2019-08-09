@@ -23,6 +23,7 @@ source:
 build:
   number: {{ build_number }}
   skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
+  merge_build_host: False
 
 requirements:
   build:
@@ -31,6 +32,9 @@ requirements:
     - ninja     # [win]
     - python    3.7
     - make
+    - libcxx {{cxx_compiler_version}}  # [osx]
+  host:
+    - libcxx {{cxx_compiler_version}}  # [osx]
 
 outputs:
   # Contains everything
@@ -69,10 +73,9 @@ outputs:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
     requirements:
       build:
-        - {{ compiler('cxx') }}    # [not osx]
-        - cmake
-        - ninja     # [win]
-        - python    3.7
+        - {{ compiler('cxx') }}    # [not (osx or win)]
+        - cmake                    # [not win]
+        - python    3.7            # [not win]
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
@@ -81,7 +84,7 @@ outputs:
 
   # This is a meta package so that people can use the latest libllvm and also
   # for run_exports
-  - name: libllvm
+  - name: llvm
     build:
       run_exports:                                                 # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
