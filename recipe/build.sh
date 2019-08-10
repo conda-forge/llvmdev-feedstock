@@ -1,4 +1,9 @@
 set -x
+
+# Make osx work like linux.
+sed -i.bak "s/NOT APPLE AND ARG_SONAME/ARG_SONAME/g" cmake/modules/AddLLVM.cmake
+sed -i.bak "s/NOT APPLE AND NOT ARG_SONAME/NOT ARG_SONAME/g" cmake/modules/AddLLVM.cmake
+
 mkdir build
 cd build
 
