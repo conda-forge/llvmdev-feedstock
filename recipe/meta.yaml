@@ -2,18 +2,18 @@
 {% set sha256 = "8872be1b12c61450cacc82b3d153eab02be2546ef34fa3580ed14137bb26224c" %}
 
 {% set build_number = 2 %}
+{% set major_ver = version.split(".")[0] %}
 
 package:
-  name: llvmdev
+  name: llvm-package
   version: {{ version }}
 
 source:
-  fn: llvm-{{ version }}.src.tar.xz
   url: http://llvm.org/releases/{{ version }}/llvm-{{ version }}.src.tar.xz
   sha256: {{ sha256 }}
   patches:
     - llvm-lto-static.patch   # [win]
-    # TODO add back for sake of llvm-lit: - partial-testing.patch
+    # TODO add back for sake of llvm-lit - partial-testing.patch
     - D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # Revert an upstream change for Numba
     # ref: https://github.com/numba/llvmlite/blob/v0.29.0/conda-recipes/0001-Revert-Limit-size-of-non-GlobalValue-name.patch
@@ -23,31 +23,107 @@ source:
 build:
   number: {{ build_number }}
   skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
+  merge_build_host: False
 
 requirements:
   build:
-    - {{ compiler('cxx') }}
+    - {{ compiler('cxx') }}   # [not osx]
     - cmake
     - ninja     # [win]
     - python    3.7
     - make
+    - libcxx {{cxx_compiler_version}}  # [osx]
   host:
-    - libcxx    4.0.1  # [osx]
-  run_constrained:
-    - llvm-meta {{ version }}
+    - libcxx {{cxx_compiler_version}}  # [osx]
 
-test:
-  files:
-    - numba-3016.ll
+outputs:
+  # Contains everything
+  - name: llvmdev
+    script: install_llvm.sh                         # [not win]
+    script: install_llvm.bat                        # [win]
+    build:
+      activate_in_script: True
+    requirements:
+      build:
+        - {{ compiler('cxx') }}    # [not osx]
+        - cmake
+        - ninja     # [win]
+        - python    3.7
+      host:
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - {{ pin_subpackage("llvm-tools", exact=True) }}
+      run:
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - {{ pin_subpackage("llvm-tools", exact=True) }}
+        - libcxx >={{ cxx_compiler_version }}  # [osx]
+    test:
+      commands:
+        - $PREFIX/bin/llvm-config --libs                         # [not win]
+        - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1        # [win]
+        - test -f $PREFIX/include/llvm/Pass.h                    # [unix]
+        - test -f $PREFIX/lib/libLLVMCore.a                      # [not win]
 
-  commands:
-    - $PREFIX/bin/llvm-config --libs                         # [not win]
-    - $PREFIX/bin/llc -version                               # [not win]
+  # Contains the shared libraries. To make different LLVM libraries co-installable
+  # soversion is appended to the package name.
+  - name: libllvm{{ major_ver }}
+    script: install_llvm.sh                         # [not win]
+    build:
+      activate_in_script: True
+      run_exports:                                                 # [not win]
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
+    requirements:
+      build:
+        - {{ compiler('cxx') }}    # [not (osx or win)]
+        - cmake                    # [not win]
+        - python    3.7            # [not win]
+      host:
+      run:
+        - libcxx >={{ cxx_compiler_version }}  # [osx]
+    test:
+      commands:
+        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}${SHLIB_EXT}  # [unix]
 
-    - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1        # [win]
+  # This is a meta package so that people can use the latest libllvm and also
+  # for run_exports
+  - name: llvm
+    build:
+      run_exports:                                                 # [not win]
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
+    requirements:
+      build:
+      host:
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
+      run:                                                         # [not win]
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
+      run_constrained:                                             # [not win]
+        - llvmdev   {{ version }}                                  # [not win]
+    test:
+      commands:
+        - echo "Hello World!"
 
-    - test -f $PREFIX/include/llvm/Pass.h                    # [unix]
-    - test -f $PREFIX/lib/libLLVMCore.a                      # [not win]
+  # Contains LLVM tools
+  - name: llvm-tools
+    script: install_llvm.sh                         # [not win]
+    script: install_llvm.bat                        # [win]
+    build:
+      activate_in_script: True
+    requirements:
+      build:
+        - {{ compiler('cxx') }}    # [not osx]
+        - cmake
+        - ninja     # [win]
+        - python    3.7
+      host:
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+      run:
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+      run_constrained:
+        - llvmdev   {{ version }}
+    test:
+      commands:
+        - $PREFIX/bin/llc -version                               # [not win]
+        - if not exist "%LIBRARY_BIN%"\\llc.exe exit 1           # [win]
+        - llc -version                                           # [win]
 
 about:
   home: http://llvm.org/
