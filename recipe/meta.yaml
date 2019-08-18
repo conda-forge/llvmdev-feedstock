@@ -12,7 +12,9 @@ source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version }}/llvm-{{ version }}.src.tar.xz
   sha256: {{ sha256 }}
   patches:
+{% if major_ver == "8" %}
     - llvm-lto-static.patch   # [win]
+{% endif %}
     # TODO add back for sake of llvm-lit - partial-testing.patch
     - D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # Revert an upstream change for Numba
@@ -30,7 +32,7 @@ requirements:
     - {{ compiler('cxx') }}   # [not osx]
     - cmake
     - ninja     # [win]
-    - python    3.7
+    - python    >=3
     - make
     - libcxx {{cxx_compiler_version}}  # [osx]
   host:
@@ -42,13 +44,14 @@ outputs:
     script: install_llvm.sh                         # [not win]
     script: install_llvm.bat                        # [win]
     build:
+      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
       activate_in_script: True
     requirements:
       build:
         - {{ compiler('cxx') }}    # [not osx]
         - cmake
         - ninja     # [win]
-        - python    3.7
+        - python    >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
@@ -68,6 +71,7 @@ outputs:
   - name: libllvm{{ major_ver }}
     script: install_llvm.sh                         # [not win]
     build:
+      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
       activate_in_script: True
       run_exports:                                                 # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
@@ -75,7 +79,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}    # [not (osx or win)]
         - cmake                    # [not win]
-        - python    3.7            # [not win]
+        - python    >=3            # [not win]
       host:
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
@@ -87,6 +91,7 @@ outputs:
   # for run_exports
   - name: llvm
     build:
+      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
       run_exports:                                                 # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
     requirements:
@@ -106,13 +111,14 @@ outputs:
     script: install_llvm.sh                         # [not win]
     script: install_llvm.bat                        # [win]
     build:
+      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
       activate_in_script: True
     requirements:
       build:
         - {{ compiler('cxx') }}    # [not osx]
         - cmake
         - ninja     # [win]
-        - python    3.7
+        - python    >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
       run:
@@ -124,6 +130,47 @@ outputs:
         - $PREFIX/bin/llc -version                               # [not win]
         - if not exist "%LIBRARY_BIN%"\\llc.exe exit 1           # [win]
         - llc -version                                           # [win]
+
+  - name: lit
+    build:
+      noarch: python
+      script: "python -m pip install utils/lit --no-deps -vv"
+      activate_in_script: True
+      skip: True  # [not linux]
+      entry_points:
+        - lit = lit:main
+    requirements:
+      host:
+        - python >=3
+        - pip
+      run:
+        - python
+    test:
+      imports:
+        - lit
+
+  # Contains LLVM utils
+  - name: llvm-utils
+    script: install_llvm.sh                         # [not win]
+    script: install_llvm.bat                        # [win]
+    build:
+      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
+      activate_in_script: True
+    requirements:
+      build:
+        - {{ compiler('cxx') }}    # [not osx]
+        - cmake
+        - ninja     # [win]
+        - python    >=3
+      host:
+        - {{ pin_subpackage("llvmdev", exact=True) }}
+      run_constrained:
+        - llvmdev   {{ version }}
+    test:
+      commands:
+        - $PREFIX/bin/not false                               # [not win]
+        - if not exist "%LIBRARY_BIN%"\\not.exe exit 1        # [win]
+
 
 about:
   home: http://llvm.org/

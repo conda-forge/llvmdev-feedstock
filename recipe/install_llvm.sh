@@ -17,5 +17,7 @@ elif [[ "${PKG_NAME}" == "llvm-tools" ]]; then
     rm -rf $PREFIX/lib
     rm -rf $PREFIX/include
     rm $PREFIX/bin/llvm-config
+elif [[ "${PKG_NAME}" == "llvm-utils" ]]; then
+    mv $SRC_DIR/install-utils/* $PREFIX/bin/
 fi
 

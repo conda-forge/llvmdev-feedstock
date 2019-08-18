@@ -10,8 +10,8 @@ jobs:
   strategy:
     maxParallel: 8
     matrix:
-      linux_target_platformlinux-64:
-        CONFIG: linux_target_platformlinux-64
+      linux_:
+        CONFIG: linux_
         UPLOAD_PACKAGES: True
         DOCKER_IMAGE: condaforge/linux-anvil-comp7
   steps:

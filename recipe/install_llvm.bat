@@ -7,3 +7,7 @@ if "%PKG_NAME%" == "llvm-tools" (
     rmdir /S /Q %LIBRARY_LIB%
     rmdir /S /Q %LIBRARY_INC%
 )
+
+if "%PKG_NAME%" == "llvm-utils" (
+    move /Y %SRC_DIR%\install-utils\* %LIBRARY_BIN%\
+)
