@@ -17,5 +17,8 @@ elif [[ "${PKG_NAME}" == "llvm-tools" ]]; then
     rm -rf $PREFIX/lib
     rm -rf $PREFIX/include
     rm $PREFIX/bin/llvm-config
+elif [[ "${PKG_NAME}" == "llvm-utils" ]]; then
+    cmake -DLLVM_INSTALL_UTILS=yes ..
+    make install
 fi
 

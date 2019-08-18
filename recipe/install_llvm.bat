@@ -7,3 +7,9 @@ if "%PKG_NAME%" == "llvm-tools" (
     rmdir /S /Q %LIBRARY_LIB%
     rmdir /S /Q %LIBRARY_INC%
 )
+
+if "%PKG_NAME%" == "llvm-utils" (
+    cmake -DLLVM_INSTALL_UTILS=yes ..
+    cmake --build . --target install
+fi
+
