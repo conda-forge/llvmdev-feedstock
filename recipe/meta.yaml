@@ -137,6 +137,8 @@ outputs:
       script: "python -m pip install utils/lit --no-deps -vv"
       activate_in_script: True
       skip: True  # [not linux]
+      entry_points:
+        - lit = lit:main
     requirements:
       host:
         - python >=3
