@@ -9,7 +9,5 @@ if "%PKG_NAME%" == "llvm-tools" (
 )
 
 if "%PKG_NAME%" == "llvm-utils" (
-    cmake -DLLVM_INSTALL_UTILS=yes ..
-    cmake --build . --target install
-fi
-
+    move /Y %SRC_DIR%\install-utils\* %LIBRARY_BIN%\
+)
