@@ -1,5 +1,5 @@
-{% set version = "8.0.1" %}
-{% set sha256 = "44787a6d02f7140f145e2250d56c9f849334e11f9ae379827510ed72f12b75e7" %}
+{% set version = "9.0.0.rc2" %}
+{% set sha256 = "0258418317820df7335d3687a44b61a6bd313992f1600a504146ce3f53298628" %}
 
 {% set build_number = 0 %}
 {% set major_ver = version.split(".")[0] %}
@@ -9,12 +9,9 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version }}/llvm-{{ version }}.src.tar.xz
+  url: http://prereleases.llvm.org/9.0.0/rc2/llvm-9.0.0rc2.src.tar.xz
   sha256: {{ sha256 }}
   patches:
-{% if major_ver == "8" %}
-    - llvm-lto-static.patch   # [win]
-{% endif %}
     # TODO add back for sake of llvm-lit - partial-testing.patch
     - D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # Revert an upstream change for Numba
@@ -175,8 +172,9 @@ outputs:
 about:
   home: http://llvm.org/
   dev_url: https://github.com/llvm-mirror/llvm
-  license: NCSA
+  license: LLVM-Exception
   license_file: LICENSE.TXT
+  license_family: Apache
   summary: Development headers and libraries for LLVM
 
 extra:
