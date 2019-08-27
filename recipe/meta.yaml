@@ -9,8 +9,7 @@ package:
   version: {{ version }}
 
 source:
-  url: http://prereleases.llvm.org/9.0.0/rc2/llvm-9.0.0rc2.src.tar.xz
-  sha256: {{ sha256 }}
+  url: https://github.com/llvm-mirror/llvm/archive/release_90.tar.gz
   patches:
     # TODO add back for sake of llvm-lit - partial-testing.patch
     - D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
