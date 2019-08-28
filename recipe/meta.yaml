@@ -25,8 +25,9 @@ build:
 
 requirements:
   build:
-    - {{ compiler('cxx') }}   # [not osx]
-    - clang_bootstrap_osx-64   # [osx]
+    - {{ compiler('cxx') }}            # [linux]
+    - vs2017_{{ target_platform  }}    # [win]
+    - clang_bootstrap_osx-64           # [osx]
     - cmake
     - ninja     # [win]
     - python    >=3
@@ -45,8 +46,9 @@ outputs:
       activate_in_script: True
     requirements:
       build:
-        - {{ compiler('cxx') }}    # [not osx]
-        - clang_bootstrap_osx-64   # [osx]
+        - {{ compiler('cxx') }}            # [linux]
+        - vs2017_{{ target_platform  }}    # [win]
+        - clang_bootstrap_osx-64           # [osx]
         - cmake
         - ninja     # [win]
         - python    >=3
@@ -75,8 +77,9 @@ outputs:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
     requirements:
       build:
-        - {{ compiler('cxx') }}    # [not (osx or win)]
-        - clang_bootstrap_osx-64   # [osx]
+        - {{ compiler('cxx') }}            # [linux]
+        - vs2017_{{ target_platform  }}    # [win]
+        - clang_bootstrap_osx-64           # [osx]
         - cmake                    # [not win]
         - python    >=3            # [not win]
       host:
@@ -114,8 +117,9 @@ outputs:
       activate_in_script: True
     requirements:
       build:
-        - {{ compiler('cxx') }}    # [not osx]
-        - clang_bootstrap_osx-64   # [osx]
+        - {{ compiler('cxx') }}            # [linux]
+        - vs2017_{{ target_platform  }}    # [win]
+        - clang_bootstrap_osx-64           # [osx]
         - cmake
         - ninja     # [win]
         - python    >=3
@@ -158,8 +162,9 @@ outputs:
       activate_in_script: True
     requirements:
       build:
-        - {{ compiler('cxx') }}    # [not osx]
-        - clang_bootstrap_osx-64   # [osx]
+        - {{ compiler('cxx') }}            # [linux]
+        - vs2017_{{ target_platform  }}    # [win]
+        - clang_bootstrap_osx-64           # [osx]
         - cmake
         - ninja     # [win]
         - python    >=3
