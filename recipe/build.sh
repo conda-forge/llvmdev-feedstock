@@ -14,7 +14,7 @@ cd build
 cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
       -DLLVM_ENABLE_RTTI=ON \
-      -DLLVM_INCLUDE_TESTS=OFF \
+      -DLLVM_INCLUDE_TESTS=ON \
       -DLLVM_INCLUDE_GO_TESTS=OFF \
       -DLLVM_INCLUDE_UTILS=ON \
       -DLLVM_INSTALL_UTILS=ON \
@@ -39,5 +39,6 @@ else
 fi
 
 bin/opt -S -vector-library=SVML $TEST_CPU_FLAG -O3 $RECIPE_DIR/numba-3016.ll | bin/FileCheck $RECIPE_DIR/numba-3016.ll || exit $?
+make -j${CPU_COUNT} check-llvm
 #cd ../test
 #../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
