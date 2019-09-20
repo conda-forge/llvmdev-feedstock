@@ -11,19 +11,10 @@ cd build
       -DLLVM_USE_INTEL_JITEVENTS=ON
 "
 
-if [[ "$target_platform" == "osx-64" ]]; then
-    export CONDA_BUILD_SYSROOT_BACKUP=${CONDA_BUILD_SYSROOT}
-    conda install -p $BUILD_PREFIX --quiet --yes clangxx_osx-64=${cxx_compiler_version}
-    export CONDA_BUILD_SYSROOT=${CONDA_BUILD_SYSROOT_BACKUP}
-    export CFLAGS="$CFLAGS -isysroot $CONDA_BUILD_SYSROOT"
-    export CXXFLAGS="$CXXFLAGS -isysroot $CONDA_BUILD_SYSROOT"
-    export LDFLAGS="$LDFLAGS -isysroot $CONDA_BUILD_SYSROOT"
-fi
-
 cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
       -DLLVM_ENABLE_RTTI=ON \
-      -DLLVM_INCLUDE_TESTS=OFF \
+      -DLLVM_INCLUDE_TESTS=ON \
       -DLLVM_INCLUDE_GO_TESTS=OFF \
       -DLLVM_INCLUDE_UTILS=ON \
       -DLLVM_INSTALL_UTILS=ON \
@@ -48,5 +39,8 @@ else
 fi
 
 bin/opt -S -vector-library=SVML $TEST_CPU_FLAG -O3 $RECIPE_DIR/numba-3016.ll | bin/FileCheck $RECIPE_DIR/numba-3016.ll || exit $?
-#cd ../test
-#../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
+
+#make -j${CPU_COUNT} check-llvm
+
+cd ../test
+../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
