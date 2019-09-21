@@ -19,5 +19,9 @@ elif [[ "${PKG_NAME}" == "llvm-tools" ]]; then
     rm -rf $PREFIX/include
     rm $PREFIX/bin/llvm-config
     rm -rf $PREFIX/libexec
+elif [[ "${PKG_NAME}" == "llvmdev" ]]; then
+    FILE="${PREFIX}/lib/cmake/llvm/LLVMExports-release.cmake"
+    sed -i 's@'${PREFIX}'@${_IMPORT_PREFIX}@g' ${FILE}
+    cat ${FILE}
 fi
 
