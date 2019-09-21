@@ -1,7 +1,7 @@
 {% set version = "9.0.0" %}
 {% set sha256 = "d6a0565cf21f22e9b4353b2eb92622e8365000a9e90a16b09b56f8157eabfe84" %}
 
-{% set build_number = 0 %}
+{% set build_number = 1 %}
 {% set major_ver = version.split(".")[0] %}
 
 package:

@@ -7,6 +7,7 @@ if [[ "${PKG_NAME}" == libllvm* ]]; then
     rm -rf $PREFIX/bin
     rm -rf $PREFIX/include
     rm -rf $PREFIX/share
+    rm -rf $PREFIX/libexec
     mv $PREFIX/lib $PREFIX/lib2
     mkdir -p $PREFIX/lib
     mv $PREFIX/lib2/libLLVM-${VER_ARR[0]}${SHLIB_EXT} $PREFIX/lib
@@ -17,7 +18,6 @@ elif [[ "${PKG_NAME}" == "llvm-tools" ]]; then
     rm -rf $PREFIX/lib
     rm -rf $PREFIX/include
     rm $PREFIX/bin/llvm-config
-elif [[ "${PKG_NAME}" == "llvm-utils" ]]; then
-    mv $SRC_DIR/install-utils/* $PREFIX/bin/
+    rm -rf $PREFIX/libexec
 fi
 
