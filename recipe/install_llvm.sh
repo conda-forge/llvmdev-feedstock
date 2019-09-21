@@ -19,7 +19,5 @@ elif [[ "${PKG_NAME}" == "llvm-tools" ]]; then
     rm -rf $PREFIX/include
     rm $PREFIX/bin/llvm-config
     rm -rf $PREFIX/libexec
-elif [[ "${PKG_NAME}" == "llvmdev" ]]; then
-    cat ${FILE}
 fi
 

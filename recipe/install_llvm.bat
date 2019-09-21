@@ -8,3 +8,4 @@ if "%PKG_NAME%" == "llvm-tools" (
     rmdir /S /Q %LIBRARY_INC%
     rmdir /S /Q %LIBRARY_PREFIX%\libexec
 )
+
