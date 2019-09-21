@@ -52,8 +52,6 @@ outputs:
         - cmake
         - ninja     # [win]
         - python    >=3
-        - sed       # [unix]
-        - m2-sed    # [win]
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
