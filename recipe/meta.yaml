@@ -174,8 +174,8 @@ outputs:
         - llvmdev   {{ version }}
     test:
       commands:
-        - $PREFIX/bin/not false                               # [not win]
-        - if not exist "%LIBRARY_BIN%"\\not.exe exit 1        # [win]
+        - $PREFIX/libexec/llvm/not false                               # [not win]
+        - if not exist "%LIBRARY_PREFIX%"\\libexec\llvm\not.exe exit 1        # [win]
 
 
 about:
