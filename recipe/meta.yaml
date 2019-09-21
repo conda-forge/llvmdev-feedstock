@@ -65,6 +65,8 @@ outputs:
         - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1        # [win]
         - test -f $PREFIX/include/llvm/Pass.h                    # [unix]
         - test -f $PREFIX/lib/libLLVMCore.a                      # [not win]
+        - $PREFIX/libexec/llvm/not false                               # [not win]
+        - if not exist "%LIBRARY_PREFIX%"\\libexec\llvm\not.exe exit 1        # [win]
 
   # Contains the shared libraries. To make different LLVM libraries co-installable
   # soversion is appended to the package name.
@@ -152,31 +154,6 @@ outputs:
     test:
       imports:
         - lit
-
-  # Contains LLVM utils
-  - name: llvm-utils
-    script: install_llvm.sh                         # [not win]
-    script: install_llvm.bat                        # [win]
-    build:
-      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
-      activate_in_script: True
-    requirements:
-      build:
-        - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform  }}    # [win]
-        - clang_bootstrap_osx-64           # [osx]
-        - cmake
-        - ninja     # [win]
-        - python    >=3
-      host:
-        - {{ pin_subpackage("llvmdev", exact=True) }}
-      run_constrained:
-        - llvmdev   {{ version }}
-    test:
-      commands:
-        - $PREFIX/libexec/llvm/not false                               # [not win]
-        - if not exist "%LIBRARY_PREFIX%"\\libexec\llvm\not.exe exit 1        # [win]
-
 
 about:
   home: http://llvm.org/
