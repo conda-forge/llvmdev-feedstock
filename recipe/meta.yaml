@@ -96,8 +96,8 @@ outputs:
   - name: llvm
     build:
       skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
-      run_exports:                                                 # [not win]
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
+      run_exports:                                                    # [not win]
+        - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
       host:
