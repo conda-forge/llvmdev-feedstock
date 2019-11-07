@@ -85,6 +85,7 @@ outputs:
         - cmake                    # [not win]
         - python    >=3            # [not win]
       host:
+        - libcxx >={{ cxx_compiler_version }}  # [osx]
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
