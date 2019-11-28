@@ -1,32 +1,31 @@
 {% set shortversion = "5.0" %}
 {% set version = "5.0.0" %}
-{% set sha256 = "e35dcbae6084adcf4abb32514127c5eabd7d63b733852ccdb31e06f1373136da" %}
 
-{% set build_number = 1002 %}
+{% set build_number = 1003 %}
 
 package:
   name: llvmdev
   version: {{ version }}
 
 source:
-  fn: llvm-{{ version }}.src.tar.xz
   url: http://llvm.org/releases/{{ version }}/llvm-{{ version }}.src.tar.xz
-  sha256: {{ sha256 }}
+  sha256: e35dcbae6084adcf4abb32514127c5eabd7d63b733852ccdb31e06f1373136da
   patches:
     # https://llvm.org/bugs/show_bug.cgi?id=15356
     - llvm-elf-relocation.patch
-    - llvm-lto-static.patch   # [win]
+    - llvm-lto-static.patch  # [win]
 
 build:
   number: {{ build_number }}
-  skip:  true  # [win and vc<14]
+  skip: true  # [win and vc<14]
 
 requirements:
   build:
     - {{ compiler('cxx') }}
     - cmake
-    - ninja     # [win]
+    - ninja  # [win]
     - python
+    - make  # [unix]
   host:
     - llvm-meta {{ version }}
   run:
