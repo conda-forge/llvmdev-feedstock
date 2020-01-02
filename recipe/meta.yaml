@@ -1,7 +1,7 @@
-{% set version = "9.0.0" %}
-{% set sha256 = "d6a0565cf21f22e9b4353b2eb92622e8365000a9e90a16b09b56f8157eabfe84" %}
+{% set version = "9.0.1" %}
+{% set sha256 = "00a1ee1f389f81e9979f3a640a01c431b3021de0d42278f6508391a2f0b81c9a" %}
 
-{% set build_number = 3 %}
+{% set build_number = 0 %}
 {% set major_ver = version.split(".")[0] %}
 
 package:
@@ -9,7 +9,7 @@ package:
   version: {{ version }}
 
 source:
-  url: http://releases.llvm.org/{{ version }}/llvm-{{ version }}.src.tar.xz
+  url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version }}/llvm-{{ version }}.src.tar.xz
   sha256: {{ sha256 }}
   patches:
     - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
