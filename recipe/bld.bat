@@ -36,5 +36,4 @@ bin\opt -S -vector-library=SVML -mcpu=haswell -O3 %RECIPE_DIR%\numba-3016.ll | b
 if errorlevel 1 exit 1
 
 cd ..\test
-cd ..\test
 ..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
