@@ -1,5 +1,5 @@
-{% set version = "9.0.1" %}
-{% set sha256 = "00a1ee1f389f81e9979f3a640a01c431b3021de0d42278f6508391a2f0b81c9a" %}
+{% set version = "10.0.0" %}
+{% set sha256 = "df83a44b3a9a71029049ec101fb0077ecbbdf5fe41e395215025779099a98fdf" %}
 
 {% set build_number = 0 %}
 {% set major_ver = version.split(".")[0] %}
@@ -20,8 +20,8 @@ source:
 
 build:
   number: {{ build_number }}
-  skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
-  merge_build_host: False
+  skip: true  # [(win and vc<14) or aarch64 or ppc64le]
+  merge_build_host: false
 
 requirements:
   build:
@@ -39,11 +39,11 @@ requirements:
 outputs:
   # Contains everything
   - name: llvmdev
-    script: install_llvm.sh                         # [not win]
-    script: install_llvm.bat                        # [win]
+    script: install_llvm.sh  # [not win]
+    script: install_llvm.bat  # [win]
     build:
-      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
-      activate_in_script: True
+      skip: true  # [(win and vc<14) or aarch64 or ppc64le]
+      activate_in_script: true
     requirements:
       build:
         - {{ compiler('cxx') }}            # [linux]
@@ -71,11 +71,11 @@ outputs:
   # Contains the shared libraries. To make different LLVM libraries co-installable
   # soversion is appended to the package name.
   - name: libllvm{{ major_ver }}
-    script: install_llvm.sh                         # [not win]
+    script: install_llvm.sh  # [not win]
     build:
-      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
-      activate_in_script: True
-      run_exports:                                                 # [not win]
+      skip: true  # [(win and vc<14) or aarch64 or ppc64le]
+      activate_in_script: true
+      run_exports:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
     requirements:
       build:
@@ -96,16 +96,16 @@ outputs:
   # for run_exports
   - name: llvm
     build:
-      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
-      run_exports:                                                    # [not win]
+      skip: true  # [(win and vc<14) or aarch64 or ppc64le]
+      run_exports:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
-      run:                                                         # [not win]
+      run:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
-      run_constrained:                                             # [not win]
+      run_constrained:   # [not win]
         - llvmdev   {{ version }}                                  # [not win]
     test:
       commands:
@@ -113,11 +113,11 @@ outputs:
 
   # Contains LLVM tools
   - name: llvm-tools
-    script: install_llvm.sh                         # [not win]
-    script: install_llvm.bat                        # [win]
+    script: install_llvm.sh  # [not win]
+    script: install_llvm.bat  # [win]
     build:
-      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
-      activate_in_script: True
+      skip: true  # [(win and vc<14) or aarch64 or ppc64le]
+      activate_in_script: true
     requirements:
       build:
         - {{ compiler('cxx') }}            # [linux]
@@ -141,9 +141,9 @@ outputs:
   - name: lit
     build:
       noarch: python
-      script: "python -m pip install utils/lit --no-deps -vv"
-      activate_in_script: True
-      skip: True  # [not linux]
+      script: python -m pip install utils/lit --no-deps -vv
+      activate_in_script: true
+      skip: true  # [not linux]
       entry_points:
         - lit = lit:main
     requirements:
