@@ -16,7 +16,7 @@ source:
     # Revert an upstream change for Numba
     # ref: https://github.com/numba/llvmlite/blob/v0.29.0/conda-recipes/0001-Revert-Limit-size-of-non-GlobalValue-name.patch
     - patches/numba-0001-Revert-Limit-size-of-non-GlobalValue-name.patch
-    - patches/amd-roc-2.7.0.diff
+    #- patches/amd-roc-2.7.0.diff
 
 build:
   number: {{ build_number }}
@@ -159,7 +159,7 @@ outputs:
 about:
   home: http://llvm.org/
   dev_url: https://github.com/llvm-mirror/llvm
-  license: LLVM-Exception
+  license: Apache-2.0 WITH LLVM-Exception
   license_file: LICENSE.TXT
   license_family: Apache
   summary: Development headers and libraries for LLVM
