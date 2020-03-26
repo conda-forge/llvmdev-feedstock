@@ -159,7 +159,7 @@ outputs:
 about:
   home: http://llvm.org/
   dev_url: https://github.com/llvm-mirror/llvm
-  license: Apache-2.0 WITH LLVM-Exception
+  license: Apache-2.0 WITH LLVM-exception
   license_file: LICENSE.TXT
   license_family: Apache
   summary: Development headers and libraries for LLVM
