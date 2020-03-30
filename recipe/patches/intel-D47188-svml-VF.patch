@@ -1,4 +1,4 @@
-From e9527605b92a54f2215e3b610fb8979a00aeeaeb Mon Sep 17 00:00:00 2001
+From 6c869c0f1e798725ab8199b17d19c9070d1ac3ee Mon Sep 17 00:00:00 2001
 From: Tim Snyder <snyder.tim@gmail.com>
 Date: Mon, 30 Mar 2020 15:37:33 -0500
 Subject: [PATCH] Fixes vectorizer and extends SVML support
@@ -119,7 +119,7 @@ index c8edc29bd..e532ce08c 100644
 +tablegen(LLVM SVML.inc -gen-svml)
 +add_public_tablegen_target(svml_gen)
 diff --git a/include/llvm/IR/CallingConv.h b/include/llvm/IR/CallingConv.h
-index d0906de3e..a573ad38e 100644
+index d0906de3e..5179ec8ee 100644
 --- a/include/llvm/IR/CallingConv.h
 +++ b/include/llvm/IR/CallingConv.h
 @@ -241,6 +241,9 @@ namespace CallingConv {
@@ -127,7 +127,7 @@ index d0906de3e..a573ad38e 100644
      WASM_EmscriptenInvoke = 99,
  
 +    /// Intel_SVML - Calling conventions for Intel Short Math Vector Library
-+    Intel_SVML = 98,
++    Intel_SVML = 100,
 +
      /// The highest possible calling convention ID. Must be some 2^k - 1.
      MaxID = 1023
