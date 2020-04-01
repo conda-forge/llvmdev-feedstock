@@ -1,4 +1,4 @@
-From 6c869c0f1e798725ab8199b17d19c9070d1ac3ee Mon Sep 17 00:00:00 2001
+From 83294690d80a899e08cc455efb443bb957303947 Mon Sep 17 00:00:00 2001
 From: Tim Snyder <snyder.tim@gmail.com>
 Date: Mon, 30 Mar 2020 15:37:33 -0500
 Subject: [PATCH] Fixes vectorizer and extends SVML support
@@ -41,6 +41,7 @@ Author: Karthik Senthil
  lib/Target/X86/X86ISelLowering.cpp            |   3 +-
  lib/Target/X86/X86RegisterInfo.cpp            |  34 ++
  lib/Target/X86/X86Subtarget.h                 |   1 +
+ lib/Transforms/Utils/InjectTLIMappings.cpp    |   3 +-
  lib/Transforms/Vectorize/LoopVectorize.cpp    | 279 +++++++++-
  .../LoopVectorize/X86/svml-calls-finite.ll    |   9 +-
  .../LoopVectorize/X86/svml-calls.ll           |  81 ++-
@@ -51,7 +52,7 @@ Author: Karthik Senthil
  utils/TableGen/TableGen.cpp                   |   8 +-
  utils/TableGen/TableGenBackends.h             |   1 +
  utils/vim/syntax/llvm.vim                     |   1 +
- 25 files changed, 1246 insertions(+), 41 deletions(-)
+ 26 files changed, 1248 insertions(+), 42 deletions(-)
  create mode 100644 include/llvm/IR/SVML.td
  create mode 100644 test/Transforms/LoopVectorize/X86/svml-legal-calls.ll
  create mode 100644 test/Transforms/LoopVectorize/X86/svml-legal-codegen.ll
@@ -518,6 +519,20 @@ index f4e8d3032..d872d3696 100644
        return isTargetWin64();
      // This convention allows using the Win64 convention on other targets.
      case CallingConv::Win64:
+diff --git a/lib/Transforms/Utils/InjectTLIMappings.cpp b/lib/Transforms/Utils/InjectTLIMappings.cpp
+index 9192e74b9..8c11e6f05 100644
+--- a/lib/Transforms/Utils/InjectTLIMappings.cpp
++++ b/lib/Transforms/Utils/InjectTLIMappings.cpp
+@@ -120,7 +120,8 @@ static void addMappingsFromTLI(const TargetLibraryInfo &TLI, CallInst &CI) {
+   //  All VFs in the TLI are powers of 2.
+   for (unsigned VF = 2, WidestVF = TLI.getWidestVF(ScalarName); VF <= WidestVF;
+        VF *= 2) {
+-    const std::string TLIName = TLI.getVectorizedFunction(ScalarName, VF);
++      bool Ignored = false;
++    const std::string TLIName = TLI.getVectorizedFunction(ScalarName, VF, Ignored, CI.getFastMathFlags().isFast());
+     if (!TLIName.empty()) {
+       std::string MangledName = mangleTLIName(TLIName, CI, VF);
+       if (!OriginalSetOfMappings.count(MangledName)) {
 diff --git a/lib/Transforms/Vectorize/LoopVectorize.cpp b/lib/Transforms/Vectorize/LoopVectorize.cpp
 index ebfd5fe8b..1beec43ca 100644
 --- a/lib/Transforms/Vectorize/LoopVectorize.cpp
