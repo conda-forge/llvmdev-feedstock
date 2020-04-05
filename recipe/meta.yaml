@@ -1,5 +1,5 @@
-{% set version = "9.0.1" %}
-{% set sha256 = "00a1ee1f389f81e9979f3a640a01c431b3021de0d42278f6508391a2f0b81c9a" %}
+{% set version = "10.0.0" %}
+{% set sha256 = "df83a44b3a9a71029049ec101fb0077ecbbdf5fe41e395215025779099a98fdf" %}
 
 {% set build_number = 0 %}
 {% set major_ver = version.split(".")[0] %}
@@ -13,15 +13,16 @@ source:
   sha256: {{ sha256 }}
   patches:
     - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
+    - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # Revert an upstream change for Numba
     # ref: https://github.com/numba/llvmlite/blob/v0.29.0/conda-recipes/0001-Revert-Limit-size-of-non-GlobalValue-name.patch
     - patches/numba-0001-Revert-Limit-size-of-non-GlobalValue-name.patch
-    - patches/amd-roc-2.7.0.diff
+    #- patches/amd-roc-2.7.0.diff
 
 build:
   number: {{ build_number }}
-  skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
-  merge_build_host: False
+  skip: true  # [(win and vc<14) or aarch64 or ppc64le]
+  merge_build_host: false
 
 requirements:
   build:
@@ -39,11 +40,11 @@ requirements:
 outputs:
   # Contains everything
   - name: llvmdev
-    script: install_llvm.sh                         # [not win]
-    script: install_llvm.bat                        # [win]
+    script: install_llvm.sh  # [not win]
+    script: install_llvm.bat  # [win]
     build:
-      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
-      activate_in_script: True
+      skip: true  # [(win and vc<14) or aarch64 or ppc64le]
+      activate_in_script: true
     requirements:
       build:
         - {{ compiler('cxx') }}            # [linux]
@@ -71,11 +72,11 @@ outputs:
   # Contains the shared libraries. To make different LLVM libraries co-installable
   # soversion is appended to the package name.
   - name: libllvm{{ major_ver }}
-    script: install_llvm.sh                         # [not win]
+    script: install_llvm.sh  # [not win]
     build:
-      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
-      activate_in_script: True
-      run_exports:                                                 # [not win]
+      skip: true  # [(win and vc<14) or aarch64 or ppc64le]
+      activate_in_script: true
+      run_exports:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
     requirements:
       build:
@@ -96,16 +97,16 @@ outputs:
   # for run_exports
   - name: llvm
     build:
-      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
-      run_exports:                                                    # [not win]
+      skip: true  # [(win and vc<14) or aarch64 or ppc64le]
+      run_exports:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
-      run:                                                         # [not win]
+      run:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
-      run_constrained:                                             # [not win]
+      run_constrained:   # [not win]
         - llvmdev   {{ version }}                                  # [not win]
     test:
       commands:
@@ -113,11 +114,11 @@ outputs:
 
   # Contains LLVM tools
   - name: llvm-tools
-    script: install_llvm.sh                         # [not win]
-    script: install_llvm.bat                        # [win]
+    script: install_llvm.sh  # [not win]
+    script: install_llvm.bat  # [win]
     build:
-      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
-      activate_in_script: True
+      skip: true  # [(win and vc<14) or aarch64 or ppc64le]
+      activate_in_script: true
     requirements:
       build:
         - {{ compiler('cxx') }}            # [linux]
@@ -141,9 +142,9 @@ outputs:
   - name: lit
     build:
       noarch: python
-      script: "python -m pip install utils/lit --no-deps -vv"
-      activate_in_script: True
-      skip: True  # [not linux]
+      script: python -m pip install utils/lit --no-deps -vv
+      activate_in_script: true
+      skip: true  # [not linux]
       entry_points:
         - lit = lit:main
     requirements:
@@ -159,7 +160,7 @@ outputs:
 about:
   home: http://llvm.org/
   dev_url: https://github.com/llvm-mirror/llvm
-  license: LLVM-Exception
+  license: Apache-2.0 WITH LLVM-exception
   license_file: LICENSE.TXT
   license_family: Apache
   summary: Development headers and libraries for LLVM
@@ -167,9 +168,9 @@ about:
 extra:
   recipe-maintainers:
     - inducer
-    - pitrou
     - jakirkham
     - mingwandroid
     - mattwala
     - SylvainCorlay
     - isuruf
+    - timsnyder
