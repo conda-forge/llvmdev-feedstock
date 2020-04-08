@@ -163,7 +163,6 @@ Feedstock Maintainers
 * [@inducer](https://github.com/inducer/)
 * [@isuruf](https://github.com/isuruf/)
 * [@jakirkham](https://github.com/jakirkham/)
-* [@mattwala](https://github.com/mattwala/)
 * [@mingwandroid](https://github.com/mingwandroid/)
-* [@pitrou](https://github.com/pitrou/)
+* [@timsnyder](https://github.com/timsnyder/)
 
