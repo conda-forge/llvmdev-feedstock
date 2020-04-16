@@ -1,7 +1,6 @@
 {% set version = "9.0.1" %}
 {% set sha256 = "00a1ee1f389f81e9979f3a640a01c431b3021de0d42278f6508391a2f0b81c9a" %}
 
-{% set build_number = 0 %}
 {% set major_ver = version.split(".")[0] %}
 
 package:
@@ -19,7 +18,7 @@ source:
     - patches/amd-roc-2.7.0.diff
 
 build:
-  number: {{ build_number }}
+  number: 1
   skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
   merge_build_host: False
 
@@ -35,6 +34,7 @@ requirements:
     - libcxx {{cxx_compiler_version}}  # [osx]
   host:
     - libcxx {{cxx_compiler_version}}  # [osx]
+    - zlib
 
 outputs:
   # Contains everything
@@ -159,7 +159,7 @@ outputs:
 about:
   home: http://llvm.org/
   dev_url: https://github.com/llvm-mirror/llvm
-  license: LLVM-Exception
+  license: Apache-2.0 WITH LLVM-exception
   license_file: LICENSE.TXT
   license_family: Apache
   summary: Development headers and libraries for LLVM
@@ -167,9 +167,9 @@ about:
 extra:
   recipe-maintainers:
     - inducer
-    - pitrou
     - jakirkham
     - mingwandroid
     - mattwala
     - SylvainCorlay
     - isuruf
+    - timsnyder
