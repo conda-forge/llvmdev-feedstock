@@ -1,7 +1,6 @@
 {% set version = "10.0.0" %}
 {% set sha256 = "df83a44b3a9a71029049ec101fb0077ecbbdf5fe41e395215025779099a98fdf" %}
 
-{% set build_number = 0 %}
 {% set major_ver = version.split(".")[0] %}
 
 package:
@@ -20,7 +19,7 @@ source:
     #- patches/amd-roc-2.7.0.diff
 
 build:
-  number: {{ build_number }}
+  number: 1
   skip: true  # [(win and vc<14) or aarch64 or ppc64le]
   merge_build_host: false
 
@@ -36,6 +35,7 @@ requirements:
     - libcxx {{cxx_compiler_version}}  # [osx]
   host:
     - libcxx {{cxx_compiler_version}}  # [osx]
+    - zlib
 
 outputs:
   # Contains everything
@@ -56,6 +56,7 @@ outputs:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
+        - zlib
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
@@ -87,6 +88,7 @@ outputs:
         - python    >=3            # [not win]
       host:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
+        - zlib
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
@@ -104,7 +106,8 @@ outputs:
       build:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
-      run:   # [not win]
+        - zlib
+      run:                                                         # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
       run_constrained:   # [not win]
         - llvmdev   {{ version }}                                  # [not win]
@@ -129,6 +132,7 @@ outputs:
         - python    >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - zlib
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
       run_constrained:
