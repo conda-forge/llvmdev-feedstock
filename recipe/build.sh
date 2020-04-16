@@ -1,4 +1,5 @@
 set -x
+set -o pipefail
 
 # Make osx work like linux.
 sed -i.bak "s/NOT APPLE AND ARG_SONAME/ARG_SONAME/g" cmake/modules/AddLLVM.cmake
@@ -7,9 +8,23 @@ sed -i.bak "s/NOT APPLE AND NOT ARG_SONAME/NOT ARG_SONAME/g" cmake/modules/AddLL
 mkdir build
 cd build
 
-[[ $(uname) == Linux ]] && conditional_args="
-      -DLLVM_USE_INTEL_JITEVENTS=ON
-"
+if [[ $(uname) == Linux ]]; then
+
+    binutils_plugin_include=($(find "$BUILD_PREFIX/lib/gcc" -name plugin-api.h | xargs -n1 dirname))
+    if [[ "${#binutils_plugin_include[@]}" -ne 1 ]]; then
+	echo "::ERROR:: unable to find binutils plugin-api.h. Find said '${binutils_plugin_include[@]}'"
+	exit 1
+    fi
+    if [[ ! -d "${binutils_plugin_include[0]}" ]]; then
+	echo "::ERROR:: binutils plugin include path isn't a directory '${binutils_plugin_include[0]}'"
+	exit 1
+    fi
+
+    conditional_args="
+	  -DLLVM_USE_INTEL_JITEVENTS=ON
+	  -DLLVM_BINUTILS_INCDIR=${binutils_plugin_include[0]}
+    "
+fi
 
 cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
