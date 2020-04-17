@@ -154,7 +154,6 @@ outputs:
       host:
         - python >=3
         - pip
-        - zlib
       run:
         - python
     test:
