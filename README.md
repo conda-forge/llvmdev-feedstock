@@ -3,7 +3,7 @@ About llvm-package
 
 Home: http://llvm.org/
 
-Package license: LLVM-Exception
+Package license: Apache-2.0 WITH LLVM-exception
 
 Feedstock license: BSD 3-Clause
 
@@ -43,10 +43,10 @@ Current build status
                 </a>
               </td>
             </tr><tr>
-              <td>win_target_platformwin-64vc14</td>
+              <td>win_target_platformwin-64</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master&jobName=win&configuration=win_target_platformwin-64vc14" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master&jobName=win&configuration=win_target_platformwin-64" alt="variant">
                 </a>
               </td>
             </tr>
@@ -165,5 +165,5 @@ Feedstock Maintainers
 * [@jakirkham](https://github.com/jakirkham/)
 * [@mattwala](https://github.com/mattwala/)
 * [@mingwandroid](https://github.com/mingwandroid/)
-* [@pitrou](https://github.com/pitrou/)
+* [@timsnyder](https://github.com/timsnyder/)
 
