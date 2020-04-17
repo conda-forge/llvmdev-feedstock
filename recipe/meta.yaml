@@ -55,6 +55,7 @@ outputs:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
+        - zlib
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
@@ -86,6 +87,7 @@ outputs:
         - python    >=3            # [not win]
       host:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
+        - zlib
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
@@ -103,6 +105,7 @@ outputs:
       build:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
+        - zlib
       run:                                                         # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
       run_constrained:                                             # [not win]
@@ -128,6 +131,7 @@ outputs:
         - python    >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - zlib
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
       run_constrained:
@@ -150,6 +154,7 @@ outputs:
       host:
         - python >=3
         - pip
+        - zlib
       run:
         - python
     test:
