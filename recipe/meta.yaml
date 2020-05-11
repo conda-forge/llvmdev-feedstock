@@ -26,15 +26,15 @@ build:
 requirements:
   build:
     - {{ compiler('cxx') }}            # [linux]
-    - vs2017_{{ target_platform  }}    # [win]
+    - vs2017_{{ target_platform }}     # [win]
     - clang_bootstrap_osx-64           # [osx]
     - cmake
     - ninja     # [win]
     - python    >=3
     - make
-    - libcxx {{cxx_compiler_version}}  # [osx]
+    - libcxx {{ cxx_compiler_version }}  # [osx]
   host:
-    - libcxx {{cxx_compiler_version}}  # [osx]
+    - libcxx {{ cxx_compiler_version }}  # [osx]
     - zlib
 
 outputs:
@@ -48,7 +48,7 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform  }}    # [win]
+        - vs2017_{{ target_platform }}     # [win]
         - clang_bootstrap_osx-64           # [osx]
         - cmake
         - ninja     # [win]
@@ -82,7 +82,7 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform  }}    # [win]
+        - vs2017_{{ target_platform }}     # [win]
         - clang_bootstrap_osx-64           # [osx]
         - cmake                    # [not win]
         - python    >=3            # [not win]
@@ -125,7 +125,7 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform  }}    # [win]
+        - vs2017_{{ target_platform }}     # [win]
         - clang_bootstrap_osx-64           # [osx]
         - cmake
         - ninja     # [win]
