@@ -34,9 +34,9 @@ requirements:
     - ninja     # [win]
     - python    >=3
     - make
-    - libcxx {{cxx_compiler_version}}  # [osx]
+    - libcxx {{ cxx_compiler_version }}  # [osx]
   host:
-    - libcxx {{cxx_compiler_version}}  # [osx]
+    - libcxx {{ cxx_compiler_version }}  # [osx]
 
 outputs:
   # Contains everything
