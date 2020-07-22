@@ -5,7 +5,7 @@ Home: http://llvm.org/
 
 Package license: Apache-2.0 WITH LLVM-exception
 
-Feedstock license: BSD 3-Clause
+Feedstock license: BSD-3-Clause
 
 Summary: Development headers and libraries for LLVM
 
