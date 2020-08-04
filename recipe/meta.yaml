@@ -1,7 +1,6 @@
-{% set version = "9.0.0" %}
-{% set sha256 = "d6a0565cf21f22e9b4353b2eb92622e8365000a9e90a16b09b56f8157eabfe84" %}
+{% set version = "10.0.1" %}
+{% set sha256 = "c5d8e30b57cbded7128d78e5e8dad811bff97a8d471896812f57fa99ee82cdf3" %}
 
-{% set build_number = 1 %}
 {% set major_ver = version.split(".")[0] %}
 
 package:
@@ -9,45 +8,47 @@ package:
   version: {{ version }}
 
 source:
-  url: http://releases.llvm.org/{{ version }}/llvm-{{ version }}.src.tar.xz
+  url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version }}/llvm-{{ version }}.src.tar.xz
   sha256: {{ sha256 }}
   patches:
-    - D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
+    - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
+    - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # Revert an upstream change for Numba
     # ref: https://github.com/numba/llvmlite/blob/v0.29.0/conda-recipes/0001-Revert-Limit-size-of-non-GlobalValue-name.patch
-    - 0001-Revert-Limit-size-of-non-GlobalValue-name.patch
-
+    - patches/numba-0001-Revert-Limit-size-of-non-GlobalValue-name.patch
+    #- patches/amd-roc-2.7.0.diff
 
 build:
-  number: {{ build_number }}
-  skip:  true  # [(win and vc<14)]
-  merge_build_host: False
+  number: 0
+  skip: true  # [(win and vc<14)]
+  merge_build_host: false
 
 requirements:
   build:
     - {{ compiler('cxx') }}            # [linux]
-    - vs2017_{{ target_platform  }}    # [win]
+    - vs2017_{{ target_platform }}     # [win]
     - clang_bootstrap_osx-64           # [osx]
     - cmake
     - ninja     # [win]
     - python    >=3
     - make
-    - libcxx {{cxx_compiler_version}}  # [osx]
+    - libcxx {{ cxx_compiler_version }}  # [osx]
   host:
-    - libcxx {{cxx_compiler_version}}  # [osx]
+    - libcxx {{ cxx_compiler_version }}  # [osx]
+    - zlib
 
 outputs:
   # Contains everything
   - name: llvmdev
-    script: install_llvm.sh                         # [not win]
-    script: install_llvm.bat                        # [win]
+    script: install_llvm.sh  # [not win]
+    script: install_llvm.bat  # [win]
     build:
-      skip:  true  # [(win and vc<14)]
+      skip: true  # [(win and vc<14)]
       activate_in_script: True
     requirements:
       build:
         - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform  }}    # [win]
+        - vs2017_{{ target_platform }}     # [win]
         - clang_bootstrap_osx-64           # [osx]
         - cmake
         - ninja     # [win]
@@ -55,6 +56,7 @@ outputs:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
+        - zlib
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
@@ -71,20 +73,22 @@ outputs:
   # Contains the shared libraries. To make different LLVM libraries co-installable
   # soversion is appended to the package name.
   - name: libllvm{{ major_ver }}
-    script: install_llvm.sh                         # [not win]
+    script: install_llvm.sh  # [not win]
     build:
-      skip:  true  # [(win and vc<14)]
-      activate_in_script: True
-      run_exports:                                                 # [not win]
+      skip: true  # [(win and vc<14)]
+      activate_in_script: true
+      run_exports:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
     requirements:
       build:
         - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform  }}    # [win]
+        - vs2017_{{ target_platform }}     # [win]
         - clang_bootstrap_osx-64           # [osx]
         - cmake                    # [not win]
         - python    >=3            # [not win]
       host:
+        - libcxx >={{ cxx_compiler_version }}  # [osx]
+        - zlib
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
@@ -95,16 +99,17 @@ outputs:
   # for run_exports
   - name: llvm
     build:
-      skip:  true  # [(win and vc<14)]
-      run_exports:                                                 # [not win]
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
+      skip: true  # [(win and vc<14)]
+      run_exports:   # [not win]
+        - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
-      run:                                                         # [not win]
+        - zlib
+      run:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
-      run_constrained:                                             # [not win]
+      run_constrained:   # [not win]
         - llvmdev   {{ version }}                                  # [not win]
     test:
       commands:
@@ -112,21 +117,22 @@ outputs:
 
   # Contains LLVM tools
   - name: llvm-tools
-    script: install_llvm.sh                         # [not win]
-    script: install_llvm.bat                        # [win]
+    script: install_llvm.sh  # [not win]
+    script: install_llvm.bat  # [win]
     build:
-      skip:  true  # [(win and vc<14)]
-      activate_in_script: True
+      skip: true  # [(win and vc<14)]
+      activate_in_script: true
     requirements:
       build:
         - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform  }}    # [win]
+        - vs2017_{{ target_platform }}     # [win]
         - clang_bootstrap_osx-64           # [osx]
         - cmake
         - ninja     # [win]
         - python    >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - zlib
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
       run_constrained:
@@ -140,9 +146,9 @@ outputs:
   - name: lit
     build:
       noarch: python
-      script: "python -m pip install utils/lit --no-deps -vv"
-      activate_in_script: True
-      skip: True  # [not linux]
+      script: python -m pip install utils/lit --no-deps -vv
+      activate_in_script: true
+      skip: true  # [not linux]
       entry_points:
         - lit = lit:main
     requirements:
@@ -158,7 +164,7 @@ outputs:
 about:
   home: http://llvm.org/
   dev_url: https://github.com/llvm-mirror/llvm
-  license: LLVM-Exception
+  license: Apache-2.0 WITH LLVM-exception
   license_file: LICENSE.TXT
   license_family: Apache
   summary: Development headers and libraries for LLVM
@@ -166,9 +172,8 @@ about:
 extra:
   recipe-maintainers:
     - inducer
-    - pitrou
     - jakirkham
     - mingwandroid
-    - mattwala
     - SylvainCorlay
     - isuruf
+    - timsnyder

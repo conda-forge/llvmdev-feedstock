@@ -17,13 +17,13 @@ cmake -G "Ninja" ^
     -DLLVM_INCLUDE_TESTS=OFF ^
     -DLLVM_INCLUDE_UTILS=ON ^
     -DLLVM_INSTALL_UTILS=ON ^
-    -DLLVM_UTILS_INSTALL_DIR=%LIBRARY_PREFIX%\libexec\llvm ^
+    -DLLVM_UTILS_INSTALL_DIR=libexec\llvm ^
     -DLLVM_INCLUDE_DOCS=OFF ^
     -DLLVM_ENABLE_RTTI=ON ^
     -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly ^
     -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON ^
     -DLLVM_ENABLE_LIBXML2=OFF ^
-    -DLLVM_ENABLE_ZLIB=OFF ^
+    -DLLVM_ENABLE_ZLIB=ON ^
     -DLLVM_BUILD_LLVM_C_DYLIB=no ^
     %SRC_DIR%
 
@@ -36,4 +36,4 @@ bin\opt -S -vector-library=SVML -mcpu=haswell -O3 %RECIPE_DIR%\numba-3016.ll | b
 if errorlevel 1 exit 1
 
 cd ..\test
-..\build\bin\llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
+..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
