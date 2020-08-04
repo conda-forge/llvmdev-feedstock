@@ -7,9 +7,15 @@ sed -i.bak "s/NOT APPLE AND NOT ARG_SONAME/NOT ARG_SONAME/g" cmake/modules/AddLL
 mkdir build
 cd build
 
-[[ $(uname) == Linux ]] && conditional_args="
-      -DLLVM_USE_INTEL_JITEVENTS=ON
-"
+[[ $(uname) == Linux ]] && CMAKE_EXTRA_ARGS="${CMAKE_EXTRA_ARGS} -DLLVM_USE_INTEL_JITEVENTS=ON"
+
+if [[ "$target_platform" == "linux-ppc64le" ]]; then
+    CMAKE_EXTRA_ARGS="${CMAKE_EXTRA_ARGS} -DCMAKE_SYSTEM_PROCESSOR=ppc64le -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSROOT=$CONDA_BUILD_SYSROOT"
+elif [[ "$target_platform" == "linux-aarch64" ]]; then
+    CMAKE_EXTRA_ARGS="${CMAKE_EXTRA_ARGS} -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSROOT=$CONDA_BUILD_SYSROOT"
+fi
+
+CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DCMAKE_AR=$AR -DCMAKE_RANLIB=$RANLIB -DCMAKE_LINKER=${LD}"
 
 cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
@@ -28,7 +34,7 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly \
       -DLLVM_BUILD_LLVM_DYLIB=yes \
       -DLLVM_LINK_LLVM_DYLIB=yes \
-      ${conditional_args} ..
+      ${CMAKE_EXTRA_ARGS} ..
 
 make -j${CPU_COUNT}
 

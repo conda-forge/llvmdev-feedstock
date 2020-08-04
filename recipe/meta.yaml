@@ -20,7 +20,7 @@ source:
 
 build:
   number: {{ build_number }}
-  skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
+  skip:  true  # [(win and vc<14)]
   merge_build_host: False
 
 requirements:
@@ -42,7 +42,7 @@ outputs:
     script: install_llvm.sh                         # [not win]
     script: install_llvm.bat                        # [win]
     build:
-      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
+      skip:  true  # [(win and vc<14)]
       activate_in_script: True
     requirements:
       build:
@@ -73,7 +73,7 @@ outputs:
   - name: libllvm{{ major_ver }}
     script: install_llvm.sh                         # [not win]
     build:
-      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
+      skip:  true  # [(win and vc<14)]
       activate_in_script: True
       run_exports:                                                 # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
@@ -95,7 +95,7 @@ outputs:
   # for run_exports
   - name: llvm
     build:
-      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
+      skip:  true  # [(win and vc<14)]
       run_exports:                                                 # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
     requirements:
@@ -115,7 +115,7 @@ outputs:
     script: install_llvm.sh                         # [not win]
     script: install_llvm.bat                        # [win]
     build:
-      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
+      skip:  true  # [(win and vc<14)]
       activate_in_script: True
     requirements:
       build:
