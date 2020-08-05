@@ -9,10 +9,15 @@ cd build
 
 [[ $(uname) == Linux ]] && CMAKE_EXTRA_ARGS="${CMAKE_EXTRA_ARGS} -DLLVM_USE_INTEL_JITEVENTS=ON"
 
-if [[ "$target_platform" == "linux-ppc64le" ]]; then
+if [[ "$build_platform" != "$target_platform" ]]; then
+  if [[ "$target_platform" == "linux-ppc64le" ]]; then
     CMAKE_EXTRA_ARGS="${CMAKE_EXTRA_ARGS} -DCMAKE_SYSTEM_PROCESSOR=ppc64le -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSROOT=$CONDA_BUILD_SYSROOT"
-elif [[ "$target_platform" == "linux-aarch64" ]]; then
+  elif [[ "$target_platform" == "linux-aarch64" ]]; then
     CMAKE_EXTRA_ARGS="${CMAKE_EXTRA_ARGS} -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSROOT=$CONDA_BUILD_SYSROOT"
+  fi
+  if [[ "$CC_FOR_BUILD" != "" ]]; then
+    CMAKE_EXTRA_ARGS="${CMAKE_EXTRA_ARGS} -DCROSS_TOOLCHAIN_FLAGS_NATIVE=\"-DCMAKE_C_COMPILER=$CC_FOR_BUILD -DCMAKE_CXX_COMPILER=$CXX_FOR_BUILD\""
+  fi
 fi
 
 CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DCMAKE_AR=$AR -DCMAKE_RANLIB=$RANLIB -DCMAKE_LINKER=${LD}"
