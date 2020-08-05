@@ -13,18 +13,9 @@ if [[ "$target_platform" == "linux-64" ]]; then
   CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_USE_INTEL_JITEVENTS=ON"
 fi
 
-if [[ "${build_platform}" != "${target_platform}" && "$build_platform" != "" ]]; then
-  if [[ "$target_platform" == "linux-ppc64le" ]]; then
-      CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_SYSTEM_PROCESSOR=ppc64le -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSROOT=$CONDA_BUILD_SYSROOT"
-  elif [[ "$target_platform" == "linux-aarch64" ]]; then
-      CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSROOT=$CONDA_BUILD_SYSROOT"
-  fi
-  if [[ "$CC_FOR_BUILD" != "" ]]; then
-      CMAKE_ARGS="${CMAKE_ARGS} -DCROSS_TOOLCHAIN_FLAGS_NATIVE=\"-DCMAKE_C_COMPILER=$CC_FOR_BUILD;-DCMAKE_CXX_COMPILER=$CXX_FOR_BUILD\""
-  fi
+if [[ "$CC_FOR_BUILD" != "" && "$CC_FOR_BUILD" != "$CC" ]]; then
+  CMAKE_ARGS="${CMAKE_ARGS} -DCROSS_TOOLCHAIN_FLAGS_NATIVE=\"-DCMAKE_C_COMPILER=$CC_FOR_BUILD;-DCMAKE_CXX_COMPILER=$CXX_FOR_BUILD\""
 fi
-
-CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_AR=$AR -DCMAKE_RANLIB=$RANLIB -DCMAKE_LINKER=${LD}"
 
 cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
