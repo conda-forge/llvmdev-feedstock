@@ -32,8 +32,8 @@ if errorlevel 1 exit 1
 cmake --build .
 if errorlevel 1 exit 1
 
-bin\opt -S -vector-library=SVML -mcpu=haswell -O3 %RECIPE_DIR%\numba-3016.ll | bin\FileCheck %RECIPE_DIR%\numba-3016.ll
-if errorlevel 1 exit 1
+REM bin\opt -S -vector-library=SVML -mcpu=haswell -O3 %RECIPE_DIR%\numba-3016.ll | bin\FileCheck %RECIPE_DIR%\numba-3016.ll
+REM if errorlevel 1 exit 1
 
 cd ..\test
 ..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
