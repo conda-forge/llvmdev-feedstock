@@ -7,9 +7,13 @@ sed -i.bak "s/NOT APPLE AND NOT ARG_SONAME/NOT ARG_SONAME/g" cmake/modules/AddLL
 mkdir build
 cd build
 
-[[ $(uname) == Linux ]] && conditional_args="
-      -DLLVM_USE_INTEL_JITEVENTS=ON
-"
+if [[ "$target_platform" == "linux-64" ]]; then
+  CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_USE_INTEL_JITEVENTS=ON"
+fi
+
+if [[ "$CC_FOR_BUILD" != "" && "$CC_FOR_BUILD" != "$CC" ]]; then
+  CMAKE_ARGS="${CMAKE_ARGS} -DCROSS_TOOLCHAIN_FLAGS_NATIVE=-DCMAKE_C_COMPILER=$CC_FOR_BUILD;-DCMAKE_CXX_COMPILER=$CXX_FOR_BUILD;-DCMAKE_C_FLAGS=-O2;-DCMAKE_CXX_FLAGS=-O2"
+fi
 
 cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
@@ -28,7 +32,7 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly \
       -DLLVM_BUILD_LLVM_DYLIB=yes \
       -DLLVM_LINK_LLVM_DYLIB=yes \
-      ${conditional_args} ..
+      ${CMAKE_ARGS} ..
 
 make -j${CPU_COUNT}
 
@@ -38,9 +42,11 @@ else
     export TEST_CPU_FLAG=""
 fi
 
-bin/opt -S -vector-library=SVML $TEST_CPU_FLAG -O3 $RECIPE_DIR/numba-3016.ll | bin/FileCheck $RECIPE_DIR/numba-3016.ll || exit $?
+if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
+  bin/opt -S -vector-library=SVML $TEST_CPU_FLAG -O3 $RECIPE_DIR/numba-3016.ll | bin/FileCheck $RECIPE_DIR/numba-3016.ll || exit $?
 
-#make -j${CPU_COUNT} check-llvm
+  #make -j${CPU_COUNT} check-llvm
 
-cd ../test
-../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
+  cd ../test
+  ../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
+fi

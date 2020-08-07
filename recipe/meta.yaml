@@ -17,10 +17,11 @@ source:
     # ref: https://github.com/numba/llvmlite/blob/v0.29.0/conda-recipes/0001-Revert-Limit-size-of-non-GlobalValue-name.patch
     - patches/numba-0001-Revert-Limit-size-of-non-GlobalValue-name.patch
     #- patches/amd-roc-2.7.0.diff
+    - patches/pass-through-qemu-ld-prefix.diff
 
 build:
-  number: 0
-  skip: true  # [(win and vc<14) or aarch64 or ppc64le]
+  number: 1
+  skip: true  # [(win and vc<14)]
   merge_build_host: false
 
 requirements:
@@ -43,8 +44,8 @@ outputs:
     script: install_llvm.sh  # [not win]
     script: install_llvm.bat  # [win]
     build:
-      skip: true  # [(win and vc<14) or aarch64 or ppc64le]
-      activate_in_script: true
+      skip: true  # [(win and vc<14)]
+      activate_in_script: True
     requirements:
       build:
         - {{ compiler('cxx') }}            # [linux]
@@ -75,7 +76,7 @@ outputs:
   - name: libllvm{{ major_ver }}
     script: install_llvm.sh  # [not win]
     build:
-      skip: true  # [(win and vc<14) or aarch64 or ppc64le]
+      skip: true  # [(win and vc<14)]
       activate_in_script: true
       run_exports:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
@@ -99,7 +100,7 @@ outputs:
   # for run_exports
   - name: llvm
     build:
-      skip: true  # [(win and vc<14) or aarch64 or ppc64le]
+      skip: true  # [(win and vc<14)]
       run_exports:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
@@ -120,7 +121,7 @@ outputs:
     script: install_llvm.sh  # [not win]
     script: install_llvm.bat  # [win]
     build:
-      skip: true  # [(win and vc<14) or aarch64 or ppc64le]
+      skip: true  # [(win and vc<14)]
       activate_in_script: true
     requirements:
       build:
@@ -148,7 +149,7 @@ outputs:
       noarch: python
       script: python -m pip install utils/lit --no-deps -vv
       activate_in_script: true
-      skip: true  # [not linux]
+      skip: true  # [not linux64]
       entry_points:
         - lit = lit:main
     requirements:
