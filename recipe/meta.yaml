@@ -11,8 +11,8 @@ source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-{{ version.replace(".rc", "rc") }}.src.tar.xz
   sha256: {{ sha256 }}
   patches:
-    - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
-    - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
+    #- patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
+    #- patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # Revert an upstream change for Numba
     # ref: https://github.com/numba/llvmlite/blob/v0.29.0/conda-recipes/0001-Revert-Limit-size-of-non-GlobalValue-name.patch
     - patches/numba-0001-Revert-Limit-size-of-non-GlobalValue-name.patch
