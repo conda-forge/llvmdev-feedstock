@@ -1,2 +1,6 @@
 channel_targets:
   - conda-forge llvm_rc
+c_compiler_version:     # [aarch64]
+  - 7.5                 # [aarch64]
+cxx_compiler_version:   # [aarch64]
+  - 7.5                 # [aarch64]
