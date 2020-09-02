@@ -79,7 +79,7 @@ outputs:
       skip: true  # [(win and vc<14)]
       activate_in_script: true
       run_exports:   # [not win]
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
+        - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
         - {{ compiler('cxx') }}            # [linux]
