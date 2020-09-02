@@ -5,7 +5,7 @@ channel_sources:
 channel_targets:
 - conda-forge llvm_rc
 cxx_compiler:
-- clangxx
+- clang_bootstrap
 cxx_compiler_version:
 - '10'
 macos_machine:
