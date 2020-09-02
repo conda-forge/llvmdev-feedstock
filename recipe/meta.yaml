@@ -20,7 +20,7 @@ source:
     - patches/pass-through-qemu-ld-prefix.diff
 
 build:
-  number: 3
+  number: 4
   skip: true  # [(win and vc<14)]
   merge_build_host: false
 
@@ -61,7 +61,7 @@ outputs:
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - libcxx >={{ cxx_compiler_version }}  # [osx]
+        - libcxx >={{ cxx_compiler_version }}.a0  # [osx]
     test:
       commands:
         - $PREFIX/bin/llvm-config --libs                         # [not win]
@@ -88,10 +88,10 @@ outputs:
         - cmake                    # [not win]
         - python    >=3            # [not win]
       host:
-        - libcxx >={{ cxx_compiler_version }}  # [osx]
+        - libcxx >={{ cxx_compiler_version }}.a0  # [osx]
         - zlib
       run:
-        - libcxx >={{ cxx_compiler_version }}  # [osx]
+        - libcxx >={{ cxx_compiler_version }}.a0  # [osx]
     test:
       commands:
         - test -f $PREFIX/lib/libLLVM-{{ major_ver }}${SHLIB_EXT}  # [unix]
