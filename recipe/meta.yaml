@@ -1,7 +1,14 @@
 {% set version = "10.0.1" %}
+# Build with old when bootstrapping on macOS
+{% set cxx_compiler_version_bootstrap = "10.0.0" %}  # [osx]
 {% set sha256 = "c5d8e30b57cbded7128d78e5e8dad811bff97a8d471896812f57fa99ee82cdf3" %}
+{% set ccache_method = 'native' %}  # [unix]
+{% set ccache_method = 'symlinks' %}  # [win]
 
+{% set build_number = 5 %}
 {% set major_ver = version.split(".")[0] %}
+
+{% set posix = 'm2-' if win else '' %}
 
 package:
   name: llvm-package
@@ -17,25 +24,29 @@ source:
     # ref: https://github.com/numba/llvmlite/blob/v0.29.0/conda-recipes/0001-Revert-Limit-size-of-non-GlobalValue-name.patch
     - patches/numba-0001-Revert-Limit-size-of-non-GlobalValue-name.patch
     #- patches/amd-roc-2.7.0.diff
-    - patches/pass-through-qemu-ld-prefix.diff
 
 build:
-  number: 2
-  skip: true  # [(win and vc<14)]
+  number: {{ build_number }}
+  skip: true  # [(win and vc<14) or aarch64]
   merge_build_host: false
 
 requirements:
   build:
-    - {{ compiler('cxx') }}            # [linux]
-    - vs2017_{{ target_platform }}     # [win]
+    - {{ compiler('cxx') }}            # [linux or win]
+    - {{ ccache(ccache_method) }}
     - clang_bootstrap_osx-64           # [osx]
     - cmake
     - ninja     # [win]
-    - python    >=3
-    - make
-    - libcxx {{ cxx_compiler_version }}  # [osx]
+    - python >=3
+    - make      # [not win]
+    - m2-coreutils  # [win]
+    - m2-grep  # [win]
+    - m2-sed  # [win]
+    - {{posix}}make
+    - {{posix}}patch
+    - libcxx >={{ cxx_compiler_version_bootstrap }}  # [osx]
   host:
-    - libcxx {{ cxx_compiler_version }}  # [osx]
+    - libcxx >={{ cxx_compiler_version_bootstrap }}  # [osx]
     - zlib
 
 outputs:
@@ -44,24 +55,29 @@ outputs:
     script: install_llvm.sh  # [not win]
     script: install_llvm.bat  # [win]
     build:
-      skip: true  # [(win and vc<14)]
-      activate_in_script: True
+      skip: true  # [(win and vc<14) or aarch64]
+      activate_in_script: true
     requirements:
       build:
-        - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform }}     # [win]
+        - {{ compiler('cxx') }}            # [linux or win]
+        - {{ ccache(ccache_method) }}
         - clang_bootstrap_osx-64           # [osx]
         - cmake
+        - make                             # [not win]
+        - m2-coreutils  # [win]
+        - m2-grep  # [win]
+        - m2-sed  # [win]
         - ninja     # [win]
         - python    >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - zlib
+        - libcxx >={{ cxx_compiler_version_bootstrap }}  # [osx]
+        - zlib  # [not linux]
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - libcxx >={{ cxx_compiler_version }}  # [osx]
+        - libcxx >={{ cxx_compiler_version_bootstrap }}  # [osx]
     test:
       commands:
         - $PREFIX/bin/llvm-config --libs                         # [not win]
@@ -76,38 +92,40 @@ outputs:
   - name: libllvm{{ major_ver }}
     script: install_llvm.sh  # [not win]
     build:
-      skip: true  # [(win and vc<14)]
+      skip: true  # [(win and vc<14) or aarch64]
       activate_in_script: true
       run_exports:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
-        - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform }}     # [win]
+        - {{ compiler('cxx') }}            # [linux or win]
+        - {{ ccache(ccache_method) }}
         - clang_bootstrap_osx-64           # [osx]
         - cmake                    # [not win]
+        - make                     # [not win]
+        - m2-coreutils  # [win]
+        - m2-grep  # [win]
         - python    >=3            # [not win]
       host:
-        - libcxx >={{ cxx_compiler_version }}  # [osx]
+        - libcxx >={{ cxx_compiler_version_bootstrap }}  # [osx]
         - zlib
       run:
-        - libcxx >={{ cxx_compiler_version }}  # [osx]
-    test:
-      commands:
+        - libcxx >={{ cxx_compiler_version_bootstrap }}  # [osx]
+    test:                                                          # [unix]
+      commands:                                                    # [unix]
         - test -f $PREFIX/lib/libLLVM-{{ major_ver }}${SHLIB_EXT}  # [unix]
 
   # This is a meta package so that people can use the latest libllvm and also
   # for run_exports
   - name: llvm
     build:
-      skip: true  # [(win and vc<14)]
+      skip: true  # [(win and vc<14) or aarch64]
       run_exports:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
-        - zlib
       run:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
       run_constrained:   # [not win]
@@ -121,21 +139,29 @@ outputs:
     script: install_llvm.sh  # [not win]
     script: install_llvm.bat  # [win]
     build:
-      skip: true  # [(win and vc<14)]
+      skip: true  # [(win and vc<14) or aarch64]
       activate_in_script: true
     requirements:
       build:
-        - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform }}     # [win]
+        - {{ compiler('cxx') }}            # [linux or win]
+        - {{ ccache(ccache_method) }}
         - clang_bootstrap_osx-64           # [osx]
         - cmake
+        - make                             # [not win]
+        - m2-coreutils  # [win]
+        - m2-grep  # [win]
+        - m2-sed  # [win]
         - ninja     # [win]
         - python    >=3
+        - {{posix}}make
+        - {{posix}}patch
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - zlib
+        - libcxx >={{ cxx_compiler_version_bootstrap }}  # [osx]
+        - zlib  # [win]
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - libcxx >={{ cxx_compiler_version_bootstrap }}  # [osx]
       run_constrained:
         - llvmdev   {{ version }}
     test:
@@ -149,7 +175,7 @@ outputs:
       noarch: python
       script: python -m pip install utils/lit --no-deps -vv
       activate_in_script: true
-      skip: true  # [not linux64]
+      skip: true  # [not linux]
       entry_points:
         - lit = lit:main
     requirements:
