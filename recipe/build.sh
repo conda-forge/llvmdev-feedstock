@@ -16,7 +16,7 @@ if [[ "$CC_FOR_BUILD" != "" && "$CC_FOR_BUILD" != "$CC" ]]; then
   CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_HOST_TRIPLE=$(echo $HOST | sed s/conda/unknown/g)"
 fi
 
-cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
+cmake ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
       -DLLVM_ENABLE_RTTI=ON \
       -DLLVM_INCLUDE_TESTS=ON \
