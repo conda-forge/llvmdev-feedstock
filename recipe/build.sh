@@ -11,5 +11,7 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DLLVM_ENABLE_TERMINFO=OFF \
       ..
 
-make -j${CPU_COUNT}
+
+# Travis can't handle how long the log is
+make -j${CPU_COUNT} 2>log.log || tail -n1000 log.log
 make install
