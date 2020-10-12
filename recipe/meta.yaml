@@ -1,7 +1,7 @@
 {% set shortversion = "5.0" %}
 {% set version = "5.0.0" %}
 
-{% set build_number = 1003 %}
+{% set build_number = 1004 %}
 
 package:
   name: llvmdev
@@ -14,6 +14,8 @@ source:
     # https://llvm.org/bugs/show_bug.cgi?id=15356
     - llvm-elf-relocation.patch
     - llvm-lto-static.patch  # [win]
+    # https://bugzilla.redhat.com/show_bug.cgi?id=1540620
+    - llvm-gcc8.patch
 
 build:
   number: {{ build_number }}
