@@ -36,10 +36,10 @@ Current build status
                 </a>
               </td>
             </tr><tr>
-              <td>linux_aarch64_cxx_compiler_version7.5</td>
+              <td>linux_aarch64_cxx_compiler_version7</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master&jobName=linux&configuration=linux_aarch64_cxx_compiler_version7.5" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master&jobName=linux&configuration=linux_aarch64_cxx_compiler_version7" alt="variant">
                 </a>
               </td>
             </tr><tr>

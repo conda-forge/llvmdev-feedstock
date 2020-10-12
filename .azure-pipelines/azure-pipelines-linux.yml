@@ -12,8 +12,8 @@ jobs:
         CONFIG: linux_64_cxx_compiler_version7
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: condaforge/linux-anvil-comp7
-      linux_aarch64_cxx_compiler_version7.5:
-        CONFIG: linux_aarch64_cxx_compiler_version7.5
+      linux_aarch64_cxx_compiler_version7:
+        CONFIG: linux_aarch64_cxx_compiler_version7
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: condaforge/linux-anvil-comp7
       linux_ppc64le_cxx_compiler_version8:
