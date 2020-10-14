@@ -8,19 +8,18 @@ jobs:
     vmImage: ubuntu-16.04
   strategy:
     matrix:
-      linux_64_:
-        CONFIG: linux_64_
+      linux_64_cxx_compiler_version7:
+        CONFIG: linux_64_cxx_compiler_version7
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: condaforge/linux-anvil-comp7
-      linux_aarch64_:
-        CONFIG: linux_aarch64_
+      linux_aarch64_cxx_compiler_version7:
+        CONFIG: linux_aarch64_cxx_compiler_version7
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: condaforge/linux-anvil-comp7
-      linux_ppc64le_:
-        CONFIG: linux_ppc64le_
+      linux_ppc64le_cxx_compiler_version8:
+        CONFIG: linux_ppc64le_cxx_compiler_version8
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: condaforge/linux-anvil-comp7
-    maxParallel: 8
   timeoutInMinutes: 360
 
   steps:

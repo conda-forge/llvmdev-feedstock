@@ -1,13 +1,19 @@
+MACOSX_DEPLOYMENT_TARGET:
+- '10.9'
 channel_sources:
 - conda-forge,defaults
 channel_targets:
 - conda-forge main
+cxx_compiler:
+- clang_bootstrap
+cxx_compiler_version:
+- '10'
+macos_machine:
+- x86_64-apple-darwin13.4.0
 pin_run_as_build:
   zlib:
     max_pin: x.x
 target_platform:
-- win-64
-vc:
-- '14'
+- osx-64
 zlib:
 - '1.2'
