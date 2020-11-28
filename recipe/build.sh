@@ -7,9 +7,9 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" == "1" ]]; then
 fi
 
 if [[ "$target_platform" == "linux-ppc64le" ]]; then
-  export CXXFLAGS="$CXXFLAGS -mmodel=large"
-  export CFLAGS="$CFLAGS -mmodel=large"
-  export LDFLAGS="$LDFLAGS -mmodel=large"
+  export CXXFLAGS="$CXXFLAGS -mcmodel=large"
+  export CFLAGS="$CFLAGS -mcmodel=large"
+  export LDFLAGS="$LDFLAGS -mcmodel=large"
 fi
 
 cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
