@@ -16,5 +16,11 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DLLVM_ENABLE_TERMINFO=OFF \
       ${CMAKE_ARGS} ..
 
+if [ $target_platform = osx-arm64 ]; then
+  make CONFIGURE_LLVM_NATIVE
+  cd NATIVE/
+  make -j${CPU_COUNT}
+fi
+
 make -j${CPU_COUNT}
 make install
