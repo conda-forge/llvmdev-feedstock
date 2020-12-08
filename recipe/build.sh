@@ -19,7 +19,8 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
 if [ $target_platform = osx-arm64 ]; then
   make CONFIGURE_LLVM_NATIVE
   cd NATIVE/
-  make -j${CPU_COUNT}
+  make -j${CPU_COUNT} llvm-tblgen
+  cd ..
 fi
 
 make -j${CPU_COUNT}
