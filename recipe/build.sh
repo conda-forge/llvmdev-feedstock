@@ -42,5 +42,7 @@ bin/opt -S -vector-library=SVML $TEST_CPU_FLAG -O3 $RECIPE_DIR/numba-3016.ll | b
 
 #make -j${CPU_COUNT} check-llvm
 
+if [[ "${CONDA_BUILD_CROSS_COMPILATION-}" != "1" ]]; then
 cd ../test
 ../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
+fi
