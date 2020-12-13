@@ -18,22 +18,22 @@ source:
     - patches/amd-roc-2.7.0.diff
 
 build:
-  number: 1
-  skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
+  number: 2
+  skip:  true  # [(win and vc<14) or ppc64le]
   merge_build_host: False
 
 requirements:
   build:
     - {{ compiler('cxx') }}            # [linux]
-    - vs2017_{{ target_platform  }}    # [win]
+    - vs2017_{{ target_platform }}     # [win]
     - clang_bootstrap_osx-64           # [osx]
     - cmake
     - ninja     # [win]
     - python    >=3
     - make
-    - libcxx {{cxx_compiler_version}}  # [osx]
+    - libcxx {{ cxx_compiler_version }}  # [osx]
   host:
-    - libcxx {{cxx_compiler_version}}  # [osx]
+    - libcxx {{ cxx_compiler_version }}  # [osx]
     - zlib
 
 outputs:
@@ -42,12 +42,12 @@ outputs:
     script: install_llvm.sh                         # [not win]
     script: install_llvm.bat                        # [win]
     build:
-      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
+      skip:  true  # [(win and vc<14) or ppc64le]
       activate_in_script: True
     requirements:
       build:
         - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform  }}    # [win]
+        - vs2017_{{ target_platform }}     # [win]
         - clang_bootstrap_osx-64           # [osx]
         - cmake
         - ninja     # [win]
@@ -74,14 +74,14 @@ outputs:
   - name: libllvm{{ major_ver }}
     script: install_llvm.sh                         # [not win]
     build:
-      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
+      skip:  true  # [(win and vc<14) or ppc64le]
       activate_in_script: True
       run_exports:                                                 # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
     requirements:
       build:
         - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform  }}    # [win]
+        - vs2017_{{ target_platform }}    # [win]
         - clang_bootstrap_osx-64           # [osx]
         - cmake                    # [not win]
         - python    >=3            # [not win]
@@ -98,7 +98,7 @@ outputs:
   # for run_exports
   - name: llvm
     build:
-      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
+      skip:  true  # [(win and vc<14) or ppc64le]
       run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
@@ -119,12 +119,12 @@ outputs:
     script: install_llvm.sh                         # [not win]
     script: install_llvm.bat                        # [win]
     build:
-      skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
+      skip:  true  # [(win and vc<14) or ppc64le]
       activate_in_script: True
     requirements:
       build:
         - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform  }}    # [win]
+        - vs2017_{{ target_platform }}     # [win]
         - clang_bootstrap_osx-64           # [osx]
         - cmake
         - ninja     # [win]
@@ -147,7 +147,7 @@ outputs:
       noarch: python
       script: "python -m pip install utils/lit --no-deps -vv"
       activate_in_script: True
-      skip: True  # [not linux]
+      skip: True  # [not linux or ppc64le or aarch64]
       entry_points:
         - lit = lit:main
     requirements:
