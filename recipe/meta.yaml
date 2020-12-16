@@ -18,7 +18,7 @@ source:
     - patches/amd-roc-2.7.0.diff
 
 build:
-  number: 2
+  number: 3
   skip:  true  # [(win and vc<14) or ppc64le]
   merge_build_host: False
 
