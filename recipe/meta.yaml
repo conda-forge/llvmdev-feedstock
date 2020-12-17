@@ -18,15 +18,13 @@ source:
     - patches/amd-roc-2.7.0.diff
 
 build:
-  number: 2
+  number: 3
   skip:  true  # [(win and vc<14) or ppc64le]
   merge_build_host: False
 
 requirements:
   build:
-    - {{ compiler('cxx') }}            # [linux]
-    - vs2017_{{ target_platform }}     # [win]
-    - clang_bootstrap_osx-64           # [osx]
+    - {{ compiler('cxx') }}
     - cmake
     - ninja     # [win]
     - python    >=3
@@ -46,9 +44,7 @@ outputs:
       activate_in_script: True
     requirements:
       build:
-        - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform }}     # [win]
-        - clang_bootstrap_osx-64           # [osx]
+        - {{ compiler('cxx') }}
         - cmake
         - ninja     # [win]
         - python    >=3
@@ -80,9 +76,7 @@ outputs:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
     requirements:
       build:
-        - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform }}    # [win]
-        - clang_bootstrap_osx-64           # [osx]
+        - {{ compiler('cxx') }}
         - cmake                    # [not win]
         - python    >=3            # [not win]
       host:
@@ -123,9 +117,7 @@ outputs:
       activate_in_script: True
     requirements:
       build:
-        - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform }}     # [win]
-        - clang_bootstrap_osx-64           # [osx]
+        - {{ compiler('cxx') }}
         - cmake
         - ninja     # [win]
         - python    >=3
