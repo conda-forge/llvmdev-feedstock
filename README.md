@@ -5,11 +5,11 @@ Home: http://llvm.org/
 
 Package license: Apache-2.0 WITH LLVM-exception
 
-Feedstock license: BSD-3-Clause
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/llvmdev-feedstock/blob/master/LICENSE.txt)
 
 Summary: Development headers and libraries for LLVM
 
-
+Development: https://github.com/llvm-mirror/llvm
 
 Current build status
 ====================
@@ -57,10 +57,17 @@ Current build status
                 </a>
               </td>
             </tr><tr>
-              <td>win_64_target_platformwin-64</td>
+              <td>osx_arm64</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master&jobName=win&configuration=win_64_target_platformwin-64" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master&jobName=osx&configuration=osx_arm64_" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>win_64</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=master">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master&jobName=win&configuration=win_64_" alt="variant">
                 </a>
               </td>
             </tr>
@@ -173,4 +180,5 @@ Feedstock Maintainers
 * [@jakirkham](https://github.com/jakirkham/)
 * [@mingwandroid](https://github.com/mingwandroid/)
 * [@timsnyder](https://github.com/timsnyder/)
+* [@xhochy](https://github.com/xhochy/)
 

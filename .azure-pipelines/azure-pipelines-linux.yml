@@ -11,16 +11,15 @@ jobs:
       linux_64_:
         CONFIG: linux_64_
         UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: condaforge/linux-anvil-comp7
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-comp7
       linux_aarch64_:
         CONFIG: linux_aarch64_
         UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: condaforge/linux-anvil-comp7
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-comp7
       linux_ppc64le_:
         CONFIG: linux_ppc64le_
         UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: condaforge/linux-anvil-comp7
-    maxParallel: 8
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-comp7
   timeoutInMinutes: 360
 
   steps:
