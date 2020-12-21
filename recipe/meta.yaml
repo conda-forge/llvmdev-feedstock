@@ -20,15 +20,13 @@ source:
     - patches/pass-through-qemu-ld-prefix.diff
 
 build:
-  number: 1
+  number: 2
   skip: true  # [(win and vc<14)]
   merge_build_host: false
 
 requirements:
   build:
-    - {{ compiler('cxx') }}            # [linux]
-    - vs2017_{{ target_platform }}     # [win]
-    - clang_bootstrap_osx-64           # [osx]
+    - {{ compiler('cxx') }}
     - cmake
     - ninja     # [win]
     - python    >=3
@@ -48,9 +46,7 @@ outputs:
       activate_in_script: True
     requirements:
       build:
-        - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform }}     # [win]
-        - clang_bootstrap_osx-64           # [osx]
+        - {{ compiler('cxx') }}
         - cmake
         - ninja     # [win]
         - python    >=3
@@ -82,9 +78,7 @@ outputs:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
     requirements:
       build:
-        - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform }}     # [win]
-        - clang_bootstrap_osx-64           # [osx]
+        - {{ compiler('cxx') }}
         - cmake                    # [not win]
         - python    >=3            # [not win]
       host:
@@ -125,9 +119,7 @@ outputs:
       activate_in_script: true
     requirements:
       build:
-        - {{ compiler('cxx') }}            # [linux]
-        - vs2017_{{ target_platform }}     # [win]
-        - clang_bootstrap_osx-64           # [osx]
+        - {{ compiler('cxx') }}
         - cmake
         - ninja     # [win]
         - python    >=3
@@ -178,3 +170,4 @@ extra:
     - SylvainCorlay
     - isuruf
     - timsnyder
+    - xhochy
