@@ -29,14 +29,11 @@ build:
 
 requirements:
   build:
-    - {{ compiler('cxx') }}   # [not osx]
+    - {{ compiler('cxx') }}
     - cmake
     - ninja     # [win]
     - python    >=3
     - make
-    - libcxx {{cxx_compiler_version}}  # [osx]
-  host:
-    - libcxx {{cxx_compiler_version}}  # [osx]
 
 outputs:
   # Contains everything
@@ -48,7 +45,7 @@ outputs:
       activate_in_script: True
     requirements:
       build:
-        - {{ compiler('cxx') }}    # [not osx]
+        - {{ compiler('cxx') }}
         - cmake
         - ninja     # [win]
         - python    >=3
@@ -58,7 +55,6 @@ outputs:
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
         - $PREFIX/bin/llvm-config --libs                         # [not win]
@@ -77,12 +73,10 @@ outputs:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
     requirements:
       build:
-        - {{ compiler('cxx') }}    # [not (osx or win)]
+        - {{ compiler('cxx') }}    # [not win]
         - cmake                    # [not win]
         - python    >=3            # [not win]
       host:
-      run:
-        - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
         - test -f $PREFIX/lib/libLLVM-{{ major_ver }}${SHLIB_EXT}  # [unix]
@@ -115,7 +109,7 @@ outputs:
       activate_in_script: True
     requirements:
       build:
-        - {{ compiler('cxx') }}    # [not osx]
+        - {{ compiler('cxx') }}
         - cmake
         - ninja     # [win]
         - python    >=3
@@ -158,7 +152,7 @@ outputs:
       activate_in_script: True
     requirements:
       build:
-        - {{ compiler('cxx') }}    # [not osx]
+        - {{ compiler('cxx') }}
         - cmake
         - ninja     # [win]
         - python    >=3
