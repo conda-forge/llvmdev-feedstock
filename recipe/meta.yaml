@@ -5,7 +5,7 @@
 {% set ccache_method = 'native' %}  # [unix]
 {% set ccache_method = 'symlinks' %}  # [win]
 
-{% set build_number = 5 %}
+{% set build_number = 6 %}
 {% set major_ver = version.split(".")[0] %}
 
 {% set posix = 'm2-' if win else '' %}
@@ -27,7 +27,7 @@ source:
 
 build:
   number: {{ build_number }}
-  skip: true  # [(win and vc<14) or aarch64]
+  skip: true  # [win and vc<14]
   merge_build_host: false
 
 requirements:
@@ -55,7 +55,7 @@ outputs:
     script: install_llvm.sh  # [not win]
     script: install_llvm.bat  # [win]
     build:
-      skip: true  # [(win and vc<14) or aarch64]
+      skip: true  # [win and vc<14]
       activate_in_script: true
     requirements:
       build:
@@ -92,7 +92,7 @@ outputs:
   - name: libllvm{{ major_ver }}
     script: install_llvm.sh  # [not win]
     build:
-      skip: true  # [(win and vc<14) or aarch64]
+      skip: true  # [win and vc<14]
       activate_in_script: true
       run_exports:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
@@ -119,7 +119,7 @@ outputs:
   # for run_exports
   - name: llvm
     build:
-      skip: true  # [(win and vc<14) or aarch64]
+      skip: true  # [win and vc<14]
       run_exports:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
@@ -139,7 +139,7 @@ outputs:
     script: install_llvm.sh  # [not win]
     script: install_llvm.bat  # [win]
     build:
-      skip: true  # [(win and vc<14) or aarch64]
+      skip: true  # [win and vc<14]
       activate_in_script: true
     requirements:
       build:
