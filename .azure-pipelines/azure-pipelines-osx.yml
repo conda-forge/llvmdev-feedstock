@@ -14,7 +14,6 @@ jobs:
       osx_arm64_:
         CONFIG: osx_arm64_
         UPLOAD_PACKAGES: 'True'
-    maxParallel: 8
   timeoutInMinutes: 360
 
   steps:
