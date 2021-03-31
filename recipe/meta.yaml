@@ -20,7 +20,7 @@ source:
     - patches/pass-through-qemu-ld-prefix.diff
 
 build:
-  number: 0
+  number: 1
   skip: true  # [(win and vc<14)]
   merge_build_host: false
 
@@ -35,6 +35,7 @@ requirements:
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
     - zlib
+    - libxml2
 
 outputs:
   # Contains everything
