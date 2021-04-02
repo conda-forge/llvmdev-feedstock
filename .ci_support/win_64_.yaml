@@ -4,7 +4,11 @@ channel_targets:
 - conda-forge llvm_rc
 cxx_compiler:
 - vs2017
+libxml2:
+- '2.9'
 pin_run_as_build:
+  libxml2:
+    max_pin: x.x
   zlib:
     max_pin: x.x
 target_platform:
