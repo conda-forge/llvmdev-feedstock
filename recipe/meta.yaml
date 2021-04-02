@@ -1,5 +1,5 @@
-{% set version = "12.0.0.rc3" %}
-{% set sha256 = "e51984ff9c7869c3af38f9b4cd9047f22083cac5f4a52d3dbb9da1259b9dedd2" %}
+{% set version = "11.1.0" %}
+{% set sha256 = "ce8508e318a01a63d4e8b3090ab2ded3c598a50258cc49e2625b9120d4c03ea5" %}
 
 {% set major_ver = version.split(".")[0] %}
 
@@ -21,7 +21,6 @@ source:
 
 build:
   number: 0
-  skip: true  # [(win and vc<14)]
   merge_build_host: false
 
 requirements:
