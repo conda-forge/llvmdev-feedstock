@@ -18,9 +18,11 @@ source:
     - patches/numba-0001-Revert-Limit-size-of-non-GlobalValue-name.patch
     #- patches/amd-roc-2.7.0.diff
     - patches/pass-through-qemu-ld-prefix.diff
+    # Don't link libLLVM.dylib to llvm-config. Makes it easier for cross compiling
+    - patches/llvm-config-no-libLLVM.diff
 
 build:
-  number: 1
+  number: 2
   skip: true  # [(win and vc<14)]
   merge_build_host: false
 
