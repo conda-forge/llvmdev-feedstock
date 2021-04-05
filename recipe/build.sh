@@ -50,9 +50,5 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
   fi
 
-  if [[ "$target_platform" == linux* ]]; then
-    ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
-  fi
-
   # make -j${CPU_COUNT} check-llvm
 fi
