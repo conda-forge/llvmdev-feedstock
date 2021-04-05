@@ -1,0 +1,11 @@
+--- tools/llvm-config/CMakeLists.txt  2021-04-05 11:29:44.122179963 -0500
++++ tools/llvm-config/CMakeLists.txt  2021-04-05 11:29:56.110269042 -0500
+@@ -5,6 +5,7 @@
+ 
+ # Add the llvm-config tool.
+ add_llvm_tool(llvm-config
++  DISABLE_LLVM_LINK_LLVM_DYLIB
+   llvm-config.cpp
+   )
+ 
+
