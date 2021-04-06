@@ -126,6 +126,7 @@ outputs:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - zlib
+        - libxml2   # [win]
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
       run_constrained:
