@@ -50,7 +50,7 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
   fi
 
-  # make -j${CPU_COUNT} check-llvm
+  make -j${CPU_COUNT} check-llvm
 
   cd ../test
   ../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
