@@ -20,13 +20,11 @@ source:
     - patches/pass-through-qemu-ld-prefix.diff
     # Don't link libLLVM.dylib to llvm-config. Makes it easier for cross compiling
     - patches/llvm-config-no-libLLVM.diff
-    # Skip some tests that fail due to https://bugs.llvm.org/show_bug.cgi?id=48992
-    # Later LLVM versions support skipping using the LIT_FILTER_OUT environment variable
-    - patches/0001-Remove-failing-instrumented-tests.patch  # [linux]
+    # https://reviews.llvm.org/D101972
+    - patches/D101972.patch
 
 build:
-  number: 0
-  skip: true  # [(win and vc<14)]
+  number: 1
   merge_build_host: false
 
 requirements:
