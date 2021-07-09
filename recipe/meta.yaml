@@ -20,8 +20,6 @@ source:
     - patches/pass-through-qemu-ld-prefix.diff
     # Don't link libLLVM.dylib to llvm-config. Makes it easier for cross compiling
     - patches/llvm-config-no-libLLVM.diff
-    # https://reviews.llvm.org/D101972
-    - patches/D101972.patch
 
 build:
   number: 0
