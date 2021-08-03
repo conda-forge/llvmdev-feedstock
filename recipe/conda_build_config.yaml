@@ -1,0 +1,8 @@
+c_compiler:         # [osx]
+  - clang_bootstrap # [osx]
+cxx_compiler:       # [osx]
+  - clang_bootstrap # [osx]
+
+cxx_compiler_version: # [linux and ppc64le]
+  # linking error with gcc 9
+  - 8                 # [linux and ppc64le]
