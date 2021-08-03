@@ -30,7 +30,8 @@ fi
 
 if [[ ${target_platform} =~ osx-.* ]]; then
     CMAKE_ARGS+=(-DCMAKE_C_FLAGS=-mlinker-version=305)
-      CMAKE_ARGS+=(-DCMAKE_CXX_FLAGS=-mlinker-version=305)
+    CMAKE_ARGS+=(-DCMAKE_CXX_FLAGS=-mlinker-version=305)
+    LDFLAGS="${LDFLAGS} -mlinker-version=305"
 fi
 
 cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
