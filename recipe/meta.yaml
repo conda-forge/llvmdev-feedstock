@@ -33,7 +33,12 @@ requirements:
     - cmake
     - ninja     # [win]
     - python    >=3
-    - make
+    - make      # [not win]
+    - m2-coreutils  # [win]
+    - m2-make   # [win]
+    - m2-patch  # [win]
+    - m2-grep   # [win]
+    - m2-sed    # [win]
     - libcxx {{ cxx_compiler_version }}  # [osx]
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
