@@ -28,6 +28,11 @@ if [[ "$CC_FOR_BUILD" != "" && "$CC_FOR_BUILD" != "$CC" ]]; then
   CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_HOST_TRIPLE=$(echo $HOST | sed s/conda/unknown/g) -DLLVM_DEFAULT_TARGET_TRIPLE=$(echo $HOST | sed s/conda/unknown/g)"
 fi
 
+if [[ ${target_platform} =~ osx-.* ]]; then
+    CMAKE_ARGS+=(-DCMAKE_C_FLAGS=-mlinker-version=305)
+      CMAKE_ARGS+=(-DCMAKE_CXX_FLAGS=-mlinker-version=305)
+fi
+
 cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
       -DLLVM_ENABLE_RTTI=ON \
