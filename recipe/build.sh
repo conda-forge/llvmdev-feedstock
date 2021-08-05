@@ -24,7 +24,7 @@ if [[ $target_platform == osx-* ]]; then
 fi
 
 if [[ $target_platform == osx-arm64 ]]; then
-  CMAKE_ARGS="${CMAKE_ARGS] -DCMAKE_ENABLE_WERROR=FALSE"
+  CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_ENABLE_WERROR=FALSE"
   # CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_OSX_ARCHITECTURES='arm64'"
   # CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_TARGETS_TO_BUILD='Aarch64'"
 fi
