@@ -22,7 +22,7 @@ source:
     - patches/llvm-config-no-libLLVM.diff
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
