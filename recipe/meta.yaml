@@ -22,7 +22,7 @@ source:
     - patches/llvm-config-no-libLLVM.diff
 
 build:
-  number: 1
+  number: 2
   merge_build_host: false
 
 requirements:
@@ -146,7 +146,7 @@ outputs:
       activate_in_script: true
       skip: true  # [not linux64]
       entry_points:
-        - lit = lit:main
+        - lit = lit.main:main
     requirements:
       host:
         - python >=3
@@ -156,6 +156,8 @@ outputs:
     test:
       imports:
         - lit
+      commands:
+        - lit -h
 
 about:
   home: http://llvm.org/
