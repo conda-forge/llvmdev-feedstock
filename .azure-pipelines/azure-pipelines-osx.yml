@@ -8,11 +8,17 @@ jobs:
     vmImage: macOS-10.15
   strategy:
     matrix:
-      osx_64_:
-        CONFIG: osx_64_
+      osx_64_variantcling_v0.9:
+        CONFIG: osx_64_variantcling_v0.9
         UPLOAD_PACKAGES: 'True'
-      osx_arm64_:
-        CONFIG: osx_arm64_
+      osx_64_variantdefault:
+        CONFIG: osx_64_variantdefault
+        UPLOAD_PACKAGES: 'True'
+      osx_arm64_variantcling_v0.9:
+        CONFIG: osx_arm64_variantcling_v0.9
+        UPLOAD_PACKAGES: 'True'
+      osx_arm64_variantdefault:
+        CONFIG: osx_arm64_variantdefault
         UPLOAD_PACKAGES: 'True'
   timeoutInMinutes: 360
 
