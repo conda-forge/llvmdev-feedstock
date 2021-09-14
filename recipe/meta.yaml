@@ -15,11 +15,11 @@ source:
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # Revert an upstream change for Numba
     # ref: https://github.com/numba/llvmlite/blob/v0.29.0/conda-recipes/0001-Revert-Limit-size-of-non-GlobalValue-name.patch
-    - patches/numba-0001-Revert-Limit-size-of-non-GlobalValue-name.patch
+    - patches/0001-Revert-Limit-size-of-non-GlobalValue-name.patch
     #- patches/amd-roc-2.7.0.diff
-    - patches/pass-through-qemu-ld-prefix.diff
+    - patches/0002-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     # Don't link libLLVM.dylib to llvm-config. Makes it easier for cross compiling
-    - patches/llvm-config-no-libLLVM.diff
+    - patches/0003-Don-t-link-libLLVM.dylib-to-llvm-config.patch
 
 build:
   number: 2
