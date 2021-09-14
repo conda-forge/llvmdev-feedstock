@@ -1,0 +1,17 @@
+channel_sources:
+- conda-forge,defaults
+channel_targets:
+- conda-forge main
+cxx_compiler:
+- vs2017
+pin_run_as_build:
+  zlib:
+    max_pin: x.x
+target_platform:
+- win-64
+variant:
+- cling_v0.9
+vc:
+- '14'
+zlib:
+- '1.2'

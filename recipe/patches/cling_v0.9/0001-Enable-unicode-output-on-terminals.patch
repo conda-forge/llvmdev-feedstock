@@ -1,0 +1,27 @@
+From c3e6e6a7811939beba5af5247bba4eb556adaf8b Mon Sep 17 00:00:00 2001
+From: Axel Naumann <Axel.Naumann@cern.ch>
+Date: Tue, 29 Nov 2016 10:29:48 +0100
+Subject: [PATCH 1/5] Enable unicode output on terminals.
+
+---
+ utils/lit/lit/ProgressBar.py | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/utils/lit/lit/ProgressBar.py b/utils/lit/lit/ProgressBar.py
+index 3ad704d16c9..e7ff8964aac 100644
+--- a/utils/lit/lit/ProgressBar.py
++++ b/utils/lit/lit/ProgressBar.py
+@@ -106,6 +106,10 @@ class TerminalController:
+         try: curses.setupterm()
+         except: return
+ 
++        # We want unicode output and have unicode input.
++        reload(sys)
++        sys.setdefaultencoding('utf8')
++
+         # Look up numeric capabilities.
+         self.COLS = curses.tigetnum('cols')
+         self.LINES = curses.tigetnum('lines')
+-- 
+2.33.0
+

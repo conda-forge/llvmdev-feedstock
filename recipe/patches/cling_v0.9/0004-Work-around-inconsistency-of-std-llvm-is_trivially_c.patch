@@ -1,0 +1,31 @@
+From 85e42859fb6de405e303fc8d92e37ff2b652b4b5 Mon Sep 17 00:00:00 2001
+From: Axel Naumann <Axel.Naumann@cern.ch>
+Date: Wed, 24 Feb 2021 18:19:27 +0100
+Subject: [PATCH 5/5] Work around inconsistency of
+ {std|llvm}::is_trivially_copyable:
+
+See https://bugs.chromium.org/p/swiftshader/issues/detail?id=153
+I.e. this is expected to be fixed in llvm11.
+---
+ include/llvm/Support/type_traits.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/include/llvm/Support/type_traits.h b/include/llvm/Support/type_traits.h
+index c8c6a76a90f..04e60f4b44c 100644
+--- a/include/llvm/Support/type_traits.h
++++ b/include/llvm/Support/type_traits.h
+@@ -183,9 +183,11 @@ class is_trivially_copyable {
+       (has_deleted_copy_constructor || has_trivial_copy_constructor);
+ 
+ #ifdef HAVE_STD_IS_TRIVIALLY_COPYABLE
++#ifndef _MSC_VER
+   static_assert(value == std::is_trivially_copyable<T>::value,
+                 "inconsistent behavior between llvm:: and std:: implementation of is_trivially_copyable");
+ #endif
++#endif
+ };
+ template <typename T>
+ class is_trivially_copyable<T*> : public std::true_type {
+-- 
+2.33.0
+
