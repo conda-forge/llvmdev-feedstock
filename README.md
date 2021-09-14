@@ -57,6 +57,20 @@ Current build status
                 </a>
               </td>
             </tr><tr>
+              <td>linux_ppc64le_variantcling_v0.9</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=master">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master&jobName=linux&configuration=linux_ppc64le_variantcling_v0.9" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>linux_ppc64le_variantdefault</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=master">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master&jobName=linux&configuration=linux_ppc64le_variantdefault" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
               <td>osx_64_variantcling_v0.9</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=master">
