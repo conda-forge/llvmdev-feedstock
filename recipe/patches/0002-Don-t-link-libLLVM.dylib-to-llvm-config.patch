@@ -1,7 +1,7 @@
 From d7e9544b005c502ff443a8b5d5171225276a8391 Mon Sep 17 00:00:00 2001
 From: Isuru Fernando <isuruf@gmail.com>
 Date: Mon, 5 Apr 2021 11:32:11 -0500
-Subject: [PATCH 2/2] Don't link libLLVM.dylib to llvm-config
+Subject: [PATCH 2/3] Don't link libLLVM.dylib to llvm-config
 
 ---
  tools/llvm-config/CMakeLists.txt | 1 +

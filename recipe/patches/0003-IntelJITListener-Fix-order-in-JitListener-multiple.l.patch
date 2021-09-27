@@ -1,0 +1,42 @@
+From 9d601760290e89dc7c27e17ca8170983c82595f8 Mon Sep 17 00:00:00 2001
+From: Andy Kaylor <andrew.kaylor@intel.com>
+Date: Wed, 29 Sep 2021 12:25:16 -0700
+Subject: [PATCH 3/3] [IntelJITListener] Fix order in JitListener/multiple.ll
+
+As reported in Bugzilla 51859, the JitListener/multiple.ll test had
+become stale. The function order in the emitted image was changed by an
+update to the MC/ElfObjectWriter code and because this test is disabled
+by default, it wasn't updated.
+---
+ test/JitListener/multiple.ll | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/test/JitListener/multiple.ll b/test/JitListener/multiple.ll
+index d60bf0b794ff..15b81ea55815 100644
+--- a/test/JitListener/multiple.ll
++++ b/test/JitListener/multiple.ll
+@@ -26,16 +26,16 @@
+ ; 21: }
+ ;
+ 
+-; CHECK: Method load [1]: bar, Size = {{[0-9]+}}
++; CHECK: Method load [1]: foo, Size = {{[0-9]+}}
++; CHECK:   Line info @ {{[0-9]+}}: multiple.c, line {{[1,2]}}
++; CHECK:   Line info @ {{[0-9]+}}: multiple.c, line {{[1,2]}}
++
++; CHECK: Method load [2]: bar, Size = {{[0-9]+}}
+ ; CHECK:   Line info @ {{[0-9]+}}: multiple.c, line {{[5,6,7,9]}}
+ ; CHECK:   Line info @ {{[0-9]+}}: multiple.c, line {{[5,6,7,9]}}
+ ; CHECK:   Line info @ {{[0-9]+}}: multiple.c, line {{[5,6,7,9]}}
+ ; CHECK:   Line info @ {{[0-9]+}}: multiple.c, line {{[5,6,7,9]}}
+ 
+-; CHECK: Method load [2]: foo, Size = {{[0-9]+}}
+-; CHECK:   Line info @ {{[0-9]+}}: multiple.c, line {{[1,2]}}
+-; CHECK:   Line info @ {{[0-9]+}}: multiple.c, line {{[1,2]}}
+-
+ ; CHECK: Method load [3]: fubar, Size = {{[0-9]+}}
+ ; CHECK:   Line info @ {{[0-9]+}}: multiple.c, line {{[12,13,15,17,19]}}
+ ; CHECK:   Line info @ {{[0-9]+}}: multiple.c, line {{[12,13,15,17,19]}}
+-- 
+2.32.0.windows.2
+
