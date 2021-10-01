@@ -1,5 +1,5 @@
-{% set version = "12.0.1" %}
-{% set sha256 = "7d9a8405f557cefc5a21bf5672af73903b64749d9bc3a50322239f56f34ffddf" %}
+{% set version = "13.0.0" %}
+{% set sha256 = "408d11708643ea826f519ff79761fcdfc12d641a2510229eec459e72f8163020" %}
 
 {% set major_ver = version.split(".")[0] %}
 
@@ -22,7 +22,7 @@ source:
     - patches/llvm-config-no-libLLVM.diff
 
 build:
-  number: 2
+  number: 0
   merge_build_host: false
 
 requirements:
