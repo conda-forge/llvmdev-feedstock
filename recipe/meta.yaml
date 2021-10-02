@@ -1,6 +1,4 @@
-{% set version = "12.0.1" %}
-{% set sha256 = "7d9a8405f557cefc5a21bf5672af73903b64749d9bc3a50322239f56f34ffddf" %}
-
+{% set version = "13.0.0" %}
 {% set major_ver = version.split(".")[0] %}
 
 package:
@@ -9,20 +7,19 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  sha256: {{ sha256 }}
+  sha256: 408d11708643ea826f519ff79761fcdfc12d641a2510229eec459e72f8163020
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
-    # Revert an upstream change for Numba
-    # ref: https://github.com/numba/llvmlite/blob/v0.29.0/conda-recipes/0001-Revert-Limit-size-of-non-GlobalValue-name.patch
-    - patches/numba-0001-Revert-Limit-size-of-non-GlobalValue-name.patch
     #- patches/amd-roc-2.7.0.diff
-    - patches/pass-through-qemu-ld-prefix.diff
+    - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     # Don't link libLLVM.dylib to llvm-config. Makes it easier for cross compiling
-    - patches/llvm-config-no-libLLVM.diff
+    - patches/0002-Don-t-link-libLLVM.dylib-to-llvm-config.patch
+    # backport upstream commit e49c0c5100 for https://bugs.llvm.org/show_bug.cgi?id=51859
+    - patches/0003-IntelJITListener-Fix-order-in-JitListener-multiple.l.patch
 
 build:
-  number: 2
+  number: 0
   merge_build_host: false
 
 requirements:

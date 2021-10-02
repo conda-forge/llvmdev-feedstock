@@ -16,6 +16,12 @@ if [[ "$CC_FOR_BUILD" != "" && "$CC_FOR_BUILD" != "$CC" ]]; then
   CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_HOST_TRIPLE=$(echo $HOST | sed s/conda/unknown/g) -DLLVM_DEFAULT_TARGET_TRIPLE=$(echo $HOST | sed s/conda/unknown/g)"
 fi
 
+# disable -fno-plt due to https://bugs.llvm.org/show_bug.cgi?id=51863 due to some GCC bug
+if [[ "$target_platform" == "linux-ppc64le" ]]; then
+  CFLAGS="$(echo $CFLAGS | sed 's/-fno-plt //g')"
+  CXXFLAGS="$(echo $CXXFLAGS | sed 's/-fno-plt //g')"
+fi
+
 cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
       -DLLVM_ENABLE_RTTI=ON \
