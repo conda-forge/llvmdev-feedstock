@@ -1,4 +1,4 @@
-{% set version = "13.0.1" %}
+{% set version = "13.0.1.rc1" %}
 {% set major_ver = version.split(".")[0] %}
 
 package:
