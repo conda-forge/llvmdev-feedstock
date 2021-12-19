@@ -50,6 +50,7 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}
+        - make      # [not win]
         - cmake
         - ninja     # [win]
         - python    >=3
@@ -82,6 +83,7 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}
+        - make                     # [not win]
         - cmake                    # [not win]
         - python    >=3            # [not win]
       host:
@@ -123,6 +125,7 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}
+        - make      # [not win]
         - cmake
         - ninja     # [win]
         - python    >=3
