@@ -119,6 +119,7 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}
+        - make      # [not win]
         - cmake
         - ninja     # [win]
         - python    >=3
