@@ -5,11 +5,11 @@ Home: http://llvm.org/
 
 Package license: Apache-2.0 WITH LLVM-exception
 
-Feedstock license: BSD-3-Clause
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/llvmdev-feedstock/blob/master/LICENSE.txt)
 
 Summary: Development headers and libraries for LLVM
 
-
+Development: https://github.com/llvm-mirror/llvm
 
 Current build status
 ====================
@@ -83,7 +83,7 @@ Current release info
 
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm11-green.svg)](https://anaconda.org/conda-forge/libllvm11) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm11.svg)](https://anaconda.org/conda-forge/libllvm11) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm11.svg)](https://anaconda.org/conda-forge/libllvm11) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm11.svg)](https://anaconda.org/conda-forge/libllvm11) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm13-green.svg)](https://anaconda.org/conda-forge/libllvm13) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm13.svg)](https://anaconda.org/conda-forge/libllvm13) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm13.svg)](https://anaconda.org/conda-forge/libllvm13) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm13.svg)](https://anaconda.org/conda-forge/libllvm13) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-lit-green.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvm-green.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvm--tools-green.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) |
@@ -96,25 +96,27 @@ Installing `llvm-package` from the `conda-forge` channel can be achieved by addi
 
 ```
 conda config --add channels conda-forge
+conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libllvm11, lit, llvm, llvm-tools, llvmdev` can be installed with:
+Once the `conda-forge` channel has been enabled, `libllvm13, lit, llvm, llvm-tools, llvmdev` can be installed with:
 
 ```
-conda install libllvm11 lit llvm llvm-tools llvmdev
+conda install libllvm13 lit llvm llvm-tools llvmdev
 ```
 
-It is possible to list all of the versions of `libllvm11` available on your platform with:
+It is possible to list all of the versions of `libllvm13` available on your platform with:
 
 ```
-conda search libllvm11 --channel conda-forge
+conda search libllvm13 --channel conda-forge
 ```
 
 
 About conda-forge
 =================
 
-[![Powered by NumFOCUS](https://img.shields.io/badge/powered%20by-NumFOCUS-orange.svg?style=flat&colorA=E1523D&colorB=007D8A)](http://numfocus.org)
+[![Powered by
+NumFOCUS](https://img.shields.io/badge/powered%20by-NumFOCUS-orange.svg?style=flat&colorA=E1523D&colorB=007D8A)](https://numfocus.org)
 
 conda-forge is a community-led conda channel of installable packages.
 In order to provide high-quality builds, the process has been automated into the
@@ -166,9 +168,9 @@ build distinct package versions.
 
 In order to produce a uniquely identifiable distribution:
  * If the version of a package **is not** being increased, please add or increase
-   the [``build/number``](https://conda.io/docs/user-guide/tasks/build-packages/define-metadata.html#build-number-and-string).
+   the [``build/number``](https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#build-number-and-string).
  * If the version of a package **is** being increased, please remember to return
-   the [``build/number``](https://conda.io/docs/user-guide/tasks/build-packages/define-metadata.html#build-number-and-string)
+   the [``build/number``](https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#build-number-and-string)
    back to 0.
 
 Feedstock Maintainers

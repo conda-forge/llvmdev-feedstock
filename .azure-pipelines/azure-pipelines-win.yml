@@ -5,13 +5,12 @@
 jobs:
 - job: win
   pool:
-    vmImage: vs2017-win2016
+    vmImage: windows-2019
   strategy:
     matrix:
       win_64_:
         CONFIG: win_64_
         UPLOAD_PACKAGES: 'True'
-    maxParallel: 4
   timeoutInMinutes: 360
   variables:
     CONDA_BLD_PATH: D:\\bld\\
@@ -53,7 +52,7 @@ jobs:
 
     - task: CondaEnvironment@1
       inputs:
-        packageSpecs: 'python=3.6 conda-build conda conda-forge::conda-forge-ci-setup=3 pip' # Optional
+        packageSpecs: 'python=3.9 conda-build conda "conda-forge-ci-setup=3" pip boa' # Optional
         installOptions: "-c conda-forge"
         updateConda: true
       displayName: Install conda-build and activate environment
@@ -87,7 +86,7 @@ jobs:
 
     - script: |
         call activate base
-        conda.exe build "recipe" -m .ci_support\%CONFIG%.yaml
+        conda.exe mambabuild "recipe" -m .ci_support\%CONFIG%.yaml --suppress-variables
       displayName: Build recipe
       env:
         PYTHONUNBUFFERED: 1
@@ -108,4 +107,4 @@ jobs:
         BINSTAR_TOKEN: $(BINSTAR_TOKEN)
         FEEDSTOCK_TOKEN: $(FEEDSTOCK_TOKEN)
         STAGING_BINSTAR_TOKEN: $(STAGING_BINSTAR_TOKEN)
-      condition: and(succeeded(), not(eq(variables['UPLOAD_PACKAGES'], 'False')))
+      condition: and(succeeded(), not(eq(variables['UPLOAD_PACKAGES'], 'False')), not(eq(variables['Build.Reason'], 'PullRequest')))
