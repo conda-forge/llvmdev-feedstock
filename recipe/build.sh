@@ -7,6 +7,11 @@ sed -i.bak "s/NOT APPLE AND NOT ARG_SONAME/NOT ARG_SONAME/g" cmake/modules/AddLL
 mkdir build
 cd build
 
+if [[ "${target_platform}" == "linux-ppc64le" ]]; then
+  export CXXFLAGS="${CXXFLAGS} -fplt"
+  export CFLAGS="${CFLAGS} -fplt"
+fi
+
 [[ $(uname) == Linux ]] && conditional_args="
       -DLLVM_USE_INTEL_JITEVENTS=ON
 "

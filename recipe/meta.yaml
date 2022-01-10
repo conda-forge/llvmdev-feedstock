@@ -2,7 +2,7 @@
 {% set sha256 = "00a1ee1f389f81e9979f3a640a01c431b3021de0d42278f6508391a2f0b81c9a" %}
 
 {% set major_ver = version.split(".")[0] %}
-{% set build_number = 4 %}
+{% set build_number = 5 %}
 
 package:
   name: llvm-package
@@ -53,6 +53,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - cmake
+        - make      # [not win]
         - ninja     # [win]
         - python    >=3
       host:
@@ -88,6 +89,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - cmake                    # [not win]
+        - make                     # [not win]
         - python    >=3            # [not win]
       host:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
@@ -135,6 +137,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - cmake
+        - make      # [not win]
         - ninja     # [win]
         - python    >=3
       host:
