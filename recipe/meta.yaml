@@ -2,7 +2,7 @@
 {% set sha256 = "00a1ee1f389f81e9979f3a640a01c431b3021de0d42278f6508391a2f0b81c9a" %}
 
 {% set major_ver = version.split(".")[0] %}
-{% set build_number = 5 %}
+{% set build_number = 6 %}
 
 package:
   name: llvm-package
@@ -21,6 +21,7 @@ source:
     - patches/cling_v0.9/0002-Fix-the-compilation.patch                                   # [variant == "cling_v0.9"]
     - patches/cling_v0.9/0003-Make-datamember-protected.patch                             # [variant == "cling_v0.9"]
     - patches/cling_v0.9/0004-Work-around-inconsistency-of-std-llvm-is_trivially_c.patch  # [variant == "cling_v0.9"]
+    - patches/cling_v0.9/0005-Restore-the-ppc64le-support.patch                           # [variant == "cling_v0.9"]
 build:
   number: {{ build_number }}
   skip:  true  # [win and vc<14]
