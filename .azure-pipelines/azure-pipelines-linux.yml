@@ -11,27 +11,27 @@ jobs:
       linux_64_variantcling_v0.9:
         CONFIG: linux_64_variantcling_v0.9
         UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-comp7
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
       linux_64_variantdefault:
         CONFIG: linux_64_variantdefault
         UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-comp7
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
       linux_aarch64_variantcling_v0.9:
         CONFIG: linux_aarch64_variantcling_v0.9
         UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-comp7
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
       linux_aarch64_variantdefault:
         CONFIG: linux_aarch64_variantdefault
         UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-comp7
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
       linux_ppc64le_variantcling_v0.9:
         CONFIG: linux_ppc64le_variantcling_v0.9
         UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-comp7
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
       linux_ppc64le_variantdefault:
         CONFIG: linux_ppc64le_variantdefault
         UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-comp7
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
   timeoutInMinutes: 360
 
   steps:
@@ -52,6 +52,11 @@ jobs:
         export CI=azure
         export GIT_BRANCH=$BUILD_SOURCEBRANCHNAME
         export FEEDSTOCK_NAME=$(basename ${BUILD_REPOSITORY_NAME})
+        if [[ "${BUILD_REASON:-}" == "PullRequest" ]]; then
+          export IS_PR_BUILD="True"
+        else
+          export IS_PR_BUILD="False"
+        fi
         .scripts/run_docker_build.sh
     displayName: Run docker build
     env:
