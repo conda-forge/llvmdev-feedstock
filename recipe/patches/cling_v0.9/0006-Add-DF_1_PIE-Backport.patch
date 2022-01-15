@@ -1,0 +1,23 @@
+From a9c961cf4613ff1f0ea50f188e4a4b0eb749b17d Mon Sep 17 00:00:00 2001
+From: Vassil Vassilev <v.g.vassilev@gmail.com>
+Date: Thu, 9 Dec 2021 18:28:26 +0000
+Subject: [PATCH] [llvm] Add DF_1_PIE Backport https://reviews.llvm.org/D80871
+
+---
+ interpreter/llvm/src/include/llvm/BinaryFormat/ELF.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/interpreter/llvm/src/include/llvm/BinaryFormat/ELF.h b/interpreter/llvm/src/include/llvm/BinaryFormat/ELF.h
+index 2bd711137845..39b352603465 100644
+--- a/interpreter/llvm/src/include/llvm/BinaryFormat/ELF.h
++++ b/interpreter/llvm/src/include/llvm/BinaryFormat/ELF.h
+@@ -1289,7 +1289,8 @@ enum {
+   DF_1_NORELOC = 0x00400000,
+   DF_1_SYMINTPOSE = 0x00800000, // Object has individual interposers.
+   DF_1_GLOBAUDIT = 0x01000000,  // Global auditing required.
+-  DF_1_SINGLETON = 0x02000000   // Singleton symbols are used.
++  DF_1_SINGLETON = 0x02000000,  // Singleton symbols are used.
++  DF_1_PIE = 0x08000000,        // Object is a position-independent executable.
+ };
+ 
+ // DT_MIPS_FLAGS values.
