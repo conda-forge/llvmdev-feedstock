@@ -40,7 +40,9 @@ requirements:
     - m2-grep   # [win]
     - m2-sed    # [win]
     - libcxx {{ cxx_compiler_version }}  # [osx]
-  host:
+    - patch       # [not win]
+    - m2-patch    # [win]
+   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
     - zlib
     - libxml2   # [win]
