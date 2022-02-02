@@ -42,7 +42,7 @@ requirements:
     - libcxx {{ cxx_compiler_version }}  # [osx]
     - patch       # [not win]
     - m2-patch    # [win]
-   host:
+  host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
     - zlib
     - libxml2   # [win]
