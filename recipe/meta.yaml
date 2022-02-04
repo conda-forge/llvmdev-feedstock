@@ -15,8 +15,6 @@ source:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     # Don't link libLLVM.dylib to llvm-config. Makes it easier for cross compiling
     - patches/0002-Don-t-link-libLLVM.dylib-to-llvm-config.patch
-    # backport upstream commit e49c0c5100 for https://bugs.llvm.org/show_bug.cgi?id=51859
-    - patches/0003-IntelJITListener-Fix-order-in-JitListener-multiple.l.patch
 
 build:
   number: 0
@@ -46,6 +44,7 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}
+        - make      # [not win]
         - cmake
         - ninja     # [win]
         - python    >=3
@@ -78,6 +77,7 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}
+        - make                     # [not win]
         - cmake                    # [not win]
         - python    >=3            # [not win]
       host:
@@ -119,6 +119,7 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}
+        - make      # [not win]
         - cmake
         - ninja     # [win]
         - python    >=3
