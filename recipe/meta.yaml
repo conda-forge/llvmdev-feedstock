@@ -22,8 +22,8 @@ source:
     - patches/llvm-config-no-libLLVM.diff
 
 build:
-  number: 2
-  skip: true
+  number: 3
+  skip: true  # [(win and vc<14)]
   merge_build_host: false
 
 requirements:
@@ -50,6 +50,7 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}
+        - make      # [not win]
         - cmake
         - ninja     # [win]
         - python    >=3
@@ -82,6 +83,7 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}
+        - make                     # [not win]
         - cmake                    # [not win]
         - python    >=3            # [not win]
       host:
@@ -123,11 +125,13 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}
+        - make      # [not win]
         - cmake
         - ninja     # [win]
         - python    >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - libxml2  # [win]
         - zlib
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
@@ -138,6 +142,7 @@ outputs:
         - $PREFIX/bin/llc -version                               # [not win]
         - if not exist "%LIBRARY_BIN%"\\llc.exe exit 1           # [win]
         - llc -version                                           # [win]
+        - llvm-mt -help                                          # [win]
 
   - name: lit
     build:
