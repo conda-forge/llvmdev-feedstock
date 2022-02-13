@@ -23,7 +23,7 @@ source:
 
 build:
   number: 2
-  skip: true
+  skip: true  # [(win and vc<14)]
   merge_build_host: false
 
 requirements:
