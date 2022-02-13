@@ -1,44 +1,57 @@
 #!/usr/bin/env bash
 
+# -*- mode: jinja-shell -*-
+
 source .scripts/logging_utils.sh
 
-set -x
+set -xe
 
-startgroup "Installing a fresh version of Miniforge"
+MINIFORGE_HOME=${MINIFORGE_HOME:-${HOME}/miniforge3}
+
+( startgroup "Installing a fresh version of Miniforge" ) 2> /dev/null
+
 MINIFORGE_URL="https://github.com/conda-forge/miniforge/releases/latest/download"
-MINIFORGE_FILE="Miniforge3-MacOSX-x86_64.sh"
+MINIFORGE_FILE="Mambaforge-MacOSX-$(uname -m).sh"
 curl -L -O "${MINIFORGE_URL}/${MINIFORGE_FILE}"
-bash $MINIFORGE_FILE -b
-endgroup "Installing a fresh version of Miniforge"
+rm -rf ${MINIFORGE_HOME}
+bash $MINIFORGE_FILE -b -p ${MINIFORGE_HOME}
 
-startgroup "Configuring conda"
-BUILD_CMD=build
+( endgroup "Installing a fresh version of Miniforge" ) 2> /dev/null
 
-source ${HOME}/miniforge3/etc/profile.d/conda.sh
+( startgroup "Configuring conda" ) 2> /dev/null
+
+source ${MINIFORGE_HOME}/etc/profile.d/conda.sh
 conda activate base
 
 echo -e "\n\nInstalling conda-forge-ci-setup=3 and conda-build."
-conda install -n base --quiet --yes "conda-forge-ci-setup=3" conda-build pip ${GET_BOA:-}
+mamba install -n base --update-specs --quiet --yes "conda-forge-ci-setup=3" conda-build pip boa
+mamba update -n base --update-specs --quiet --yes "conda-forge-ci-setup=3" conda-build pip boa
 
 
 
 echo -e "\n\nSetting up the condarc and mangling the compiler."
 setup_conda_rc ./ ./recipe ./.ci_support/${CONFIG}.yaml
-mangle_compiler ./ ./recipe .ci_support/${CONFIG}.yaml
 
-echo -e "\n\nMangling homebrew in the CI to avoid conflicts."
-/usr/bin/sudo mangle_homebrew
-/usr/bin/sudo -k
+if [[ "${CI:-}" != "" ]]; then
+  mangle_compiler ./ ./recipe .ci_support/${CONFIG}.yaml
+fi
+
+if [[ "${CI:-}" != "" ]]; then
+  echo -e "\n\nMangling homebrew in the CI to avoid conflicts."
+  /usr/bin/sudo mangle_homebrew
+  /usr/bin/sudo -k
+else
+  echo -e "\n\nNot mangling homebrew as we are not running in CI"
+fi
 
 echo -e "\n\nRunning the build setup script."
 source run_conda_forge_build_setup
 
 
-endgroup "Configuring conda"
 
-set -e
+( endgroup "Configuring conda" ) 2> /dev/null
 
-startgroup "Running conda $BUILD_CMD"
+
 echo -e "\n\nMaking the build clobber file"
 make_build_number ./ ./recipe ./.ci_support/${CONFIG}.yaml
 
@@ -46,14 +59,17 @@ if [[ "${HOST_PLATFORM}" != "${BUILD_PLATFORM}" ]]; then
     EXTRA_CB_OPTIONS="${EXTRA_CB_OPTIONS:-} --no-test"
 fi
 
-conda $BUILD_CMD ./recipe -m ./.ci_support/${CONFIG}.yaml --suppress-variables --clobber-file ./.ci_support/clobber_${CONFIG}.yaml ${EXTRA_CB_OPTIONS:-}
-endgroup "Running conda build"
-startgroup "Validating outputs"
-validate_recipe_outputs "${FEEDSTOCK_NAME}"
-endgroup "Validating outputs"
+conda mambabuild ./recipe -m ./.ci_support/${CONFIG}.yaml --suppress-variables --clobber-file ./.ci_support/clobber_${CONFIG}.yaml ${EXTRA_CB_OPTIONS:-}
+( startgroup "Validating outputs" ) 2> /dev/null
 
-if [[ "${UPLOAD_PACKAGES}" != "False" ]]; then
-  startgroup "Uploading packages"
+validate_recipe_outputs "${FEEDSTOCK_NAME}"
+
+( endgroup "Validating outputs" ) 2> /dev/null
+
+( startgroup "Uploading packages" ) 2> /dev/null
+
+if [[ "${UPLOAD_PACKAGES}" != "False" ]] && [[ "${IS_PR_BUILD}" == "False" ]]; then
   upload_package --validate --feedstock-name="${FEEDSTOCK_NAME}" ./ ./recipe ./.ci_support/${CONFIG}.yaml
-  endgroup "Uploading packages"
 fi
+
+( endgroup "Uploading packages" ) 2> /dev/null
