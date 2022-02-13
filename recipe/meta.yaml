@@ -139,6 +139,7 @@ outputs:
         - $PREFIX/bin/llc -version                               # [not win]
         - if not exist "%LIBRARY_BIN%"\\llc.exe exit 1           # [win]
         - llc -version                                           # [win]
+        - llvm-mt -help                                          # [win]
 
   - name: lit
     build:
