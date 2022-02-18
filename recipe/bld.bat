@@ -8,6 +8,8 @@ set "CXXFLAGS=-MD"
 set "CC=cl.exe"
 set "CXX=cl.exe"
 
+copy "llvm-project\cmake\Modules\*" "cmake\modules\"
+
 cmake -G "Ninja" ^
     -DCMAKE_BUILD_TYPE="Release" ^
     -DCMAKE_PREFIX_PATH=%LIBRARY_PREFIX% ^
