@@ -1,5 +1,9 @@
 echo on
 
+REM workaround https://github.com/llvm/llvm-project/issues/53281
+xcopy llvm-project\cmake\Modules\* cmake\modules\
+if errorlevel 1 exit 1
+
 mkdir build
 cd build
 
@@ -7,9 +11,6 @@ REM remove GL flag for now
 set "CXXFLAGS=-MD"
 set "CC=cl.exe"
 set "CXX=cl.exe"
-
-xcopy llvm-project\cmake\Modules\* cmake\modules\
-if errorlevel 1 exit 1
 
 cmake -G "Ninja" ^
     -DCMAKE_BUILD_TYPE="Release" ^
