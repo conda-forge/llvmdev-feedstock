@@ -26,14 +26,13 @@ cmake -G "Ninja" ^
     -DLLVM_ENABLE_ZLIB=ON ^
     -DLLVM_BUILD_LLVM_C_DYLIB=no ^
     %SRC_DIR%
-
-if errorlevel 1 exit 1
+if %ERRORLEVEL% neq 0 exit 1
 
 cmake --build .
-if errorlevel 1 exit 1
+if %ERRORLEVEL% neq 0 exit 1
 
 REM bin\opt -S -vector-library=SVML -mcpu=haswell -O3 %RECIPE_DIR%\numba-3016.ll | bin\FileCheck %RECIPE_DIR%\numba-3016.ll
-REM if errorlevel 1 exit 1
+REM if %ERRORLEVEL% neq 0 exit 1
 
 cd ..\test
 ..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
