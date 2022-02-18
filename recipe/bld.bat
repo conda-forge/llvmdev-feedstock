@@ -8,7 +8,8 @@ set "CXXFLAGS=-MD"
 set "CC=cl.exe"
 set "CXX=cl.exe"
 
-copy "llvm-project\cmake\Modules\*" "cmake\modules\"
+xcopy llvm-project\cmake\Modules\* cmake\modules\
+if errorlevel 1 exit 1
 
 cmake -G "Ninja" ^
     -DCMAKE_BUILD_TYPE="Release" ^
