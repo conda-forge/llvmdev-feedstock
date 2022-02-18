@@ -47,9 +47,8 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}
-        - make      # [not win]
         - cmake
-        - ninja     # [win]
+        - ninja
         - python    >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
@@ -80,7 +79,7 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}
-        - make                     # [not win]
+        - ninja                     # [not win]
         - cmake                    # [not win]
         - python    >=3            # [not win]
       host:
@@ -122,7 +121,7 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}
-        - make      # [not win]
+        - ninja      # [not win]
         - cmake
         - ninja     # [win]
         - python    >=3
