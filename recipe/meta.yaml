@@ -28,9 +28,8 @@ requirements:
   build:
     - {{ compiler('cxx') }}
     - cmake
-    - ninja     # [win]
+    - ninja
     - python    >=3
-    - make
     - libcxx {{ cxx_compiler_version }}  # [osx]
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]

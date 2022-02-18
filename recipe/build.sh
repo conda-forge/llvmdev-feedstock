@@ -43,9 +43,10 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly \
       -DLLVM_BUILD_LLVM_DYLIB=yes \
       -DLLVM_LINK_LLVM_DYLIB=yes \
-      ${CMAKE_ARGS} ..
+      ${CMAKE_ARGS} \
+      -GNinja ..
 
-make -j${CPU_COUNT}
+ninja
 
 if [[ "${target_platform}" == "linux-64" || "${target_platform}" == "osx-64" ]]; then
     export TEST_CPU_FLAG="-mcpu=haswell"
@@ -60,7 +61,7 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
   fi
 
-  make -j${CPU_COUNT} check-llvm
+  ninja check-llvm
 
   cd ../test
   ../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
