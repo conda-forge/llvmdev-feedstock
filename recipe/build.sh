@@ -9,6 +9,9 @@ cd build
 
 if [[ "$target_platform" == "linux-64" ]]; then
   CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_USE_INTEL_JITEVENTS=ON"
+else
+  # disabling libxar on linux-64 leads to 1 test failure
+  CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_ENABLE_LIBXAR=OFF"
 fi
 
 if [[ "$CC_FOR_BUILD" != "" && "$CC_FOR_BUILD" != "$CC" ]]; then
@@ -25,7 +28,6 @@ fi
 cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
       -DHAVE_LIBEDIT=OFF \
-      -DLLVM_ENABLE_LIBXAR=OFF \
       -DLLVM_ENABLE_LIBXML2=OFF \
       -DLLVM_ENABLE_RTTI=ON \
       -DLLVM_ENABLE_TERMINFO=OFF \
