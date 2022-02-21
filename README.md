@@ -83,7 +83,7 @@ Current release info
 
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm13-green.svg)](https://anaconda.org/conda-forge/libllvm13) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm13.svg)](https://anaconda.org/conda-forge/libllvm13) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm13.svg)](https://anaconda.org/conda-forge/libllvm13) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm13.svg)](https://anaconda.org/conda-forge/libllvm13) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm14-green.svg)](https://anaconda.org/conda-forge/libllvm14) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm14.svg)](https://anaconda.org/conda-forge/libllvm14) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm14.svg)](https://anaconda.org/conda-forge/libllvm14) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm14.svg)](https://anaconda.org/conda-forge/libllvm14) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-lit-green.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvm-green.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvm--tools-green.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) |
@@ -99,16 +99,16 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libllvm13, lit, llvm, llvm-tools, llvmdev` can be installed with:
+Once the `conda-forge` channel has been enabled, `libllvm14, lit, llvm, llvm-tools, llvmdev` can be installed with:
 
 ```
-conda install libllvm13 lit llvm llvm-tools llvmdev
+conda install libllvm14 lit llvm llvm-tools llvmdev
 ```
 
-It is possible to list all of the versions of `libllvm13` available on your platform with:
+It is possible to list all of the versions of `libllvm14` available on your platform with:
 
 ```
-conda search libllvm13 --channel conda-forge
+conda search libllvm14 --channel conda-forge
 ```
 
 
@@ -177,9 +177,11 @@ Feedstock Maintainers
 =====================
 
 * [@SylvainCorlay](https://github.com/SylvainCorlay/)
+* [@h-vetinari](https://github.com/h-vetinari/)
 * [@inducer](https://github.com/inducer/)
 * [@isuruf](https://github.com/isuruf/)
 * [@jakirkham](https://github.com/jakirkham/)
 * [@mingwandroid](https://github.com/mingwandroid/)
 * [@timsnyder](https://github.com/timsnyder/)
+* [@xhochy](https://github.com/xhochy/)
 
