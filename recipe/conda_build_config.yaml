@@ -2,3 +2,8 @@ c_compiler:         # [osx]
   - clang_bootstrap # [osx]
 cxx_compiler:       # [osx]
   - clang_bootstrap # [osx]
+# test failure (DebugInfo/X86/vla-multi.ll) with GCC 10
+c_compiler_version:            # [linux64]
+  - 9                          # [linux64]
+cxx_compiler_version:          # [linux64]
+  - 9                          # [linux64]
