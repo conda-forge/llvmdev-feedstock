@@ -1,16 +1,16 @@
-From c51fc0c3bcbeaa48932e52566a1d643f07ab4880 Mon Sep 17 00:00:00 2001
+From c6b30d226f744a4797a98e23f5e52b33750bed12 Mon Sep 17 00:00:00 2001
 From: Isuru Fernando <isuruf@gmail.com>
 Date: Tue, 4 Aug 2020 21:06:30 -0500
 Subject: [PATCH 1/2] pass through QEMU_LD_PREFIX & SDKROOT
 
 ---
- utils/lit/lit/TestingConfig.py | 2 +-
+ llvm/utils/lit/lit/TestingConfig.py | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/utils/lit/lit/TestingConfig.py b/utils/lit/lit/TestingConfig.py
-index e80369377857..44f5794ed96b 100644
---- a/utils/lit/lit/TestingConfig.py
-+++ b/utils/lit/lit/TestingConfig.py
+diff --git a/llvm/utils/lit/lit/TestingConfig.py b/llvm/utils/lit/lit/TestingConfig.py
+index e80369377..44f5794ed 100644
+--- a/llvm/utils/lit/lit/TestingConfig.py
++++ b/llvm/utils/lit/lit/TestingConfig.py
 @@ -21,7 +21,7 @@ class TestingConfig(object):
              'LLVM_DISABLE_CRASH_REPORT' : '1',
              }
@@ -21,5 +21,5 @@ index e80369377857..44f5794ed96b 100644
                       'UBSAN_OPTIONS', 'LSAN_OPTIONS', 'ADB', 'ANDROID_SERIAL',
                       'SSH_AUTH_SOCK', 'SANITIZER_IGNORE_CVE_2016_2143',
 -- 
-2.32.0.windows.2
+2.35.0
 

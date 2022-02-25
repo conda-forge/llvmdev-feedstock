@@ -3,7 +3,7 @@ MACOSX_DEPLOYMENT_TARGET:
 channel_sources:
 - conda-forge
 channel_targets:
-- conda-forge llvm_rc
+- conda-forge llvm_dev
 cxx_compiler:
 - clang_bootstrap
 cxx_compiler_version:
