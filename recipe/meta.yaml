@@ -12,11 +12,7 @@ package:
   version: {{ version }}
 
 source:
-  {% if git_commit != "" %}
   - url: https://github.com/llvm/llvm-project/archive/{{ archive_file }}.tar.gz
-  {% else %}
-  - url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  {% endif %}
     sha256: 1459d328ea67802f5b7c64349ba300b5ddc4a78838d6b77a8a970fe99ed3e78c
     patches:
       # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
