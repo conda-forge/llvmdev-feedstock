@@ -5,7 +5,7 @@ MACOSX_SDK_VERSION:
 channel_sources:
 - conda-forge
 channel_targets:
-- conda-forge llvm_dev
+- conda-forge llvm_tf
 cxx_compiler:
 - clang_bootstrap
 cxx_compiler_version:
