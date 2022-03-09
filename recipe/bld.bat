@@ -1,9 +1,5 @@
 echo on
 
-REM workaround https://github.com/llvm/llvm-project/issues/53281
-xcopy llvm-project\cmake\Modules\* cmake\modules\
-if %ERRORLEVEL% neq 0 exit 1
-
 mkdir build
 cd build
 
@@ -29,7 +25,7 @@ cmake -G "Ninja" ^
     -DLLVM_UTILS_INSTALL_DIR=libexec\llvm ^
     -DLLVM_BUILD_LLVM_C_DYLIB=no ^
     -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly ^
-    %SRC_DIR%
+    %SRC_DIR%\llvm
 if %ERRORLEVEL% neq 0 exit 1
 
 cmake --build .
@@ -38,5 +34,7 @@ if %ERRORLEVEL% neq 0 exit 1
 REM bin\opt -S -vector-library=SVML -mcpu=haswell -O3 %RECIPE_DIR%\numba-3016.ll | bin\FileCheck %RECIPE_DIR%\numba-3016.ll
 REM if %ERRORLEVEL% neq 0 exit 1
 
-cd ..\test
-..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
+cd ..\llvm\test
+if %ERRORLEVEL% neq 0 exit 1
+..\..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
+if %ERRORLEVEL% neq 0 exit 1

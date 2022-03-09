@@ -1,13 +1,19 @@
-{% set version = "14.0.0.rc1" %}
+{% set version = "14.0.0.tf280_55c71c9eac9b" %}
 {% set major_ver = version.split(".")[0] %}
+{% set git_commit = "55c71c9eac9bc7f956a05fa9258fad4f86565450" %}
+{% if git_commit != "" %}
+  {% set archive_file = git_commit %}
+{% else %}
+  {% set archive_file = "refs/tags/llvmorg-" + version.replace(".rc", "-rc") %}
+{% endif %}
 
 package:
   name: llvm-package
   version: {{ version }}
 
 source:
-  - url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-{{ version.replace(".rc", "rc") }}.src.tar.xz
-    sha256: 7cc32fbe452a655978a86d0e0719b6439d7be8d3914ab1802dede7d8d4a42b3a
+  - url: https://github.com/llvm/llvm-project/archive/{{ archive_file }}.tar.gz
+    sha256: 1459d328ea67802f5b7c64349ba300b5ddc4a78838d6b77a8a970fe99ed3e78c
     patches:
       # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
       # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
@@ -15,10 +21,6 @@ source:
       - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
       # Don't link libLLVM.dylib to llvm-config. Makes it easier for cross compiling
       - patches/0002-Don-t-link-libLLVM.dylib-to-llvm-config.patch
-  # Workaround for https://github.com/llvm/llvm-project/issues/53281
-  - url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-    sha256: f598fac0347f4b0cd8bf508109c7cb5c62f0c0768cdd7b378d59d6bf60634985
-    folder: llvm-project
 
 build:
   number: 0
@@ -89,7 +91,11 @@ outputs:
         - libcxx >={{ cxx_compiler_version }}.a0  # [osx]
     test:
       commands:
+        {% if git_commit != "" %}
+        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}git${SHLIB_EXT}  # [unix]
+        {% else %}
         - test -f $PREFIX/lib/libLLVM-{{ major_ver }}${SHLIB_EXT}  # [unix]
+        {% endif %}
 
   # This is a meta package so that people can use the latest libllvm and also
   # for run_exports
@@ -142,7 +148,7 @@ outputs:
   - name: lit
     build:
       noarch: python
-      script: python -m pip install utils/lit --no-deps -vv
+      script: python -m pip install llvm/utils/lit --no-deps -vv
       activate_in_script: true
       skip: true  # [not linux64]
       entry_points:
@@ -163,7 +169,7 @@ about:
   home: http://llvm.org/
   dev_url: https://github.com/llvm-mirror/llvm
   license: Apache-2.0 WITH LLVM-exception
-  license_file: LICENSE.TXT
+  license_file: llvm/LICENSE.TXT
   license_family: Apache
   summary: Development headers and libraries for LLVM
 

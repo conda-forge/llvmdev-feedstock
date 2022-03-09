@@ -1,11 +1,8 @@
 set -x
 
 # Make osx work like linux.
-sed -i.bak "s/NOT APPLE AND ARG_SONAME/ARG_SONAME/g" cmake/modules/AddLLVM.cmake
-sed -i.bak "s/NOT APPLE AND NOT ARG_SONAME/NOT ARG_SONAME/g" cmake/modules/AddLLVM.cmake
-
-# Workaround https://github.com/llvm/llvm-project/issues/53281
-cp llvm-project/cmake/Modules/* cmake/modules/
+sed -i.bak "s/NOT APPLE AND ARG_SONAME/ARG_SONAME/g" llvm/cmake/modules/AddLLVM.cmake
+sed -i.bak "s/NOT APPLE AND NOT ARG_SONAME/NOT ARG_SONAME/g" llvm/cmake/modules/AddLLVM.cmake
 
 mkdir build
 cd build
@@ -44,7 +41,7 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DLLVM_LINK_LLVM_DYLIB=yes \
       -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly \
       ${CMAKE_ARGS} \
-      -GNinja ..
+      -GNinja ../llvm
 
 ninja
 
@@ -63,6 +60,6 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
 
   ninja check-llvm
 
-  cd ../test
-  ../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
+  cd ../llvm/test
+  ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
 fi
