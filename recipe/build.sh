@@ -4,6 +4,9 @@ set -x
 sed -i.bak "s/NOT APPLE AND ARG_SONAME/ARG_SONAME/g" cmake/modules/AddLLVM.cmake
 sed -i.bak "s/NOT APPLE AND NOT ARG_SONAME/NOT ARG_SONAME/g" cmake/modules/AddLLVM.cmake
 
+# Workaround https://github.com/llvm/llvm-project/issues/53281
+cp llvm-project/cmake/Modules/* cmake/modules/
+
 mkdir build
 cd build
 
