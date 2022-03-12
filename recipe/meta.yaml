@@ -1,4 +1,4 @@
-{% set version = "14.0.0.rc2" %}
+{% set version = "14.0.0.rc4" %}
 {% set major_ver = version.split(".")[0] %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   - url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-{{ version.replace(".rc", "rc") }}.src.tar.xz
-    sha256: f150d57fa4b17d107479a7b0dfff1903b51b5023dd8ff890ed535531dc37956f
+    sha256: a9f8b5ffe9fbac4b597fed44834b35b17b57a98adabe42703d19fdfc7ce9258c
     patches:
       # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
       # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
@@ -17,7 +17,7 @@ source:
       - patches/0002-Don-t-link-libLLVM.dylib-to-llvm-config.patch
   # Workaround for https://github.com/llvm/llvm-project/issues/53281
   - url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-    sha256: 089ad60fd1b4d2f409ba8a9f929ad0e04d336a4ebeefc70c3cce3cd3e4614659
+    sha256: ca833d5ca97b2d46053f6d2759fcd9ec3201201275e0c2119a4680356f5b0a15
     folder: llvm-project
 
 build:
