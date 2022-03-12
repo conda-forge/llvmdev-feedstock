@@ -1,9 +1,5 @@
 echo on
 
-REM workaround https://github.com/llvm/llvm-project/issues/53281
-xcopy llvm-project\cmake\Modules\* cmake\modules\
-if %ERRORLEVEL% neq 0 exit 1
-
 mkdir build
 cd build
 
