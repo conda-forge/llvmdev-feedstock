@@ -17,7 +17,7 @@ source:
       - patches/0002-Don-t-link-libLLVM.dylib-to-llvm-config.patch
   # Workaround for https://github.com/llvm/llvm-project/issues/53281
   - url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-    sha256: ca833d5ca97b2d46053f6d2759fcd9ec3201201275e0c2119a4680356f5b0a15
+    sha256: fa67da2200ec0a7dc99122f5f0e9aed74b0fec80e47061840f1173eb8a78055f
     folder: llvm-project
 
 build:
