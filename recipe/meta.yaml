@@ -21,7 +21,7 @@ source:
     folder: llvm-project
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
@@ -29,7 +29,7 @@ requirements:
     - {{ compiler('cxx') }}
     - cmake
     - ninja
-    - python    >=3
+    - python >=3
     - libcxx {{ cxx_compiler_version }}  # [osx]
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
@@ -39,7 +39,7 @@ requirements:
 outputs:
   # Contains everything
   - name: llvmdev
-    script: install_llvm.sh  # [not win]
+    script: install_llvm.sh   # [not win]
     script: install_llvm.bat  # [win]
     build:
       skip: true  # [(win and vc<14)]
@@ -49,7 +49,7 @@ outputs:
         - {{ compiler('cxx') }}
         - cmake
         - ninja
-        - python    >=3
+        - python >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
@@ -57,31 +57,31 @@ outputs:
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - libcxx >={{ cxx_compiler_version }}.a0  # [osx]
+        - libcxx >={{ cxx_compiler_version }}.a0                        # [osx]
     test:
       commands:
-        - $PREFIX/bin/llvm-config --libs                         # [not win]
-        - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1        # [win]
-        - test -f $PREFIX/include/llvm/Pass.h                    # [unix]
-        - test -f $PREFIX/lib/libLLVMCore.a                      # [not win]
-        - $PREFIX/libexec/llvm/not false                               # [not win]
-        - if not exist "%LIBRARY_PREFIX%"\\libexec\llvm\not.exe exit 1        # [win]
+        - $PREFIX/bin/llvm-config --libs                                # [not win]
+        - test -f $PREFIX/include/llvm/Pass.h                           # [not win]
+        - test -f $PREFIX/lib/libLLVMCore.a                             # [not win]
+        - $PREFIX/libexec/llvm/not false                                # [not win]
+        - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1               # [win]
+        - if not exist "%LIBRARY_PREFIX%"\\libexec\llvm\not.exe exit 1  # [win]
 
   # Contains the shared libraries. To make different LLVM libraries co-installable
   # soversion is appended to the package name.
   - name: libllvm{{ major_ver }}
     script: install_llvm.sh  # [not win]
     build:
-      skip: true  # [(win and vc<14)]
+      skip: true    # [win and vc<14]
       activate_in_script: true
-      run_exports:   # [not win]
+      run_exports:  # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
         - {{ compiler('cxx') }}
-        - ninja                     # [not win]
+        - ninja                    # [not win]
         - cmake                    # [not win]
-        - python    >=3            # [not win]
+        - python >=3               # [not win]
       host:
         - libcxx >={{ cxx_compiler_version }}.a0  # [osx]
         - zlib
@@ -89,31 +89,31 @@ outputs:
         - libcxx >={{ cxx_compiler_version }}.a0  # [osx]
     test:
       commands:
-        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}${SHLIB_EXT}  # [unix]
+        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}${SHLIB_EXT}     # [not win]
 
   # This is a meta package so that people can use the latest libllvm and also
   # for run_exports
   - name: llvm
     build:
       skip: true  # [(win and vc<14)]
-      run_exports:   # [not win]
+      run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
       host:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
         - zlib
-      run:   # [not win]
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
-      run_constrained:   # [not win]
-        - llvmdev   {{ version }}                                  # [not win]
+      run:                                                            # [not win]
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
+      run_constrained:                                                # [not win]
+        - llvmdev   {{ version }}                                     # [not win]
     test:
       commands:
         - echo "Hello World!"
 
   # Contains LLVM tools
   - name: llvm-tools
-    script: install_llvm.sh  # [not win]
+    script: install_llvm.sh   # [not win]
     script: install_llvm.bat  # [win]
     build:
       skip: true  # [(win and vc<14)]
@@ -121,10 +121,9 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}
-        - ninja      # [not win]
         - cmake
-        - ninja     # [win]
-        - python    >=3
+        - ninja
+        - python >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - libxml2  # [win]
