@@ -9,7 +9,7 @@ Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/llvmdev-feedsto
 
 Summary: Development headers and libraries for LLVM
 
-Development: https://github.com/llvm-mirror/llvm
+Development: https://github.com/llvm/llvm-project
 
 Current build status
 ====================
