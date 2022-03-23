@@ -45,7 +45,7 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -GNinja \
       ../llvm
 
-ninja
+ninja -j${CPU_COUNT}
 
 if [[ "${target_platform}" == "linux-64" || "${target_platform}" == "osx-64" ]]; then
     export TEST_CPU_FLAG="-mcpu=haswell"
@@ -60,7 +60,7 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
   fi
 
-  ninja check-llvm
+  ninja -j${CPU_COUNT} check-llvm
 
   cd ../llvm/test
   ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
