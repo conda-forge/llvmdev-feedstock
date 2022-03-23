@@ -6,19 +6,13 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-{{ version.replace(".rc", "rc") }}.src.tar.xz
-    sha256: 4df7ed50b8b7017b90dc22202f6b59e9006a29a9568238c6af28df9c049c7b9b
-    patches:
-      # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
-      # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
-      # - patches/amd-roc-2.7.0.diff
-      - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
-      # Don't link libLLVM.dylib to llvm-config. Makes it easier for cross compiling
-      - patches/0002-Don-t-link-libLLVM.dylib-to-llvm-config.patch
-  # Workaround for https://github.com/llvm/llvm-project/issues/53281
-  - url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-    sha256: 35ce9edbc8f774fe07c8f4acdf89ec8ac695c8016c165dd86b8d10e7cba07e23
-    folder: llvm-project
+  url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
+  sha256: 35ce9edbc8f774fe07c8f4acdf89ec8ac695c8016c165dd86b8d10e7cba07e23
+  patches:
+    # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
+    # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
+    # - patches/amd-roc-2.7.0.diff
+    - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
 
 build:
   number: 0
@@ -162,7 +156,7 @@ about:
   home: http://llvm.org/
   dev_url: https://github.com/llvm-mirror/llvm
   license: Apache-2.0 WITH LLVM-exception
-  license_file: LICENSE.TXT
+  license_file: llvm/LICENSE.TXT
   license_family: Apache
   summary: Development headers and libraries for LLVM
 
