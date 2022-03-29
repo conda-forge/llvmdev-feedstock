@@ -1,9 +1,11 @@
+c_compiler:            # [win]
+- vs2019               # [win]
+cxx_compiler:          # [win]
+- vs2019               # [win]
+MACOSX_SDK_VERSION:    # [osx and x86_64]
+  - 10.12              # [osx and x86_64]
+
 c_compiler:         # [osx]
   - clang_bootstrap # [osx]
 cxx_compiler:       # [osx]
   - clang_bootstrap # [osx]
-# test failure (DebugInfo/X86/vla-multi.ll) with GCC 10
-c_compiler_version:            # [linux64]
-  - 9                          # [linux64]
-cxx_compiler_version:          # [linux64]
-  - 9                          # [linux64]

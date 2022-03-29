@@ -1,4 +1,4 @@
-{% set version = "13.0.1" %}
+{% set version = "14.0.0" %}
 {% set major_ver = version.split(".")[0] %}
 
 package:
@@ -6,32 +6,29 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  sha256: ec6b80d82c384acad2dc192903a6cf2cdbaffb889b84bfb98da9d71e630fc834
+  url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
+  sha256: 35ce9edbc8f774fe07c8f4acdf89ec8ac695c8016c165dd86b8d10e7cba07e23
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
-    # Don't link libLLVM.dylib to llvm-config. Makes it easier for cross compiling
-    - patches/0002-Don-t-link-libLLVM.dylib-to-llvm-config.patch
 
 build:
-  number: 2
+  number: 0
   merge_build_host: false
 
 requirements:
   build:
     - {{ compiler('cxx') }}
     - cmake
-    - ninja     # [win]
+    - ninja
     - python >=3
-    - make
     - libcxx {{ cxx_compiler_version }}  # [osx]
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
     - zlib
-    - libxml2   # [win]
+    - libxml2                            # [win]
 
 outputs:
   # Contains everything
@@ -44,9 +41,8 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}
-        - make      # [not win]
         - cmake
-        - ninja     # [win]
+        - ninja
         - python >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
@@ -72,12 +68,12 @@ outputs:
     build:
       skip: true    # [win and vc<14]
       activate_in_script: true
-      run_exports:  # [not win]
+      run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
         - {{ compiler('cxx') }}
-        - make                     # [not win]
+        - ninja                    # [not win]
         - cmake                    # [not win]
         - python >=3               # [not win]
       host:
@@ -119,9 +115,8 @@ outputs:
     requirements:
       build:
         - {{ compiler('cxx') }}
-        - make      # [not win]
         - cmake
-        - ninja     # [win]
+        - ninja
         - python >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
@@ -140,7 +135,7 @@ outputs:
   - name: lit
     build:
       noarch: python
-      script: python -m pip install utils/lit --no-deps -vv
+      script: python -m pip install llvm/utils/lit --no-deps -vv
       activate_in_script: true
       skip: true  # [not linux64]
       entry_points:
@@ -159,9 +154,9 @@ outputs:
 
 about:
   home: http://llvm.org/
-  dev_url: https://github.com/llvm-mirror/llvm
+  dev_url: https://github.com/llvm/llvm-project
   license: Apache-2.0 WITH LLVM-exception
-  license_file: LICENSE.TXT
+  license_file: llvm/LICENSE.TXT
   license_family: Apache
   summary: Development headers and libraries for LLVM
 
