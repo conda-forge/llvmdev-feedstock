@@ -15,7 +15,7 @@ source:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
@@ -51,7 +51,7 @@ outputs:
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - libcxx >={{ cxx_compiler_version }}.a0                        # [osx]
+        - libcxx >={{ cxx_compiler_version }}                           # [osx]
     test:
       commands:
         - $PREFIX/bin/llvm-config --libs                                # [not win]
@@ -77,10 +77,10 @@ outputs:
         - cmake                    # [not win]
         - python >=3               # [not win]
       host:
-        - libcxx >={{ cxx_compiler_version }}.a0  # [osx]
+        - libcxx >={{ cxx_compiler_version }}  # [osx]
         - zlib
       run:
-        - libcxx >={{ cxx_compiler_version }}.a0  # [osx]
+        - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
         - test -f $PREFIX/lib/libLLVM-{{ major_ver }}${SHLIB_EXT}     # [not win]
