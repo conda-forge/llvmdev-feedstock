@@ -1,4 +1,4 @@
-{% set version = "14.0.2" %}
+{% set version = "14.0.3" %}
 {% set major_ver = version.split(".")[0] %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  sha256: dd559ea1b02cb241def100e05b1e406521da50af87aca0f2ae309abd916177d5
+  sha256: 44d3e7a784d5cf805e72853bb03f218bd1058d448c03ca883dabbebc99204e0c
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
@@ -17,7 +17,7 @@ source:
     - patches/0002-set-patch-version-correctly.patch
 
 build:
-  number: 1
+  number: 0
   merge_build_host: false
 
 requirements:
@@ -35,7 +35,7 @@ requirements:
 outputs:
   # Contains everything
   - name: llvmdev
-    script: install_llvm.sh   # [not win]
+    script: install_llvm.sh  # [not win]
     script: install_llvm.bat  # [win]
     build:
       skip: true  # [(win and vc<14)]
@@ -68,9 +68,9 @@ outputs:
   - name: libllvm{{ major_ver }}
     script: install_llvm.sh  # [not win]
     build:
-      skip: true    # [win and vc<14]
+      skip: true  # [win and vc<14]
       activate_in_script: true
-      run_exports:                                                    # [not win]
+      run_exports:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
@@ -92,16 +92,16 @@ outputs:
   - name: llvm
     build:
       skip: true  # [(win and vc<14)]
-      run_exports:                                                    # [not win]
+      run_exports:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
         - zlib
-      run:                                                            # [not win]
+      run:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
-      run_constrained:                                                # [not win]
+      run_constrained:   # [not win]
         - llvmdev   {{ version }}                                     # [not win]
     test:
       commands:
@@ -109,7 +109,7 @@ outputs:
 
   # Contains LLVM tools
   - name: llvm-tools
-    script: install_llvm.sh   # [not win]
+    script: install_llvm.sh  # [not win]
     script: install_llvm.bat  # [win]
     build:
       skip: true  # [(win and vc<14)]
