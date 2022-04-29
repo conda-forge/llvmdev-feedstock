@@ -1,7 +1,7 @@
-From 5ef5b9b34b3648f2c81140f5f1a9a1cd459c26cd Mon Sep 17 00:00:00 2001
+From 629cea6a21aefda147f674d86a9d9ba550be4e18 Mon Sep 17 00:00:00 2001
 From: Isuru Fernando <isuruf@gmail.com>
 Date: Tue, 4 Aug 2020 21:06:30 -0500
-Subject: [PATCH 1/2] pass through QEMU_LD_PREFIX & SDKROOT
+Subject: [PATCH] pass through QEMU_LD_PREFIX & SDKROOT
 
 ---
  llvm/utils/lit/lit/TestingConfig.py | 2 +-
