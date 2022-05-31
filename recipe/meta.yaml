@@ -29,6 +29,7 @@ requirements:
     - {{ compiler('cxx') }}
     - bazel 4.2.1
     - bazel-toolchain
+    - rsync
 
 test:
   commands:
