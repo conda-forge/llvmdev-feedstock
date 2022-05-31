@@ -1,7 +1,7 @@
 MACOSX_DEPLOYMENT_TARGET:
 - '10.9'
 MACOSX_SDK_VERSION:
-- '10.12'
+- '10.13'
 c_compiler:
 - clang
 c_compiler_version:
@@ -16,13 +16,8 @@ cxx_compiler_version:
 - '13'
 macos_machine:
 - x86_64-apple-darwin13.4.0
-pin_run_as_build:
-  zlib:
-    max_pin: x.x
 target_platform:
 - osx-64
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version
-zlib:
-- '1.2'

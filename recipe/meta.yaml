@@ -17,6 +17,7 @@ source:
 
 build:
   number: 0
+  skip: true  # [win or ppc64le or aarch64]
   # conda-build breaks on this. There is no need to relocate anything, so skip it.
   binary_relocation: false
 
@@ -28,15 +29,15 @@ requirements:
     - {{ compiler('cxx') }}
     - bazel 4.2.1
     - bazel-toolchain
-  host:
-    - zlib
-    - libxml2   # [win]
 
 test:
   commands:
-    - test -f "${PREFIX}/lib/llvm_for_tf/libLLVMTFSupport.a"
+    - test -f "${PREFIX}/lib/libLLVMTFSupport.a"
     - test -f "${PREFIX}/share/llvm_for_tf/llvm/BUILD.bazel"
     - test -f "${PREFIX}/share/llvm_for_tf/llvm/include/llvm/Pass.h"
+    - test -f "${PREFIX}/lib/libMLIRTFSupport.a"
+    - test -f "${PREFIX}/share/llvm_for_tf/mlir/BUILD.bazel"
+    - test -f "${PREFIX}/share/llvm_for_tf/mlir/include/mlir/InitAllPasses.h"
 
 about:
   home: http://llvm.org/
