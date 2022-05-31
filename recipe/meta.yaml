@@ -8,162 +8,35 @@
 {% endif %}
 
 package:
-  name: llvm-package
+  name: llvm-for-tensorflow
   version: {{ version }}
 
 source:
   - url: https://github.com/llvm/llvm-project/archive/{{ archive_file }}.tar.gz
     sha256: 1459d328ea67802f5b7c64349ba300b5ddc4a78838d6b77a8a970fe99ed3e78c
-    patches:
-      # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
-      # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
-      #- patches/amd-roc-2.7.0.diff
-      - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
-      # Don't link libLLVM.dylib to llvm-config. Makes it easier for cross compiling
-      - patches/0002-Don-t-link-libLLVM.dylib-to-llvm-config.patch
 
 build:
   number: 0
-  merge_build_host: false
+  # conda-build breaks on this. There is no need to relocate anything, so skip it.
+  binary_relocation: false
 
 requirements:
   build:
+    - python *
+    - astor
+    - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - cmake
-    - ninja
-    - python    >=3
-    - libcxx {{ cxx_compiler_version }}  # [osx]
+    - bazel 4.2.1
+    - bazel-toolchain
   host:
-    - libcxx {{ cxx_compiler_version }}  # [osx]
     - zlib
     - libxml2   # [win]
 
-outputs:
-  # Contains everything
-  - name: llvmdev
-    script: install_llvm.sh  # [not win]
-    script: install_llvm.bat  # [win]
-    build:
-      skip: true  # [(win and vc<14)]
-      activate_in_script: true
-    requirements:
-      build:
-        - {{ compiler('cxx') }}
-        - cmake
-        - ninja
-        - python    >=3
-      host:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - zlib
-      run:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - libcxx >={{ cxx_compiler_version }}.a0  # [osx]
-    test:
-      commands:
-        - $PREFIX/bin/llvm-config --libs                         # [not win]
-        - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1        # [win]
-        - test -f $PREFIX/include/llvm/Pass.h                    # [unix]
-        - test -f $PREFIX/lib/libLLVMCore.a                      # [not win]
-        - $PREFIX/libexec/llvm/not false                               # [not win]
-        - if not exist "%LIBRARY_PREFIX%"\\libexec\llvm\not.exe exit 1        # [win]
-
-  # Contains the shared libraries. To make different LLVM libraries co-installable
-  # soversion is appended to the package name.
-  - name: libllvm{{ major_ver }}
-    script: install_llvm.sh  # [not win]
-    build:
-      skip: true  # [(win and vc<14)]
-      activate_in_script: true
-      run_exports:   # [not win]
-        - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
-    requirements:
-      build:
-        - {{ compiler('cxx') }}
-        - ninja                     # [not win]
-        - cmake                    # [not win]
-        - python    >=3            # [not win]
-      host:
-        - libcxx >={{ cxx_compiler_version }}.a0  # [osx]
-        - zlib
-      run:
-        - libcxx >={{ cxx_compiler_version }}.a0  # [osx]
-    test:
-      commands:
-        {% if git_commit != "" %}
-        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}git${SHLIB_EXT}  # [unix]
-        {% else %}
-        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}${SHLIB_EXT}  # [unix]
-        {% endif %}
-
-  # This is a meta package so that people can use the latest libllvm and also
-  # for run_exports
-  - name: llvm
-    build:
-      skip: true  # [(win and vc<14)]
-      run_exports:   # [not win]
-        - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
-    requirements:
-      build:
-      host:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
-        - zlib
-      run:   # [not win]
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
-      run_constrained:   # [not win]
-        - llvmdev   {{ version }}                                  # [not win]
-    test:
-      commands:
-        - echo "Hello World!"
-
-  # Contains LLVM tools
-  - name: llvm-tools
-    script: install_llvm.sh  # [not win]
-    script: install_llvm.bat  # [win]
-    build:
-      skip: true  # [(win and vc<14)]
-      activate_in_script: true
-    requirements:
-      build:
-        - {{ compiler('cxx') }}
-        - ninja      # [not win]
-        - cmake
-        - ninja     # [win]
-        - python    >=3
-      host:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libxml2  # [win]
-        - zlib
-      run:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-      run_constrained:
-        - llvmdev   {{ version }}
-    test:
-      commands:
-        - $PREFIX/bin/llc -version                               # [not win]
-        - if not exist "%LIBRARY_BIN%"\\llc.exe exit 1           # [win]
-        - llc -version                                           # [win]
-
-  - name: lit
-    build:
-      noarch: python
-      script: python -m pip install llvm/utils/lit --no-deps -vv
-      activate_in_script: true
-      skip: true  # [not linux64]
-      entry_points:
-        - lit = lit.main:main
-    requirements:
-      host:
-        - python >=3
-        - pip
-      run:
-        - python
-    test:
-      imports:
-        - lit
-      commands:
-        - lit -h
+test:
+  commands:
+    - test -f "${PREFIX}/lib/llvm_for_tf/libLLVMTFSupport.a"
+    - test -f "${PREFIX}/share/llvm_for_tf/llvm/BUILD.bazel"
+    - test -f "${PREFIX}/share/llvm_for_tf/llvm/include/llvm/Pass.h"
 
 about:
   home: http://llvm.org/
@@ -171,15 +44,8 @@ about:
   license: Apache-2.0 WITH LLVM-exception
   license_file: llvm/LICENSE.TXT
   license_family: Apache
-  summary: Development headers and libraries for LLVM
+  summary: Development headers and libraries for LLVM, pre-built for use with tensorflow
 
 extra:
   recipe-maintainers:
-    - inducer
-    - jakirkham
-    - mingwandroid
-    - SylvainCorlay
-    - isuruf
-    - timsnyder
-    - xhochy
-    - h-vetinari
+    - conda-forge/tensorflow

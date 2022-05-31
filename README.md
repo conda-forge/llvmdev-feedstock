@@ -1,5 +1,5 @@
-About llvm-package
-==================
+About llvm-for-tensorflow
+=========================
 
 Home: http://llvm.org/
 
@@ -7,7 +7,7 @@ Package license: Apache-2.0 WITH LLVM-exception
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/llvmdev-feedstock/blob/master/LICENSE.txt)
 
-Summary: Development headers and libraries for LLVM
+Summary: Development headers and libraries for LLVM, pre-built for use with tensorflow
 
 Development: https://github.com/llvm-mirror/llvm
 
@@ -83,32 +83,53 @@ Current release info
 
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm14-green.svg)](https://anaconda.org/conda-forge/libllvm14) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm14.svg)](https://anaconda.org/conda-forge/libllvm14) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm14.svg)](https://anaconda.org/conda-forge/libllvm14) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm14.svg)](https://anaconda.org/conda-forge/libllvm14) |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-lit-green.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-llvm-green.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-llvm--tools-green.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-llvmdev-green.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-llvm--for--tensorflow-green.svg)](https://anaconda.org/conda-forge/llvm-for-tensorflow) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm-for-tensorflow.svg)](https://anaconda.org/conda-forge/llvm-for-tensorflow) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm-for-tensorflow.svg)](https://anaconda.org/conda-forge/llvm-for-tensorflow) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm-for-tensorflow.svg)](https://anaconda.org/conda-forge/llvm-for-tensorflow) |
 
-Installing llvm-package
-=======================
+Installing llvm-for-tensorflow
+==============================
 
-Installing `llvm-package` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
+Installing `llvm-for-tensorflow` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
 
 ```
 conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libllvm14, lit, llvm, llvm-tools, llvmdev` can be installed with:
+Once the `conda-forge` channel has been enabled, `llvm-for-tensorflow` can be installed with `conda`:
 
 ```
-conda install libllvm14 lit llvm llvm-tools llvmdev
+conda install llvm-for-tensorflow
 ```
 
-It is possible to list all of the versions of `libllvm14` available on your platform with:
+or with `mamba`:
 
 ```
-conda search libllvm14 --channel conda-forge
+mamba install llvm-for-tensorflow
+```
+
+It is possible to list all of the versions of `llvm-for-tensorflow` available on your platform with `conda`:
+
+```
+conda search llvm-for-tensorflow --channel conda-forge
+```
+
+or with `mamba`:
+
+```
+mamba search llvm-for-tensorflow --channel conda-forge
+```
+
+Alternatively, `mamba repoquery` may provide more information:
+
+```
+# Search all versions available on your platform:
+mamba repoquery search llvm-for-tensorflow --channel conda-forge
+
+# List packages depending on `llvm-for-tensorflow`:
+mamba repoquery whoneeds llvm-for-tensorflow --channel conda-forge
+
+# List dependencies of `llvm-for-tensorflow`:
+mamba repoquery depends llvm-for-tensorflow --channel conda-forge
 ```
 
 
@@ -126,10 +147,12 @@ for each of the installable packages. Such a repository is known as a *feedstock
 A feedstock is made up of a conda recipe (the instructions on what and how to build
 the package) and the necessary configurations for automatic building using freely
 available continuous integration services. Thanks to the awesome service provided by
-[CircleCI](https://circleci.com/), [AppVeyor](https://www.appveyor.com/)
-and [TravisCI](https://travis-ci.com/) it is possible to build and upload installable
-packages to the [conda-forge](https://anaconda.org/conda-forge)
-[Anaconda-Cloud](https://anaconda.org/) channel for Linux, Windows and OSX respectively.
+[Azure](https://azure.microsoft.com/en-us/services/devops/), [GitHub](https://github.com/),
+[CircleCI](https://circleci.com/), [AppVeyor](https://www.appveyor.com/),
+[Drone](https://cloud.drone.io/welcome), and [TravisCI](https://travis-ci.com/)
+it is possible to build and upload installable packages to the
+[conda-forge](https://anaconda.org/conda-forge) [Anaconda-Cloud](https://anaconda.org/)
+channel for Linux, Windows and OSX respectively.
 
 To manage the continuous integration and simplify feedstock maintenance
 [conda-smithy](https://github.com/conda-forge/conda-smithy) has been developed.
@@ -151,17 +174,17 @@ Terminology
                   produce the finished article (built conda distributions)
 
 
-Updating llvm-package-feedstock
-===============================
+Updating llvm-for-tensorflow-feedstock
+======================================
 
-If you would like to improve the llvm-package recipe or build a new
+If you would like to improve the llvm-for-tensorflow recipe or build a new
 package version, please fork this repository and submit a PR. Upon submission,
 your changes will be run on the appropriate platforms to give the reviewer an
 opportunity to confirm that the changes result in a successful build. Once
 merged, the recipe will be re-built and uploaded automatically to the
 `conda-forge` channel, whereupon the built conda packages will be available for
 everybody to install and use from the `conda-forge` channel.
-Note that all branches in the conda-forge/llvm-package-feedstock are
+Note that all branches in the conda-forge/llvm-for-tensorflow-feedstock are
 immediately built and any created packages are uploaded, so PRs should be based
 on branches in forks and branches in the main repository should only be used to
 build distinct package versions.
@@ -176,12 +199,5 @@ In order to produce a uniquely identifiable distribution:
 Feedstock Maintainers
 =====================
 
-* [@SylvainCorlay](https://github.com/SylvainCorlay/)
-* [@h-vetinari](https://github.com/h-vetinari/)
-* [@inducer](https://github.com/inducer/)
-* [@isuruf](https://github.com/isuruf/)
-* [@jakirkham](https://github.com/jakirkham/)
-* [@mingwandroid](https://github.com/mingwandroid/)
-* [@timsnyder](https://github.com/timsnyder/)
-* [@xhochy](https://github.com/xhochy/)
+* [@conda-forge/tensorflow](https://github.com/conda-forge/tensorflow/)
 
