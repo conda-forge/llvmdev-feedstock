@@ -25,6 +25,7 @@ rm ${PREFIX}/share/llvm_for_tf/llvm/BUILD.bazel
 rm ${PREFIX}/share/llvm_for_tf/mlir/BUILD.bazel
 
 # Delete some files that break LIEF (and aren't needed)
+rm -rf ${PREFIX}/share/llvm_for_tf/clang/test/
 rm -rf ${PREFIX}/share/llvm_for_tf/llvm/test/
 rm -rf ${PREFIX}/share/llvm_for_tf/llvm/utils/lit/tests
 find ${PREFIX}/share/llvm_for_tf -name '*.a' -delete
