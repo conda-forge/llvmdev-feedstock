@@ -13,7 +13,7 @@ OTHER_TARGET_DIR = Path(os.environ["PREFIX"]) / "share" / "llvm_for_tf"
 
 def extend_linkopts(kw, name):
     current_src = astor.to_source(kw.value)[:-1]
-    kw.value = ast.parse(f"{current_src} + ['-l{name}']").body[0]
+    kw.value = ast.parse(f"{current_src} + ['-l{name}']").body[0].value
 
 
 def new_kwarg(name, code):
