@@ -60,6 +60,6 @@ def rewrite_binaries(code, symbol):
 llvm_build = (BAZEL_DIR / "llvm-project-overlay" / "llvm" / "BUILD.bazel").read_text()
 mlir_build = (BAZEL_DIR / "llvm-project-overlay" / "mlir" / "BUILD.bazel").read_text()
 bzl = rewrite_binaries(llvm_build, "LLVM")
-(BAZEL_DIR / "llvm-project-overlay" / "llvm" / "BUILD.bazel").write_text(bzl)
+(OTHER_TARGET_DIR / "llvm" / "BUILD.bazel").write_text(bzl)
 bzl = rewrite_binaries(mlir_build, "MLIR")
-(BAZEL_DIR / "llvm-project-overlay" / "mlir" / "BUILD.bazel").write_text(bzl)
+(OTHER_TARGET_DIR / "mlir" / "BUILD.bazel").write_text(bzl)
