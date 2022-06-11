@@ -1,4 +1,4 @@
-{% set version = "14.0.4" %}
+{% set version = "14.0.5" %}
 {% set major_ver = version.split(".")[0] %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  sha256: f40c77ceff02ae3873d273a51b0f93cd8e6409576f771d860d75835335522052
+  sha256: c9d27903ba3883c476a83cd515e36e1e07b0585db55692835de11385d9e3c8fa
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
