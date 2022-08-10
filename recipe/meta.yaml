@@ -27,8 +27,9 @@ requirements:
     - libcxx {{ cxx_compiler_version }}  # [osx]
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
+    - libxml2
     - zlib
-    - libxml2                            # [win]
+    - zstd
 
 outputs:
   # Contains everything
