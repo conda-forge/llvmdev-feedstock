@@ -27,6 +27,8 @@ requirements:
     - libcxx {{ cxx_compiler_version }}  # [osx]
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
+    # needs aarch/ppc/arm (re)build of conda-forge/backtrace-feedstock
+    - backtrace                          # [unix and x86]
     - libxml2
     - zlib
     - zstd
