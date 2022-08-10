@@ -49,7 +49,9 @@ outputs:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
+        - libxml2
         - zlib
+        - zstd     # [build_platform == target_platform]
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
@@ -79,7 +81,9 @@ outputs:
         - python >=3               # [not win]
       host:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
+        - libxml2
         - zlib
+        - zstd                                 # [build_platform == target_platform]
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
@@ -96,7 +100,9 @@ outputs:
       build:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
+        - libxml2
         - zlib
+        - zstd                                                        # [build_platform == target_platform]
       run:                                                            # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
       run_constrained:                                                # [not win]
@@ -119,8 +125,9 @@ outputs:
         - python >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libxml2   # [win]
+        - libxml2
         - zlib
+        - zstd     # [build_platform == target_platform]
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
       run_constrained:
