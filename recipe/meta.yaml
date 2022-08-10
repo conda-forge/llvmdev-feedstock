@@ -31,7 +31,7 @@ requirements:
     - backtrace                          # [unix and x86]
     - libxml2
     - zlib
-    - zstd
+    - zstd                               # [build_platform == target_platform]
 
 outputs:
   # Contains everything
