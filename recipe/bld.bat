@@ -1,9 +1,5 @@
 echo on
 
-REM workaround https://github.com/llvm/llvm-project/issues/53281
-xcopy llvm-project\cmake\Modules\* cmake\modules\
-if %ERRORLEVEL% neq 0 exit 1
-
 mkdir build
 cd build
 
@@ -17,9 +13,10 @@ cmake -G "Ninja" ^
     -DCMAKE_PREFIX_PATH=%LIBRARY_PREFIX% ^
     -DCMAKE_INSTALL_PREFIX:PATH=%LIBRARY_PREFIX% ^
     -DLLVM_USE_INTEL_JITEVENTS=ON ^
-    -DLLVM_ENABLE_LIBXML2=ON ^
+    -DLLVM_ENABLE_LIBXML2=FORCE_ON ^
     -DLLVM_ENABLE_RTTI=ON ^
-    -DLLVM_ENABLE_ZLIB=ON ^
+    -DLLVM_ENABLE_ZLIB=FORCE_ON ^
+    -DLLVM_ENABLE_ZSTD=FORCE_ON ^
     -DLLVM_INCLUDE_BENCHMARKS=OFF ^
     -DLLVM_INCLUDE_DOCS=OFF ^
     -DLLVM_INCLUDE_EXAMPLES=OFF ^
@@ -29,7 +26,7 @@ cmake -G "Ninja" ^
     -DLLVM_UTILS_INSTALL_DIR=libexec\llvm ^
     -DLLVM_BUILD_LLVM_C_DYLIB=no ^
     -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly ^
-    %SRC_DIR%
+    %SRC_DIR%/llvm
 if %ERRORLEVEL% neq 0 exit 1
 
 cmake --build .
@@ -38,5 +35,5 @@ if %ERRORLEVEL% neq 0 exit 1
 REM bin\opt -S -vector-library=SVML -mcpu=haswell -O3 %RECIPE_DIR%\numba-3016.ll | bin\FileCheck %RECIPE_DIR%\numba-3016.ll
 REM if %ERRORLEVEL% neq 0 exit 1
 
-cd ..\test
-..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
+cd ..\llvm\test
+..\..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86

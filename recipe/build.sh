@@ -1,11 +1,8 @@
 set -x
 
 # Make osx work like linux.
-sed -i.bak "s/NOT APPLE AND ARG_SONAME/ARG_SONAME/g" cmake/modules/AddLLVM.cmake
-sed -i.bak "s/NOT APPLE AND NOT ARG_SONAME/NOT ARG_SONAME/g" cmake/modules/AddLLVM.cmake
-
-# Workaround https://github.com/llvm/llvm-project/issues/53281
-cp llvm-project/cmake/Modules/* cmake/modules/
+sed -i.bak "s/NOT APPLE AND ARG_SONAME/ARG_SONAME/g" llvm/cmake/modules/AddLLVM.cmake
+sed -i.bak "s/NOT APPLE AND NOT ARG_SONAME/NOT ARG_SONAME/g" llvm/cmake/modules/AddLLVM.cmake
 
 mkdir build
 cd build
@@ -17,6 +14,11 @@ fi
 if [[ "$CC_FOR_BUILD" != "" && "$CC_FOR_BUILD" != "$CC" ]]; then
   CMAKE_ARGS="${CMAKE_ARGS} -DCROSS_TOOLCHAIN_FLAGS_NATIVE=-DCMAKE_C_COMPILER=$CC_FOR_BUILD;-DCMAKE_CXX_COMPILER=$CXX_FOR_BUILD;-DCMAKE_C_FLAGS=-O2;-DCMAKE_CXX_FLAGS=-O2;-DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath,${BUILD_PREFIX}/lib;-DCMAKE_MODULE_LINKER_FLAGS=;-DCMAKE_SHARED_LINKER_FLAGS=;-DCMAKE_STATIC_LINKER_FLAGS=;-DLLVM_INCLUDE_BENCHMARKS=OFF;"
   CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_HOST_TRIPLE=$(echo $HOST | sed s/conda/unknown/g) -DLLVM_DEFAULT_TARGET_TRIPLE=$(echo $HOST | sed s/conda/unknown/g)"
+  CF_USE_BACKTRACES=OFF
+  CF_USE_ZSTD=OFF
+else
+  CF_USE_BACKTRACES=ON
+  CF_USE_ZSTD=FORCE_ON
 fi
 
 # disable -fno-plt due to https://bugs.llvm.org/show_bug.cgi?id=51863 due to some GCC bug
@@ -27,12 +29,14 @@ fi
 
 cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
-      -DHAVE_LIBEDIT=OFF \
-      -DLLVM_HAVE_LIBXAR=OFF \
-      -DLLVM_ENABLE_LIBXML2=OFF \
+      -DCMAKE_LIBRARY_PATH="${PREFIX}" \
+      -DLLVM_ENABLE_BACKTRACES=${CF_USE_BACKTRACES} \
+      -DLLVM_ENABLE_LIBEDIT=OFF \
+      -DLLVM_ENABLE_LIBXML2=FORCE_ON \
       -DLLVM_ENABLE_RTTI=ON \
       -DLLVM_ENABLE_TERMINFO=OFF \
-      -DLLVM_ENABLE_ZLIB=ON \
+      -DLLVM_ENABLE_ZLIB=FORCE_ON \
+      -DLLVM_ENABLE_ZSTD=${CF_USE_ZSTD} \
       -DLLVM_INCLUDE_BENCHMARKS=OFF \
       -DLLVM_INCLUDE_DOCS=OFF \
       -DLLVM_INCLUDE_EXAMPLES=OFF \
@@ -45,9 +49,10 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DLLVM_LINK_LLVM_DYLIB=yes \
       -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly \
       ${CMAKE_ARGS} \
-      -GNinja ..
+      -GNinja \
+      ../llvm
 
-ninja
+ninja -j${CPU_COUNT}
 
 if [[ "${target_platform}" == "linux-64" || "${target_platform}" == "osx-64" ]]; then
     export TEST_CPU_FLAG="-mcpu=haswell"
@@ -62,8 +67,8 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
   fi
 
-  ninja check-llvm
+  ninja -j${CPU_COUNT} check-llvm
 
-  cd ../test
-  ../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
+  cd ../llvm/test
+  ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
 fi
