@@ -13,7 +13,7 @@ pin_run_as_build:
     max_pin: x.x
 target_platform:
 - win-64
-vc:
-- '14'
 zlib:
 - '1.2'
+zstd:
+- '1.5'
