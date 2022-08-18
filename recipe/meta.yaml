@@ -25,7 +25,7 @@ source:
     - patches/llvm-consecutive-registers.patch
 
 build:
-  number: 3
+  number: 4
   skip: true  # [(win and vc<14)]
   merge_build_host: false
 
