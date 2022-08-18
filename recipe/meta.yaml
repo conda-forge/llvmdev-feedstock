@@ -25,7 +25,7 @@ source:
     - patches/llvm-consecutive-registers.patch
 
 build:
-  number: 2
+  number: 3
   merge_build_host: false
 
 requirements:
