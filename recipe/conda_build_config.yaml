@@ -6,3 +6,9 @@ cxx_compiler:       # [osx]
 cxx_compiler_version: # [linux and ppc64le]
   # linking error with gcc 9
   - 8                 # [linux and ppc64le]
+
+# 2022/08/20 hmaarrfk
+# Updating to version 13 seemed to cause problems in the tests
+# https://github.com/conda-forge/llvmdev-feedstock/pull/164
+cxx_compiler_version:  # [osx]
+  - 11                 # [osx]
