@@ -36,6 +36,7 @@ requirements:
     - m2-sed    # [win]
     - patch       # [not win]
     - m2-patch    # [win]
+    - git         # [unix]
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
     - zlib
