@@ -92,8 +92,11 @@ outputs:
       host:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
         - zlib
+        - libffi  # [unix]
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
+        - libffi  # [unix]
+        - zlib    # [osx]
     test:
       commands:
         - test -f $PREFIX/lib/libLLVM-{{ major_ver }}${SHLIB_EXT}  # [not win]
