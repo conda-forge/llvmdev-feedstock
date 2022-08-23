@@ -40,7 +40,8 @@ requirements:
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
     - zlib
-    - libxml2                            # [win]
+    - libxml2   # [win]
+    - libffi    # [unix]
 
 outputs:
   # Contains everything
