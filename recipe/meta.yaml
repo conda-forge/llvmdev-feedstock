@@ -170,8 +170,9 @@ outputs:
         - lit -h
 
 about:
-  home: http://llvm.org/
+  home: https://llvm.org/
   dev_url: https://github.com/llvm/llvm-project
+  doc_url: https://llvm.org/docs/
   license: Apache-2.0 WITH LLVM-exception
   license_file: llvm/LICENSE.TXT
   license_family: Apache
