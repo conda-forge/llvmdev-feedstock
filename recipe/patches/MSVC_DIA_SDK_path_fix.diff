@@ -1,0 +1,82 @@
+The previous method for including the DIA SDK caused an absolute
+path to be included in LLVMDebugInfoPDB's INTERFACE_LINK_LIBRARIES
+when the LLVMExports.cmake file was generated.
+This is problematic, as the path was machine-specific,
+and therefore may not exist, even if the DIA SDK is available.
+
+diff --git a/llvm/lib/DebugInfo/PDB/CMakeLists.txt b/llvm/lib/DebugInfo/PDB/CMakeLists.txt
+index 9088bc86f668..fd7523e91bb5 100644
+--- a/llvm/lib/DebugInfo/PDB/CMakeLists.txt
++++ b/llvm/lib/DebugInfo/PDB/CMakeLists.txt
+@@ -4,17 +4,7 @@ macro(add_pdb_impl_folder group)
+ endmacro()
+ 
+ if(LLVM_ENABLE_DIA_SDK)
+-  include_directories(SYSTEM ${MSVC_DIA_SDK_DIR}/include)
+-  set(LIBPDB_LINK_FOLDERS "${MSVC_DIA_SDK_DIR}\\lib")
+-
+-  if ("$ENV{VSCMD_ARG_TGT_ARCH}" STREQUAL "arm64")
+-    set(LIBPDB_LINK_FOLDERS "${LIBPDB_LINK_FOLDERS}\\arm64")
+-  elseif ("$ENV{VSCMD_ARG_TGT_ARCH}" STREQUAL "arm")
+-    set(LIBPDB_LINK_FOLDERS "${LIBPDB_LINK_FOLDERS}\\arm")
+-  elseif (CMAKE_SIZEOF_VOID_P EQUAL 8)
+-    set(LIBPDB_LINK_FOLDERS "${LIBPDB_LINK_FOLDERS}\\amd64")
+-  endif()
+-  file(TO_CMAKE_PATH "${LIBPDB_LINK_FOLDERS}\\diaguids.lib" LIBPDB_ADDITIONAL_LIBRARIES)
++  include(AddDIA)
+ 
+   add_pdb_impl_folder(DIA
+     DIA/DIADataStream.cpp
+@@ -150,4 +140,7 @@ add_llvm_component_library(LLVMDebugInfo
+   DebugInfoMSF
+   )
+ 
+-target_link_libraries(LLVMDebugInfoPDB INTERFACE "${LIBPDB_ADDITIONAL_LIBRARIES}")
++if(LLVM_ENABLE_DIA_SDK)
++  target_link_libraries(LLVMDebugInfoPDB INTERFACE MSVC_diaguids)
++endif()
++
+diff --git a/llvm/cmake/modules/LLVMConfig.cmake.in b/llvm/cmake/modules/LLVMConfig.cmake.in
+index 4d8e33711d27..73bb7200f29b 100644
+--- a/llvm/cmake/modules/LLVMConfig.cmake.in
++++ b/llvm/cmake/modules/LLVMConfig.cmake.in
+@@ -133,6 +133,10 @@ set(LLVM_LIT_ARGS "@LLVM_LIT_ARGS@")
+ 
+ set(LLVM_HAVE_LIBXAR "@LLVM_HAVE_LIBXAR@")
+ 
++if(LLVM_ENABLE_DIA_SDK)
++  include("${LLVM_CMAKE_DIR}/AddDIA.cmake")
++endif()
++
+ if(NOT TARGET LLVMSupport)
+   @LLVM_CONFIG_INCLUDE_EXPORTS@
+   @llvm_config_include_buildtree_only_exports@
+diff --git a/llvm/cmake/modules/AddDIA.cmake b/llvm/cmake/modules/AddDIA.cmake
+new file mode 100644
+index 000000000000..261b68a4c31d
+--- /dev/null
++++ b/llvm/cmake/modules/AddDIA.cmake
+@@ -0,0 +1,23 @@
++# Allows LLVMDebugInfoPDB to import the DIA SDK as a library target.
++
++if(NOT MSVC_DIA_SDK_DIR)
++    set(MSVC_DIA_SDK_DIR "$ENV{VSINSTALLDIR}DIA SDK")
++endif()
++
++set(MSVC_DIA_SDK_LINK_DIR "${MSVC_DIA_SDK_DIR}\\lib")
++
++if ("$ENV{VSCMD_ARG_TGT_ARCH}" STREQUAL "arm64")
++  set(MSVC_DIA_SDK_LINK_DIR "${MSVC_DIA_SDK_LINK_DIR}\\arm64")
++elseif ("$ENV{VSCMD_ARG_TGT_ARCH}" STREQUAL "arm")
++  set(MSVC_DIA_SDK_LINK_DIR "${MSVC_DIA_SDK_LINK_DIR}\\arm")
++elseif (CMAKE_SIZEOF_VOID_P EQUAL 8)
++  set(MSVC_DIA_SDK_LINK_DIR "${MSVC_DIA_SDK_LINK_DIR}\\amd64")
++endif()
++
++include_directories("${MSVC_DIA_SDK_DIR}\\include")
++
++add_library(MSVC_diaguids STATIC IMPORTED)
++set_target_properties(MSVC_diaguids PROPERTIES
++    IMPORTED_LOCATION "${MSVC_DIA_SDK_LINK_DIR}\\diaguids.lib"
++)
++

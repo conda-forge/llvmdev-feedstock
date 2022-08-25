@@ -16,6 +16,7 @@ source:
     - patches/llvm-config-no-libLLVM.diff
     # https://reviews.llvm.org/D101972
     - patches/osx_ver.patch
+    - patches/MSVC_DIA_SDK_path_fix.diff  # [win]
 
 build:
   number: 0
