@@ -1,11 +1,11 @@
-Index: llvm-12.0.1rc1.src/tools/llvm-shlib/CMakeLists.txt
+Index: llvm/tools/llvm-shlib/CMakeLists.txt
 ===================================================================
---- llvm-12.0.1rc1.src.orig/tools/llvm-shlib/CMakeLists.txt
-+++ llvm-12.0.1rc1.src/tools/llvm-shlib/CMakeLists.txt
-@@ -82,7 +82,7 @@ if(LLVM_BUILD_LLVM_C_DYLIB AND NOT MSVC)
-   set(LLVM_EXPORTED_SYMBOL_FILE ${CMAKE_BINARY_DIR}/libllvm-c.exports)
+--- llvm.orig/tools/llvm-shlib/CMakeLists.txt
++++ llvm/tools/llvm-shlib/CMakeLists.txt
+@@ -89,7 +89,7 @@ if(LLVM_BUILD_LLVM_C_DYLIB AND NOT MSVC)
+   set(LLVM_EXPORTED_SYMBOL_FILE ${LLVM_BINARY_DIR}/libllvm-c.exports)
  
-   set(LIB_DIR ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/lib${LLVM_LIBDIR_SUFFIX})
+   set(LIB_DIR ${LLVM_BINARY_DIR}/${CMAKE_CFG_INTDIR}/lib${LLVM_LIBDIR_SUFFIX})
 -  set(LIB_NAME ${LIB_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}LLVM)
 +  set(LIB_NAME ${LIB_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}LLVM-${LLVM_VERSION_MAJOR}${LLVM_VERSION_SUFFIX})
    set(LIB_PATH ${LIB_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX})
