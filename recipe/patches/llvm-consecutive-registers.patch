@@ -81,10 +81,10 @@ Differential Revision: https://reviews.llvm.org/D104123
  create mode 100644 llvm/test/CodeGen/AArch64/argument-blocks-array-of-struct.ll
 
 diff --git a/llvm/include/llvm/CodeGen/TargetLowering.h b/llvm/include/llvm/CodeGen/TargetLowering.h
-index 06f2b3ca38ea..f6b8ab1a8aef 100644
+index 06f2b3ca38ea7..f6b8ab1a8aef5 100644
 --- a/llvm/include/llvm/CodeGen/TargetLowering.h
 +++ b/llvm/include/llvm/CodeGen/TargetLowering.h
-@@ -3954,7 +3954,8 @@ public:
+@@ -3954,7 +3954,8 @@ class TargetLowering : public TargetLoweringBase {
    /// must be passed in a block of consecutive registers.
    virtual bool
    functionArgumentNeedsConsecutiveRegisters(Type *Ty, CallingConv::ID CallConv,
@@ -95,7 +95,7 @@ index 06f2b3ca38ea..f6b8ab1a8aef 100644
    }
  
 diff --git a/llvm/lib/CodeGen/SelectionDAG/FastISel.cpp b/llvm/lib/CodeGen/SelectionDAG/FastISel.cpp
-index f5948d2a20dc..88053aaf6584 100644
+index f5948d2a20dca..88053aaf65847 100644
 --- a/llvm/lib/CodeGen/SelectionDAG/FastISel.cpp
 +++ b/llvm/lib/CodeGen/SelectionDAG/FastISel.cpp
 @@ -1192,7 +1192,7 @@ bool FastISel::lowerCallTo(CallLoweringInfo &CLI) {
@@ -108,7 +108,7 @@ index f5948d2a20dc..88053aaf6584 100644
      ISD::ArgFlagsTy Flags;
      if (Arg.IsZExt)
 diff --git a/llvm/lib/CodeGen/SelectionDAG/SelectionDAGBuilder.cpp b/llvm/lib/CodeGen/SelectionDAG/SelectionDAGBuilder.cpp
-index d2930391f87a..e3d8e43b54d8 100644
+index d2930391f87a5..e3d8e43b54d86 100644
 --- a/llvm/lib/CodeGen/SelectionDAG/SelectionDAGBuilder.cpp
 +++ b/llvm/lib/CodeGen/SelectionDAG/SelectionDAGBuilder.cpp
 @@ -1862,7 +1862,7 @@ void SelectionDAGBuilder::visitRet(const ReturnInst &I) {
@@ -148,7 +148,7 @@ index d2930391f87a..e3d8e43b54d8 100644
           Value != NumValues; ++Value) {
        EVT VT = ValueVTs[Value];
 diff --git a/llvm/lib/Target/AArch64/AArch64ISelLowering.cpp b/llvm/lib/Target/AArch64/AArch64ISelLowering.cpp
-index 48ca9039b1bd..6070ef1de44f 100644
+index 48ca9039b1bd7..6070ef1de44f7 100644
 --- a/llvm/lib/Target/AArch64/AArch64ISelLowering.cpp
 +++ b/llvm/lib/Target/AArch64/AArch64ISelLowering.cpp
 @@ -31,6 +31,7 @@
@@ -186,10 +186,10 @@ index 48ca9039b1bd..6070ef1de44f 100644
  
  bool AArch64TargetLowering::shouldNormalizeToSelectSequence(LLVMContext &,
 diff --git a/llvm/lib/Target/AArch64/AArch64ISelLowering.h b/llvm/lib/Target/AArch64/AArch64ISelLowering.h
-index 4fe77481706b..425ba055926a 100644
+index 4fe77481706b3..425ba055926a8 100644
 --- a/llvm/lib/Target/AArch64/AArch64ISelLowering.h
 +++ b/llvm/lib/Target/AArch64/AArch64ISelLowering.h
-@@ -727,9 +727,10 @@ public:
+@@ -727,9 +727,10 @@ class AArch64TargetLowering : public TargetLowering {
    MachineMemOperand::Flags getTargetMMOFlags(
      const Instruction &I) const override;
  
@@ -204,7 +204,7 @@ index 4fe77481706b..425ba055926a 100644
    bool needsFixedCatchObjects() const override;
  
 diff --git a/llvm/lib/Target/AArch64/GISel/AArch64CallLowering.cpp b/llvm/lib/Target/AArch64/GISel/AArch64CallLowering.cpp
-index 4832ae8f415f..0daa930c3b26 100644
+index 4832ae8f415f2..0daa930c3b265 100644
 --- a/llvm/lib/Target/AArch64/GISel/AArch64CallLowering.cpp
 +++ b/llvm/lib/Target/AArch64/GISel/AArch64CallLowering.cpp
 @@ -261,7 +261,7 @@ void AArch64CallLowering::splitToValueTypes(
@@ -217,7 +217,7 @@ index 4832ae8f415f..0daa930c3b26 100644
      Type *SplitTy = SplitVTs[i].getTypeForEVT(Ctx);
      SplitArgs.emplace_back(OrigArg.Regs[i], SplitTy, OrigArg.Flags[0],
 diff --git a/llvm/lib/Target/ARM/ARMCallLowering.cpp b/llvm/lib/Target/ARM/ARMCallLowering.cpp
-index d860473011e7..c0f8b50cdc51 100644
+index d860473011e77..c0f8b50cdc513 100644
 --- a/llvm/lib/Target/ARM/ARMCallLowering.cpp
 +++ b/llvm/lib/Target/ARM/ARMCallLowering.cpp
 @@ -219,7 +219,7 @@ void ARMCallLowering::splitToValueTypes(const ArgInfo &OrigArg,
@@ -230,7 +230,7 @@ index d860473011e7..c0f8b50cdc51 100644
        Flags.setInConsecutiveRegs();
        if (i == e - 1)
 diff --git a/llvm/lib/Target/ARM/ARMISelLowering.cpp b/llvm/lib/Target/ARM/ARMISelLowering.cpp
-index 287e2e60e572..ac09439cc878 100644
+index 287e2e60e572c..ac09439cc878f 100644
 --- a/llvm/lib/Target/ARM/ARMISelLowering.cpp
 +++ b/llvm/lib/Target/ARM/ARMISelLowering.cpp
 @@ -18852,7 +18852,8 @@ Align ARMTargetLowering::getABIAlignmentForCallingConv(Type *ArgTy,
@@ -244,7 +244,7 @@ index 287e2e60e572..ac09439cc878 100644
        CallingConv::ARM_AAPCS_VFP)
      return false;
 diff --git a/llvm/lib/Target/ARM/ARMISelLowering.h b/llvm/lib/Target/ARM/ARMISelLowering.h
-index 8b1f4183032e..f05a42db9c75 100644
+index 8b1f4183032eb..f05a42db9c759 100644
 --- a/llvm/lib/Target/ARM/ARMISelLowering.h
 +++ b/llvm/lib/Target/ARM/ARMISelLowering.h
 @@ -570,7 +570,8 @@ class VectorType;
@@ -258,7 +258,7 @@ index 8b1f4183032e..f05a42db9c75 100644
      /// If a physical register, this returns the register that receives the
      /// exception address on entry to an EH pad.
 diff --git a/llvm/lib/Target/PowerPC/PPCISelLowering.h b/llvm/lib/Target/PowerPC/PPCISelLowering.h
-index 768eaa43e013..a3e53430c5b3 100644
+index 768eaa43e0135..a3e53430c5b3a 100644
 --- a/llvm/lib/Target/PowerPC/PPCISelLowering.h
 +++ b/llvm/lib/Target/PowerPC/PPCISelLowering.h
 @@ -959,7 +959,8 @@ namespace llvm {
@@ -273,7 +273,7 @@ index 768eaa43e013..a3e53430c5b3 100644
        // whether the argument should go in GPRs, FPRs, or VRs if available.
 diff --git a/llvm/test/CodeGen/AArch64/argument-blocks-array-of-struct.ll b/llvm/test/CodeGen/AArch64/argument-blocks-array-of-struct.ll
 new file mode 100644
-index 000000000000..47ebc394d739
+index 0000000000000..47ebc394d7396
 --- /dev/null
 +++ b/llvm/test/CodeGen/AArch64/argument-blocks-array-of-struct.ll
 @@ -0,0 +1,511 @@
@@ -788,9 +788,6 @@ index 000000000000..47ebc394d739
 +  call void @callee_no_block(%T_NO_BLOCK %1)
 +  ret void
 +}
--- 
-2.37.1
-
 
 From 50761c36d9fdb221ed19ab9dd083e734488a42ce Mon Sep 17 00:00:00 2001
 From: Graham Markall <gmarkall@nvidia.com>
@@ -819,10 +816,10 @@ ARM, and PPC targets:
  6 files changed, 35 insertions(+)
 
 diff --git a/llvm/include/llvm/CodeGen/TargetLowering.h b/llvm/include/llvm/CodeGen/TargetLowering.h
-index f6b8ab1a8aef..97c39c585313 100644
+index f6b8ab1a8aef5..97c39c5853131 100644
 --- a/llvm/include/llvm/CodeGen/TargetLowering.h
 +++ b/llvm/include/llvm/CodeGen/TargetLowering.h
-@@ -3952,6 +3952,12 @@ public:
+@@ -3952,6 +3952,12 @@ class TargetLowering : public TargetLoweringBase {
    /// For some targets, an LLVM struct type must be broken down into multiple
    /// simple types, but the calling convention specifies that the entire struct
    /// must be passed in a block of consecutive registers.
@@ -836,7 +833,7 @@ index f6b8ab1a8aef..97c39c585313 100644
    functionArgumentNeedsConsecutiveRegisters(Type *Ty, CallingConv::ID CallConv,
                                              bool isVarArg,
 diff --git a/llvm/lib/Target/AArch64/AArch64ISelLowering.cpp b/llvm/lib/Target/AArch64/AArch64ISelLowering.cpp
-index 6070ef1de44f..4c5720705e4f 100644
+index 6070ef1de44f7..4c5720705e4f6 100644
 --- a/llvm/lib/Target/AArch64/AArch64ISelLowering.cpp
 +++ b/llvm/lib/Target/AArch64/AArch64ISelLowering.cpp
 @@ -14709,6 +14709,18 @@ Value *AArch64TargetLowering::emitStoreConditional(IRBuilder<> &Builder,
@@ -859,10 +856,10 @@ index 6070ef1de44f..4c5720705e4f 100644
      Type *Ty, CallingConv::ID CallConv, bool isVarArg,
      const DataLayout &DL) const {
 diff --git a/llvm/lib/Target/AArch64/AArch64ISelLowering.h b/llvm/lib/Target/AArch64/AArch64ISelLowering.h
-index 425ba055926a..a498cd93bcdb 100644
+index 425ba055926a8..a498cd93bcdb9 100644
 --- a/llvm/lib/Target/AArch64/AArch64ISelLowering.h
 +++ b/llvm/lib/Target/AArch64/AArch64ISelLowering.h
-@@ -727,6 +727,10 @@ public:
+@@ -727,6 +727,10 @@ class AArch64TargetLowering : public TargetLowering {
    MachineMemOperand::Flags getTargetMMOFlags(
      const Instruction &I) const override;
  
@@ -874,7 +871,7 @@ index 425ba055926a..a498cd93bcdb 100644
        Type *Ty, CallingConv::ID CallConv, bool isVarArg,
        const DataLayout &DL) const override;
 diff --git a/llvm/lib/Target/ARM/ARMISelLowering.cpp b/llvm/lib/Target/ARM/ARMISelLowering.cpp
-index ac09439cc878..5d32d9e28914 100644
+index ac09439cc878f..5d32d9e28914c 100644
 --- a/llvm/lib/Target/ARM/ARMISelLowering.cpp
 +++ b/llvm/lib/Target/ARM/ARMISelLowering.cpp
 @@ -18854,6 +18854,11 @@ Align ARMTargetLowering::getABIAlignmentForCallingConv(Type *ArgTy,
@@ -890,7 +887,7 @@ index ac09439cc878..5d32d9e28914 100644
        CallingConv::ARM_AAPCS_VFP)
      return false;
 diff --git a/llvm/lib/Target/ARM/ARMISelLowering.h b/llvm/lib/Target/ARM/ARMISelLowering.h
-index f05a42db9c75..0c45a9c9e77b 100644
+index f05a42db9c759..0c45a9c9e77be 100644
 --- a/llvm/lib/Target/ARM/ARMISelLowering.h
 +++ b/llvm/lib/Target/ARM/ARMISelLowering.h
 @@ -569,6 +569,9 @@ class VectorType;
@@ -904,7 +901,7 @@ index f05a42db9c75..0c45a9c9e77b 100644
          Type *Ty, CallingConv::ID CallConv, bool isVarArg,
          const DataLayout &DL) const override;
 diff --git a/llvm/lib/Target/PowerPC/PPCISelLowering.h b/llvm/lib/Target/PowerPC/PPCISelLowering.h
-index a3e53430c5b3..8010df4b2e9e 100644
+index a3e53430c5b3a..8010df4b2e9e3 100644
 --- a/llvm/lib/Target/PowerPC/PPCISelLowering.h
 +++ b/llvm/lib/Target/PowerPC/PPCISelLowering.h
 @@ -961,6 +961,11 @@ namespace llvm {
@@ -919,6 +916,3 @@ index a3e53430c5b3..8010df4b2e9e 100644
        // We support any array type as "consecutive" block in the parameter
        // save area.  The element type defines the alignment requirement and
        // whether the argument should go in GPRs, FPRs, or VRs if available.
--- 
-2.37.1
-
