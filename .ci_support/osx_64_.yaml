@@ -9,13 +9,19 @@ channel_targets:
 cxx_compiler:
 - clang_bootstrap
 cxx_compiler_version:
-- '13'
+- '14'
+libxml2:
+- '2.9'
 macos_machine:
 - x86_64-apple-darwin13.4.0
 pin_run_as_build:
+  libxml2:
+    max_pin: x.x
   zlib:
     max_pin: x.x
 target_platform:
 - osx-64
 zlib:
 - '1.2'
+zstd:
+- '1.5'

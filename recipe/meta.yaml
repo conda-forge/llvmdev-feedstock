@@ -1,4 +1,4 @@
-{% set version = "14.0.6" %}
+{% set version = "15.0.0" %}
 {% set major_ver = version.split(".")[0] %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  sha256: 8b3cfd7bc695bd6cea0f37f53f0981f34f87496e79e2529874fd03a2f9dd3a8a
+  sha256: caaf8100365b6ebafc39fea803e902ca3ff38b4d5327b9927097808d32964db7
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
@@ -27,16 +27,18 @@ requirements:
     - libcxx {{ cxx_compiler_version }}  # [osx]
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
+    # needs aarch/ppc/arm (re)build of conda-forge/backtrace-feedstock
+    - backtrace                          # [unix and x86]
+    - libxml2
     - zlib
-    - libxml2                            # [win]
+    - zstd                               # [build_platform == target_platform]
 
 outputs:
   # Contains everything
   - name: llvmdev
-    script: install_llvm.sh  # [not win]
+    script: install_llvm.sh   # [not win]
     script: install_llvm.bat  # [win]
     build:
-      skip: true  # [(win and vc<14)]
       activate_in_script: true
     requirements:
       build:
@@ -47,7 +49,9 @@ outputs:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
+        - libxml2
         - zlib
+        - zstd     # [build_platform == target_platform]
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
@@ -66,9 +70,8 @@ outputs:
   - name: libllvm{{ major_ver }}
     script: install_llvm.sh  # [not win]
     build:
-      skip: true  # [win and vc<14]
       activate_in_script: true
-      run_exports:   # [not win]
+      run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
@@ -78,7 +81,9 @@ outputs:
         - python >=3               # [not win]
       host:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
+        - libxml2
         - zlib
+        - zstd                                 # [build_platform == target_platform]
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
@@ -89,17 +94,18 @@ outputs:
   # for run_exports
   - name: llvm
     build:
-      skip: true  # [(win and vc<14)]
-      run_exports:   # [not win]
+      run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
+        - libxml2
         - zlib
-      run:   # [not win]
+        - zstd                                                        # [build_platform == target_platform]
+      run:                                                            # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
-      run_constrained:   # [not win]
+      run_constrained:                                                # [not win]
         - llvmdev   {{ version }}                                     # [not win]
     test:
       commands:
@@ -107,10 +113,9 @@ outputs:
 
   # Contains LLVM tools
   - name: llvm-tools
-    script: install_llvm.sh  # [not win]
+    script: install_llvm.sh   # [not win]
     script: install_llvm.bat  # [win]
     build:
-      skip: true  # [(win and vc<14)]
       activate_in_script: true
     requirements:
       build:
@@ -120,8 +125,9 @@ outputs:
         - python >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libxml2   # [win]
+        - libxml2
         - zlib
+        - zstd     # [build_platform == target_platform]
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
       run_constrained:
