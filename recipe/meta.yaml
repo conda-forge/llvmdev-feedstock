@@ -20,9 +20,14 @@ source:
     - patches/pass-through-qemu-ld-prefix.diff
     # Don't link libLLVM.dylib to llvm-config. Makes it easier for cross compiling
     - patches/llvm-config-no-libLLVM.diff
+    # Fixes a consecutive register issue on `aarch64`
+    # ref: https://reviews.llvm.org/D104123
+    - patches/llvm-consecutive-registers.patch
+    # Restores the ABI previously modified by llvm-consecutive-registers.patch
+    - patches/llvm-consecutive-registers-abi.patch
 
 build:
-  number: 3
+  number: 4
   skip: true  # [(win and vc<14)]
   merge_build_host: false
 

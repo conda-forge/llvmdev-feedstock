@@ -7,7 +7,7 @@ channel_targets:
 cxx_compiler:
 - clang_bootstrap
 cxx_compiler_version:
-- '11'
+- '14'
 macos_machine:
 - x86_64-apple-darwin13.4.0
 pin_run_as_build:

@@ -1,0 +1,130 @@
+From 50761c36d9fdb221ed19ab9dd083e734488a42ce Mon Sep 17 00:00:00 2001
+From: Graham Markall <gmarkall@nvidia.com>
+Date: Wed, 24 Aug 2022 11:49:05 +0100
+Subject: [PATCH] Maintain ABI following AArch64 consecutive regs patch
+
+This maintains the existing ABI for
+`TargetLowering::functionArgumentNeedsConsecutiveRegisters()` by
+providing both the old and new prototypes of the function - one with
+(new) and one without (old) a `DataLayout`. This affects the AArch64,
+ARM, and PPC targets:
+
+- AArch64: The original function implementation is provided for the old
+  variant, so this will maintain both the ABI and the behaviour of the
+  code for anything already linked against the old version.
+- ARM: Behaviour is unchanged, so both variants share a common code
+  path.
+- PPC: Also unchanged behaviour / common code path.
+---
+ llvm/include/llvm/CodeGen/TargetLowering.h      |  6 ++++++
+ llvm/lib/Target/AArch64/AArch64ISelLowering.cpp | 12 ++++++++++++
+ llvm/lib/Target/AArch64/AArch64ISelLowering.h   |  4 ++++
+ llvm/lib/Target/ARM/ARMISelLowering.cpp         |  5 +++++
+ llvm/lib/Target/ARM/ARMISelLowering.h           |  3 +++
+ llvm/lib/Target/PowerPC/PPCISelLowering.h       |  5 +++++
+ 6 files changed, 35 insertions(+)
+
+diff --git a/llvm/include/llvm/CodeGen/TargetLowering.h b/llvm/include/llvm/CodeGen/TargetLowering.h
+index f6b8ab1a8aef..97c39c585313 100644
+--- a/llvm/include/llvm/CodeGen/TargetLowering.h
++++ b/llvm/include/llvm/CodeGen/TargetLowering.h
+@@ -3952,6 +3952,12 @@ public:
+   /// For some targets, an LLVM struct type must be broken down into multiple
+   /// simple types, but the calling convention specifies that the entire struct
+   /// must be passed in a block of consecutive registers.
++  virtual bool
++  functionArgumentNeedsConsecutiveRegisters(Type *Ty, CallingConv::ID CallConv,
++                                            bool isVarArg) const {
++    return false;
++  }
++
+   virtual bool
+   functionArgumentNeedsConsecutiveRegisters(Type *Ty, CallingConv::ID CallConv,
+                                             bool isVarArg,
+diff --git a/llvm/lib/Target/AArch64/AArch64ISelLowering.cpp b/llvm/lib/Target/AArch64/AArch64ISelLowering.cpp
+index 6070ef1de44f..4c5720705e4f 100644
+--- a/llvm/lib/Target/AArch64/AArch64ISelLowering.cpp
++++ b/llvm/lib/Target/AArch64/AArch64ISelLowering.cpp
+@@ -14709,6 +14709,18 @@ Value *AArch64TargetLowering::emitStoreConditional(IRBuilder<> &Builder,
+                              Addr});
+ }
+ 
++bool AArch64TargetLowering::functionArgumentNeedsConsecutiveRegisters(
++    Type *Ty, CallingConv::ID CallConv, bool isVarArg) const {
++  if (Ty->isArrayTy())
++    return true;
++
++  const TypeSize &TySize = Ty->getPrimitiveSizeInBits();
++  if (TySize.isScalable() && TySize.getKnownMinSize() > 128)
++    return true;
++
++  return false;
++}
++
+ bool AArch64TargetLowering::functionArgumentNeedsConsecutiveRegisters(
+     Type *Ty, CallingConv::ID CallConv, bool isVarArg,
+     const DataLayout &DL) const {
+diff --git a/llvm/lib/Target/AArch64/AArch64ISelLowering.h b/llvm/lib/Target/AArch64/AArch64ISelLowering.h
+index 425ba055926a..a498cd93bcdb 100644
+--- a/llvm/lib/Target/AArch64/AArch64ISelLowering.h
++++ b/llvm/lib/Target/AArch64/AArch64ISelLowering.h
+@@ -727,6 +727,10 @@ public:
+   MachineMemOperand::Flags getTargetMMOFlags(
+     const Instruction &I) const override;
+ 
++  bool functionArgumentNeedsConsecutiveRegisters(Type *Ty,
++                                                 CallingConv::ID CallConv,
++                                                 bool isVarArg) const override;
++
+   bool functionArgumentNeedsConsecutiveRegisters(
+       Type *Ty, CallingConv::ID CallConv, bool isVarArg,
+       const DataLayout &DL) const override;
+diff --git a/llvm/lib/Target/ARM/ARMISelLowering.cpp b/llvm/lib/Target/ARM/ARMISelLowering.cpp
+index ac09439cc878..5d32d9e28914 100644
+--- a/llvm/lib/Target/ARM/ARMISelLowering.cpp
++++ b/llvm/lib/Target/ARM/ARMISelLowering.cpp
+@@ -18854,6 +18854,11 @@ Align ARMTargetLowering::getABIAlignmentForCallingConv(Type *ArgTy,
+ bool ARMTargetLowering::functionArgumentNeedsConsecutiveRegisters(
+     Type *Ty, CallingConv::ID CallConv, bool isVarArg,
+     const DataLayout &DL) const {
++  return functionArgumentNeedsConsecutiveRegisters(Ty, CallConv, isVarArg);
++}
++
++bool ARMTargetLowering::functionArgumentNeedsConsecutiveRegisters(
++    Type *Ty, CallingConv::ID CallConv, bool isVarArg) const {
+   if (getEffectiveCallingConv(CallConv, isVarArg) !=
+       CallingConv::ARM_AAPCS_VFP)
+     return false;
+diff --git a/llvm/lib/Target/ARM/ARMISelLowering.h b/llvm/lib/Target/ARM/ARMISelLowering.h
+index f05a42db9c75..0c45a9c9e77b 100644
+--- a/llvm/lib/Target/ARM/ARMISelLowering.h
++++ b/llvm/lib/Target/ARM/ARMISelLowering.h
+@@ -569,6 +569,9 @@ class VectorType;
+ 
+     /// Returns true if an argument of type Ty needs to be passed in a
+     /// contiguous block of registers in calling convention CallConv.
++    bool functionArgumentNeedsConsecutiveRegisters(
++        Type *Ty, CallingConv::ID CallConv, bool isVarArg) const override;
++
+     bool functionArgumentNeedsConsecutiveRegisters(
+         Type *Ty, CallingConv::ID CallConv, bool isVarArg,
+         const DataLayout &DL) const override;
+diff --git a/llvm/lib/Target/PowerPC/PPCISelLowering.h b/llvm/lib/Target/PowerPC/PPCISelLowering.h
+index a3e53430c5b3..8010df4b2e9e 100644
+--- a/llvm/lib/Target/PowerPC/PPCISelLowering.h
++++ b/llvm/lib/Target/PowerPC/PPCISelLowering.h
+@@ -961,6 +961,11 @@ namespace llvm {
+     bool functionArgumentNeedsConsecutiveRegisters(
+         Type *Ty, CallingConv::ID CallConv, bool isVarArg,
+         const DataLayout &DL) const override {
++      return functionArgumentNeedsConsecutiveRegisters(Ty, CallConv, isVarArg);
++    }
++
++    bool functionArgumentNeedsConsecutiveRegisters(
++        Type *Ty, CallingConv::ID CallConv, bool isVarArg) const override {
+       // We support any array type as "consecutive" block in the parameter
+       // save area.  The element type defines the alignment requirement and
+       // whether the argument should go in GPRs, FPRs, or VRs if available.
+-- 
+2.35.3
+
