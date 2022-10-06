@@ -1,4 +1,4 @@
-{% set version = "15.0.1" %}
+{% set version = "15.0.2" %}
 {% set major_ver = version.split(".")[0] %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  sha256: f25ce2d4243bebf527284eb7be7f6f56ef454fca8b3de9523f7eb4efb8d26218
+  sha256: 7877cd67714728556a79e5ec0cc72d66b6926448cf73b12b2cb901b268f7a872
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
@@ -36,7 +36,7 @@ requirements:
 outputs:
   # Contains everything
   - name: llvmdev
-    script: install_llvm.sh   # [not win]
+    script: install_llvm.sh  # [not win]
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
@@ -71,7 +71,7 @@ outputs:
     script: install_llvm.sh  # [not win]
     build:
       activate_in_script: true
-      run_exports:                                                    # [not win]
+      run_exports:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
@@ -94,7 +94,7 @@ outputs:
   # for run_exports
   - name: llvm
     build:
-      run_exports:                                                    # [not win]
+      run_exports:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
@@ -103,9 +103,9 @@ outputs:
         - libxml2
         - zlib
         - zstd                                                        # [build_platform == target_platform]
-      run:                                                            # [not win]
+      run:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
-      run_constrained:                                                # [not win]
+      run_constrained:   # [not win]
         - llvmdev   {{ version }}                                     # [not win]
     test:
       commands:
@@ -113,7 +113,7 @@ outputs:
 
   # Contains LLVM tools
   - name: llvm-tools
-    script: install_llvm.sh   # [not win]
+    script: install_llvm.sh  # [not win]
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
