@@ -1,4 +1,4 @@
-{% set version = "15.0.2" %}
+{% set version = "15.0.3" %}
 {% set major_ver = version.split(".")[0] %}
 
 package:
@@ -7,12 +7,14 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  sha256: 7877cd67714728556a79e5ec0cc72d66b6926448cf73b12b2cb901b268f7a872
+  sha256: dd07bdab557866344d85ae21bbeca5259d37b4b0e2ebf6e0481f42d1ba0fee88
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
+    # https://reviews.llvm.org/D136065
+    - patches/0002-CMake-Fix-Findzstd-module-for-shared-DLL-on-Windows.patch
 
 build:
   number: 0
