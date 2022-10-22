@@ -18,7 +18,7 @@ source:
     - patches/0002-CMake-Fix-Findzstd-module-for-shared-DLL-on-Windows.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
