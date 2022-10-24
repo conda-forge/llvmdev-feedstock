@@ -13,11 +13,12 @@ source:
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
-    # https://reviews.llvm.org/D136065
+    # backport of zlib patches, can be dropped for v>15.0.3, see
+    # https://reviews.llvm.org/D135457 & https://reviews.llvm.org/D136065
     - patches/0002-CMake-Fix-Findzstd-module-for-shared-DLL-on-Windows.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
