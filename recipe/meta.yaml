@@ -171,6 +171,7 @@ about:
 
 extra:
   recipe-maintainers:
+    - username
     - inducer
     - jakirkham
     - mingwandroid
