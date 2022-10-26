@@ -1,7 +1,7 @@
 {% set shortversion = "5.0" %}
 {% set version = "5.0.0" %}
 
-{% set build_number = 1005 %}
+{% set build_number = 1006 %}
 
 package:
   name: llvmdev
