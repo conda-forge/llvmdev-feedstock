@@ -171,6 +171,7 @@ about:
 
 extra:
   recipe-maintainers:
+    - JohanMabille
     - inducer
     - jakirkham
     - mingwandroid
