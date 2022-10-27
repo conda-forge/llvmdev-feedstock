@@ -1,7 +1,9 @@
-c_compiler:         # [osx]
+c_compiler:         # [osx or win]
   - clang_bootstrap # [osx]
-cxx_compiler:       # [osx]
+  - vs2017          # [win]
+cxx_compiler:       # [osx or win]
   - clang_bootstrap # [osx]
+  - vs2017          # [win]
 
 cxx_compiler_version: # [linux and ppc64le]
   # linking error with gcc 9
