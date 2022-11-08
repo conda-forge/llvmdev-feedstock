@@ -16,9 +16,10 @@ source:
     # backport of zlib patches, can be dropped for v>15.0.3, see
     # https://reviews.llvm.org/D135457 & https://reviews.llvm.org/D136065
     - patches/0002-CMake-Fix-Findzstd-module-for-shared-DLL-on-Windows.patch
+    - patches/no-windows-symlinks.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
