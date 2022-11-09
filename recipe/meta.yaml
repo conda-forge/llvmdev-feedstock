@@ -16,9 +16,10 @@ source:
     # backport of zlib patches, can be dropped for v>15.0.3, see
     # https://reviews.llvm.org/D135457 & https://reviews.llvm.org/D136065
     - patches/0002-CMake-Fix-Findzstd-module-for-shared-DLL-on-Windows.patch
+    - patches/no-windows-symlinks.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
@@ -65,8 +66,11 @@ outputs:
         - test -f $PREFIX/include/llvm/Pass.h                           # [not win]
         - test -f $PREFIX/lib/libLLVMCore.a                             # [not win]
         - $PREFIX/libexec/llvm/not false                                # [not win]
+        - $PREFIX/bin/llvm-nm --help                                    # [not win]
         - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1               # [win]
         - if not exist "%LIBRARY_PREFIX%"\\libexec\llvm\not.exe exit 1  # [win]
+        - if not exist "%LIBRARY_BIN%"\\llvm-nm.exe exit 1              # [win]
+        - llvm-nm.exe --help                                            # [win]
 
   # Contains the shared libraries. To make different LLVM libraries co-installable
   # soversion is appended to the package name.
