@@ -2,3 +2,5 @@ matrix:
 - [[LLVM_VARIANT, cling]]
 - [[LLVM_VARIANT, default]]
 conda_forge_output_validation: true
+conda_build:
+  pkg_format: '2'
