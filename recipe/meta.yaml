@@ -19,7 +19,7 @@ source:
     - patches/MSVC_DIA_SDK_path_fix.diff  # [win]
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
@@ -41,8 +41,8 @@ requirements:
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
     - zlib
-    - libxml2   # [win]
-    - libffi    # [unix]
+    - libxml2      # [win]
+    - libffi 3.3   # [unix]
 
 outputs:
   # Contains everything
@@ -93,10 +93,10 @@ outputs:
       host:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
         - zlib
-        - libffi  # [unix]
+        - libffi 3.3  # [unix]
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
-        - libffi  # [unix]
+        - libffi >=3.3,<4  # [unix]
         - zlib    # [osx]
     test:
       commands:
