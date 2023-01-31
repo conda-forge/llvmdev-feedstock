@@ -5,12 +5,7 @@ channel_targets:
 cxx_compiler:
 - vs2019
 libxml2:
-- '2.9'
-pin_run_as_build:
-  libxml2:
-    max_pin: x.x
-  zlib:
-    max_pin: x.x
+- '2.10'
 target_platform:
 - win-64
 zlib:
