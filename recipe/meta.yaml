@@ -14,6 +14,8 @@ source:
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     - patches/0002-Always-copy-on-windows.patch
+    # see https://github.com/llvm/llvm-project/issues/60363
+    - patches/0003-skip-two-tests-on-OSX-while-they-re-being-debugged.patch  # [osx]
 
 build:
   number: 0
