@@ -15,10 +15,10 @@ source:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     - patches/0002-Always-copy-on-windows.patch
     # see https://github.com/llvm/llvm-project/issues/60363
-    - patches/0003-skip-two-tests-on-OSX-while-they-re-being-debugged.patch  # [osx]
+    - patches/0003-llvm-debuginfo-analyzer-LLVM-16.0.0-rc1-Failing-test.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
