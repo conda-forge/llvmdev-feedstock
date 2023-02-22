@@ -1,7 +1,7 @@
-From bf45ec438e1ad2e35c8f219ca8b18c2318c255b4 Mon Sep 17 00:00:00 2001
+From 2e14c868cd7cf69333d4aae77dfcd5a329131ee6 Mon Sep 17 00:00:00 2001
 From: Isuru Fernando <idf2@illinois.edu>
 Date: Tue, 8 Nov 2022 13:34:20 -0600
-Subject: [PATCH 2/3] Always copy on windows
+Subject: [PATCH 2/2] Always copy on windows
 
 The conda package build machine may have permissions to
 create symlinks, but conda doesn't handle symlinks on windows
