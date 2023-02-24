@@ -1,4 +1,4 @@
-{% set version = "16.0.0.rc2" %}
+{% set version = "16.0.0.rc3" %}
 {% set major_ver = version.split(".")[0] %}
 
 package:
@@ -7,18 +7,16 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  sha256: 2ae53e4d9cdc46e660359a5311f276bd4cb39c310345de951c580a09b4f34861
+  sha256: 8fa9792a1a04f78d023b87c5e5bd25010d5f73a5c0ae1830e897d85821ee9325
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     - patches/0002-Always-copy-on-windows.patch
-    # see https://github.com/llvm/llvm-project/issues/60363
-    - patches/0003-skip-two-tests-on-OSX-while-they-re-being-debugged.patch  # [osx]
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
