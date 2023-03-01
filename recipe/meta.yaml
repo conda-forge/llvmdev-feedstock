@@ -16,7 +16,7 @@ source:
     - patches/no-windows-symlinks.patch
 
 build:
-  number: 1
+  number: 2
   merge_build_host: false
 
 requirements:
@@ -45,6 +45,7 @@ outputs:
         - cmake
         - ninja
         - python >=3
+        - m2-sed  # [win]
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
