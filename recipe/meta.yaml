@@ -48,6 +48,7 @@ outputs:
         - cmake
         - ninja
         - python >=3
+        - m2-sed                             # [win]
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
@@ -61,6 +62,8 @@ outputs:
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - libcxx >={{ cxx_compiler_version }}                           # [osx]
     test:
+      requires:
+        - ripgrep  # [win]
       commands:
         - $PREFIX/bin/llvm-config --libs                                # [not win]
         - test -f $PREFIX/include/llvm/Pass.h                           # [not win]
@@ -71,6 +74,10 @@ outputs:
         - if not exist "%LIBRARY_PREFIX%"\\libexec\llvm\not.exe exit 1  # [win]
         - if not exist "%LIBRARY_BIN%"\\llvm-nm.exe exit 1              # [win]
         - llvm-nm.exe --help                                            # [win]
+
+        # ensure we've correctly inserted %VSINSTALLDIR% into the CMake metadata for LLVM;
+        # we're looking for: `INTERFACE_LINK_LIBRARIES "$ENV{VSINSTALLDIR}/DIA SDK/lib/amd64/diaguids.lib;[...]`instead
+        - rg -e "INTERFACE_LINK_LIBRARIES\s\"\$ENV\{VSINSTALLDIR\}[/\w\s]+/diaguids\.lib" %LIBRARY_LIB%\cmake\llvm\LLVMExports.cmake  # [win]
 
   # Contains the shared libraries. To make different LLVM libraries co-installable
   # soversion is appended to the package name.
