@@ -2,7 +2,7 @@
 set -x
 
 cd build
-ninja install
+ninja --verbose install
 
 IFS='.' read -ra VER_ARR <<< "$PKG_VERSION"
 
