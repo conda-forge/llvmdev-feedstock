@@ -37,4 +37,4 @@ REM bin\opt -S -vector-library=SVML -mcpu=haswell -O3 %RECIPE_DIR%\numba-3016.ll
 REM if %ERRORLEVEL% neq 0 exit 1
 
 cd ..\llvm\test
-%SYS_PYTHON% ..\..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
+python ..\..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
