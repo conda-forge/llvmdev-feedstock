@@ -47,7 +47,9 @@ outputs:
         - cmake
         - ninja
         - python >=3
+        - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
+        - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - libxml2
@@ -83,8 +85,9 @@ outputs:
         - ninja                    # [not win]
         - cmake                    # [not win]
         - python >=3               # [not win]
+        - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
-        - libcxx >={{ cxx_compiler_version }}  # [osx]
+        - libcxx {{ cxx_compiler_version }}  # [osx]
         - libxml2
         - zlib
         - zstd                                 # [build_platform == target_platform]
@@ -127,7 +130,9 @@ outputs:
         - cmake
         - ninja
         - python >=3
+        - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
+        - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - libxml2
         - zlib
