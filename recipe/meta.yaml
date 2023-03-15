@@ -16,7 +16,7 @@ source:
     - patches/0002-Always-copy-on-windows.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
