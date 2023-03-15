@@ -32,7 +32,7 @@ requirements:
     - backtrace                          # [unix and x86]
     - libxml2
     - zlib
-    - zstd                               # [build_platform == target_platform]
+    - zstd
 
 outputs:
   # Contains everything
@@ -90,7 +90,7 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - libxml2
         - zlib
-        - zstd                                 # [build_platform == target_platform]
+        - zstd
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
@@ -109,7 +109,7 @@ outputs:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
         - libxml2
         - zlib
-        - zstd                                                        # [build_platform == target_platform]
+        - zstd
       run:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
       run_constrained:   # [not win]
@@ -136,7 +136,7 @@ outputs:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - libxml2
         - zlib
-        - zstd     # [build_platform == target_platform]
+        - zstd
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
       run_constrained:
