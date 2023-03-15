@@ -20,7 +20,7 @@ cmake -G "Ninja" ^
     -DLLVM_INCLUDE_BENCHMARKS=OFF ^
     -DLLVM_INCLUDE_DOCS=OFF ^
     -DLLVM_INCLUDE_EXAMPLES=OFF ^
-    -DLLVM_INCLUDE_TESTS=OFF ^
+    -DLLVM_INCLUDE_TESTS=ON ^
     -DLLVM_INCLUDE_UTILS=ON ^
     -DLLVM_INSTALL_UTILS=ON ^
     -DLLVM_UTILS_INSTALL_DIR=libexec\llvm ^
@@ -37,4 +37,4 @@ REM bin\opt -S -vector-library=SVML -mcpu=haswell -O3 %RECIPE_DIR%\numba-3016.ll
 REM if %ERRORLEVEL% neq 0 exit 1
 
 cd ..\llvm\test
-..\..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
+python ..\..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
