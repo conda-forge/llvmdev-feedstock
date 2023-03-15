@@ -16,7 +16,7 @@ source:
     - patches/0002-Always-copy-on-windows.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
@@ -32,12 +32,12 @@ requirements:
     - backtrace                          # [unix and x86]
     - libxml2
     - zlib
-    - zstd                               # [build_platform == target_platform]
+    - zstd
 
 outputs:
   # Contains everything
   - name: llvmdev
-    script: install_llvm.sh  # [not win]
+    script: install_llvm.sh   # [not win]
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
@@ -77,7 +77,7 @@ outputs:
     script: install_llvm.sh  # [not win]
     build:
       activate_in_script: true
-      run_exports:   # [not win]
+      run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
@@ -90,7 +90,7 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - libxml2
         - zlib
-        - zstd                                 # [build_platform == target_platform]
+        - zstd
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
@@ -101,7 +101,7 @@ outputs:
   # for run_exports
   - name: llvm
     build:
-      run_exports:   # [not win]
+      run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
@@ -109,10 +109,10 @@ outputs:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
         - libxml2
         - zlib
-        - zstd                                                        # [build_platform == target_platform]
-      run:   # [not win]
+        - zstd
+      run:                                                            # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
-      run_constrained:   # [not win]
+      run_constrained:                                                # [not win]
         - llvmdev   {{ version }}                                     # [not win]
     test:
       commands:
@@ -136,7 +136,7 @@ outputs:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - libxml2
         - zlib
-        - zstd     # [build_platform == target_platform]
+        - zstd
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
       run_constrained:
