@@ -1,0 +1,30 @@
+From 8bc5fd44678e88c3f1ba5437e42d475cc39b21d5 Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Thu, 16 Mar 2023 18:03:09 +1100
+Subject: [PATCH 3/3] respect {ZSTD,LIBXML2}_ROOT in LLVMConfig.cmake
+
+---
+ llvm/cmake/modules/LLVMConfig.cmake.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/llvm/cmake/modules/LLVMConfig.cmake.in b/llvm/cmake/modules/LLVMConfig.cmake.in
+index 2d90512bfb..3c2c3a842a 100644
+--- a/llvm/cmake/modules/LLVMConfig.cmake.in
++++ b/llvm/cmake/modules/LLVMConfig.cmake.in
+@@ -75,11 +75,13 @@ endif()
+ 
+ set(LLVM_ENABLE_ZSTD @LLVM_ENABLE_ZSTD@)
+ if(LLVM_ENABLE_ZSTD)
++  set(ZSTD_ROOT @ZSTD_ROOT@)
+   find_package(zstd)
+ endif()
+ 
+ set(LLVM_ENABLE_LIBXML2 @LLVM_ENABLE_LIBXML2@)
+ if(LLVM_ENABLE_LIBXML2)
++  set(LIBXML2_ROOT @LIBXML2_ROOT@)
+   find_package(LibXml2)
+ endif()
+ 
+-- 
+2.38.1.windows.1
+

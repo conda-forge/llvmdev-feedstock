@@ -14,9 +14,10 @@ source:
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     - patches/0002-Always-copy-on-windows.patch
+    - patches/0003-respect-ZSTD-LIBXML2-_ROOT-in-LLVMConfig.cmake.patch
 
 build:
-  number: 1
+  number: 2
   merge_build_host: false
 
 requirements:
