@@ -1,4 +1,4 @@
-From 7f0bfa15b5af93df0a74660481359489d3a116ea Mon Sep 17 00:00:00 2001
+From ecdd0c95fbbe28bbc0cdcf82ce5e86eb59c3c7d4 Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Thu, 16 Mar 2023 18:03:09 +1100
 Subject: [PATCH 3/3] respect {ZSTD,LIBXML2}_ROOT in LLVMConfig.cmake
@@ -10,20 +10,20 @@ https://cmake.org/cmake/help/latest/command/find_package.html
  1 file changed, 2 insertions(+)
 
 diff --git a/llvm/cmake/modules/LLVMConfig.cmake.in b/llvm/cmake/modules/LLVMConfig.cmake.in
-index 2d90512bfb..a00799478b 100644
+index 2d90512bfb..758b4d4bda 100644
 --- a/llvm/cmake/modules/LLVMConfig.cmake.in
 +++ b/llvm/cmake/modules/LLVMConfig.cmake.in
 @@ -75,11 +75,13 @@ endif()
  
  set(LLVM_ENABLE_ZSTD @LLVM_ENABLE_ZSTD@)
  if(LLVM_ENABLE_ZSTD)
-+  set(zstd_ROOT @ZSTD_ROOT@)
++  set(zstd_ROOT @zstd_ROOT@)
    find_package(zstd)
  endif()
  
  set(LLVM_ENABLE_LIBXML2 @LLVM_ENABLE_LIBXML2@)
  if(LLVM_ENABLE_LIBXML2)
-+  set(LibXml2_ROOT @LIBXML2_ROOT@)
++  set(LibXml2_ROOT @LibXml2_ROOT@)
    find_package(LibXml2)
  endif()
  
