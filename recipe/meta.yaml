@@ -27,6 +27,9 @@ requirements:
     - ninja
     - python >=3
     - libcxx {{ cxx_compiler_version }}  # [osx]
+    - libxml2                            # [build_platform != target_platform]
+    - zlib                               # [build_platform != target_platform]
+    - zstd                               # [build_platform != target_platform]
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
     # needs aarch/ppc/arm (re)build of conda-forge/backtrace-feedstock
@@ -55,7 +58,7 @@ outputs:
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - libxml2
         - zlib
-        - zstd     # [build_platform == target_platform]
+        - zstd
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
