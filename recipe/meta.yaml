@@ -1,4 +1,4 @@
-{% set version = "15.0.7" %}
+{% set version = "16.0.0" %}
 {% set major_ver = version.split(".")[0] %}
 
 package:
@@ -7,19 +7,16 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  sha256: 8b5fcb24b4128cf04df1b0b9410ce8b1a729cb3c544e6da885d234280dedeac6
+  sha256: 9a56d906a2c81f16f06efc493a646d497c53c2f4f28f0cb1f3c8da7f74350254
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
-    # backport of zlib patches, can be dropped for v>15.0.3, see
-    # https://reviews.llvm.org/D135457 & https://reviews.llvm.org/D136065
-    - patches/0002-CMake-Fix-Findzstd-module-for-shared-DLL-on-Windows.patch
-    - patches/no-windows-symlinks.patch
+    - patches/0002-Always-copy-on-windows.patch
 
 build:
-  number: 1
+  number: 0
   merge_build_host: false
 
 requirements:
@@ -35,12 +32,12 @@ requirements:
     - backtrace                          # [unix and x86]
     - libxml2
     - zlib
-    - zstd                               # [build_platform == target_platform]
+    - zstd
 
 outputs:
   # Contains everything
   - name: llvmdev
-    script: install_llvm.sh  # [not win]
+    script: install_llvm.sh   # [not win]
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
@@ -80,7 +77,7 @@ outputs:
     script: install_llvm.sh  # [not win]
     build:
       activate_in_script: true
-      run_exports:   # [not win]
+      run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
@@ -93,7 +90,7 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - libxml2
         - zlib
-        - zstd                                 # [build_platform == target_platform]
+        - zstd
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
@@ -104,7 +101,7 @@ outputs:
   # for run_exports
   - name: llvm
     build:
-      run_exports:   # [not win]
+      run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
@@ -112,10 +109,10 @@ outputs:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
         - libxml2
         - zlib
-        - zstd                                                        # [build_platform == target_platform]
-      run:   # [not win]
+        - zstd
+      run:                                                            # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
-      run_constrained:   # [not win]
+      run_constrained:                                                # [not win]
         - llvmdev   {{ version }}                                     # [not win]
     test:
       commands:
@@ -139,7 +136,7 @@ outputs:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - libxml2
         - zlib
-        - zstd     # [build_platform == target_platform]
+        - zstd
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
       run_constrained:
