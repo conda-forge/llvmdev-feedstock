@@ -14,9 +14,10 @@ source:
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     - patches/0002-Always-copy-on-windows.patch
+    - patches/0003-restore-macos-10.9-support.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
