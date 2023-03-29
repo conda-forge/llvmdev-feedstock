@@ -43,7 +43,7 @@ requirements:
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
     - zlib
-    - libxml2      # [win]
+    - libxml2 2.10 # [win]
     - libffi 3.4   # [unix]
 
 outputs:
@@ -139,7 +139,7 @@ outputs:
         - python >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libxml2   # [win]
+        - libxml2 2.10  # [win]
         - zlib
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
