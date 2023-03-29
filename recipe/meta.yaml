@@ -19,7 +19,7 @@ source:
     - patches/MSVC_DIA_SDK_path_fix.diff  # [win]
 
 build:
-  number: 1
+  number: 2
   merge_build_host: false
 
 requirements:
@@ -42,7 +42,7 @@ requirements:
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
     - zlib
-    - libxml2      # [win]
+    - libxml2 2.10 # [win]
     - libffi 3.4   # [unix]
 
 outputs:
@@ -138,7 +138,7 @@ outputs:
         - python >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libxml2   # [win]
+        - libxml2 2.10  # [win]
         - zlib
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
