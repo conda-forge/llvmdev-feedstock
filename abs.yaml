@@ -1,5 +1,4 @@
-channels:
- dp_test: libxml2_buildout
+# the conda-build parameters to use for disabling --skip-existing
 build_parameters:
-  - "--suppress-variables"
-  - "--error-overlinking"
+  - ""
+
