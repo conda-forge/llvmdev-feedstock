@@ -42,7 +42,7 @@ requirements:
     - m2-git      # [win]
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
-    - zlib
+    - zlib 1.2.13
     - libxml2 2.10 # [win]
     - libffi 3.4   # [unix]
 
@@ -63,7 +63,7 @@ outputs:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - zlib
+        - zlib 1.2.13
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
@@ -94,7 +94,7 @@ outputs:
         - python >=3             # [not win]
       host:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
-        - zlib
+        - zlib 1.2.13
         - libffi 3.4  # [unix]
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
@@ -115,7 +115,7 @@ outputs:
       build:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
-        - zlib
+        - zlib 1.2.13
       run:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
       run_constrained:             # [not win]
@@ -140,7 +140,7 @@ outputs:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - libxml2 2.10  # [win]
-        - zlib
+        - zlib 1.2.13
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
       run_constrained:
