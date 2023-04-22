@@ -9,7 +9,7 @@ channel_targets:
 cxx_compiler:
 - clang_bootstrap
 cxx_compiler_version:
-- '14'
+- '15'
 libxml2:
 - '2.10'
 macos_machine:
