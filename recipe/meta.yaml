@@ -17,7 +17,7 @@ source:
     - patches/0003-restore-macos-10.9-support.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
@@ -155,7 +155,10 @@ outputs:
       activate_in_script: true
       skip: true  # [not linux64]
       entry_points:
+        # upstream LLVM is inconsistent; there's one way specified in lit's setup.py...
         - lit = lit.main:main
+        # ... and then the CMake files we install here (e.g. AddLLVM.cmake) look for another
+        - llvm-lit = lit.main:main
     requirements:
       host:
         - python >=3
@@ -167,6 +170,7 @@ outputs:
         - lit
       commands:
         - lit -h
+        - llvm-lit -h
 
 about:
   home: http://llvm.org/
