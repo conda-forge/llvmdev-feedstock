@@ -55,6 +55,8 @@ outputs:
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - libcxx >={{ cxx_compiler_version }}                           # [osx]
     test:
+      requires:
+        - ripgrep  # [win]
       commands:
         - $PREFIX/bin/llvm-config --libs                                # [not win]
         - test -f $PREFIX/include/llvm/Pass.h                           # [not win]
@@ -62,6 +64,11 @@ outputs:
         - $PREFIX/libexec/llvm/not false                                # [not win]
         - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1               # [win]
         - if not exist "%LIBRARY_PREFIX%"\\libexec\llvm\not.exe exit 1  # [win]
+
+        # ensure we've correctly inserted %VSINSTALLDIR% into the CMake metadata for LLVM;
+        # we're looking for: `INTERFACE_LINK_LIBRARIES "%VSINSTALLDIR%/DIA SDK/lib/amd64/diaguids.lib;[...]`
+        # `%` in the regex gets messed up by batch execution (even if escaped), use `.` instead
+        - rg -e "INTERFACE_LINK_LIBRARIES\s\".VSINSTALLDIR.[/\w\s]+/diaguids\.lib" %LIBRARY_LIB%\cmake\llvm\LLVMExports.cmake  # [win]
 
   # Contains the shared libraries. To make different LLVM libraries co-installable
   # soversion is appended to the package name.
