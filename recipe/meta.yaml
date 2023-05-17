@@ -16,7 +16,7 @@ source:
     - patches/no-windows-symlinks.patch
 
 build:
-  number: 1
+  number: 2
   merge_build_host: false
 
 requirements:
@@ -45,6 +45,7 @@ outputs:
         - cmake
         - ninja
         - python >=3
+        - m2-sed  # [win]
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
@@ -54,6 +55,8 @@ outputs:
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - libcxx >={{ cxx_compiler_version }}                           # [osx]
     test:
+      requires:
+        - ripgrep  # [win]
       commands:
         - $PREFIX/bin/llvm-config --libs                                # [not win]
         - test -f $PREFIX/include/llvm/Pass.h                           # [not win]
@@ -61,6 +64,10 @@ outputs:
         - $PREFIX/libexec/llvm/not false                                # [not win]
         - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1               # [win]
         - if not exist "%LIBRARY_PREFIX%"\\libexec\llvm\not.exe exit 1  # [win]
+
+        # ensure we've correctly inserted %VSINSTALLDIR% into the CMake metadata for LLVM;
+        # we're looking for: `INTERFACE_LINK_LIBRARIES "$ENV{VSINSTALLDIR}/DIA SDK/lib/amd64/diaguids.lib;[...]`instead
+        - rg -e "INTERFACE_LINK_LIBRARIES\s\"\$ENV\{VSINSTALLDIR\}[/\w\s]+/diaguids\.lib" %LIBRARY_LIB%\cmake\llvm\LLVMExports.cmake  # [win]
 
   # Contains the shared libraries. To make different LLVM libraries co-installable
   # soversion is appended to the package name.
@@ -140,7 +147,10 @@ outputs:
       activate_in_script: true
       skip: true  # [not linux64]
       entry_points:
+        # upstream LLVM is inconsistent; there's one way specified in lit's setup.py...
         - lit = lit.main:main
+        # ... and then the CMake files we install here (e.g. AddLLVM.cmake) look for another
+        - llvm-lit = lit.main:main
     requirements:
       host:
         - python >=3
@@ -152,6 +162,7 @@ outputs:
         - lit
       commands:
         - lit -h
+        - llvm-lit -h
 
 about:
   home: http://llvm.org/
@@ -171,3 +182,4 @@ extra:
     - timsnyder
     - xhochy
     - h-vetinari
+  feedstock-name: llvmdev
