@@ -1,7 +1,7 @@
 From a0894cfa644fa50242fc655b7d2f8bed43d52f3c Mon Sep 17 00:00:00 2001
 From: Graham Markall <gmarkall@nvidia.com>
 Date: Mon, 3 Apr 2023 11:15:36 -0700
-Subject: [PATCH 3/3] [RuntimeDyld] RuntimeDyldELF: Clear GOTOffsetMap when
+Subject: [PATCH 3/4] [RuntimeDyld] RuntimeDyldELF: Clear GOTOffsetMap when
  resetting GOT section.
 
 When the GOT section ID is reset, the GOTOffsetMap must also be cleared,
