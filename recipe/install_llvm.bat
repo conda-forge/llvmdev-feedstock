@@ -17,5 +17,5 @@ if "%PKG_NAME%" == "llvm-tools" (
     REM and gets hardcoded by CMake to point to the path in our windows image.
     REM This makes it non-portable between image versions (e.g. 2019 vs 2022), so replace
     REM the hardcoded path with a variable again
-    sed -i "s,C:/Program Files/Microsoft Visual Studio/2022/Enterprise,%%VSINSTALLDIR%%,g" %LIBRARY_LIB%\cmake\llvm\LLVMExports.cmake
+    sed -i "s,C:/Program Files/Microsoft Visual Studio/2022/Enterprise,$ENV{VSINSTALLDIR},g" %LIBRARY_LIB%\cmake\llvm\LLVMExports.cmake
 )
