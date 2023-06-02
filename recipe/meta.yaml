@@ -14,9 +14,10 @@ source:
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     - patches/no-windows-symlinks.patch
+    - patches/0001-RuntimeDyld-RuntimeDyldELF-Clear-GOTOffsetMap-when-r.patch
 
 build:
-  number: 2
+  number: 3
   merge_build_host: false
 
 requirements:
