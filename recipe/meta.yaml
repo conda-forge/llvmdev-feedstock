@@ -1,5 +1,6 @@
 {% set version = "17.0.0.dev0" %}
 {% set major_ver = version.split(".")[0] %}
+{% set git = "git" if version.split(".")[-1] == "dev0" else "" %}
 
 package:
   name: llvm-package
@@ -104,7 +105,8 @@ outputs:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
-        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}${SHLIB_EXT}     # [not win]
+        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ git }}.so     # [linux]
+        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ git }}.dylib  # [osx]
 
   # This is a meta package so that people can use the latest libllvm and also
   # for run_exports
