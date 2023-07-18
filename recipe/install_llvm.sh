@@ -6,6 +6,11 @@ ninja install
 
 IFS='.' read -ra VER_ARR <<< "$PKG_VERSION"
 
+VER_MAJOR=${VER_ARR[0]}
+if [[ "${PKG_VERSION}" == *dev0 ]]; then
+    SOVER_EXT="${VER_MAJOR}git"
+fi
+
 if [[ "${PKG_NAME}" == libllvm* ]]; then
     rm -rf $PREFIX/bin
     rm -rf $PREFIX/include
@@ -13,9 +18,9 @@ if [[ "${PKG_NAME}" == libllvm* ]]; then
     rm -rf $PREFIX/libexec
     mv $PREFIX/lib $PREFIX/lib2
     mkdir -p $PREFIX/lib
-    mv $PREFIX/lib2/libLLVM-${VER_ARR[0]}${SHLIB_EXT} $PREFIX/lib
-    mv $PREFIX/lib2/lib*.so.${VER_ARR[0]} $PREFIX/lib || true
-    mv $PREFIX/lib2/lib*.${VER_ARR[0]}.dylib $PREFIX/lib || true
+    mv $PREFIX/lib2/libLLVM-${SOVER_EXT}${SHLIB_EXT} $PREFIX/lib
+    mv $PREFIX/lib2/lib*.so.${SOVER_EXT} $PREFIX/lib || true
+    mv $PREFIX/lib2/lib*.${SOVER_EXT}.dylib $PREFIX/lib || true
     rm -rf $PREFIX/lib2
 elif [[ "${PKG_NAME}" == "llvm-tools" ]]; then
     rm -rf $PREFIX/lib

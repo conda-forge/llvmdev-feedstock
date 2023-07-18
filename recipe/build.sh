@@ -69,5 +69,5 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
   ninja -j${CPU_COUNT} check-llvm
 
   cd ../llvm/test
-  ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
+  python ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
 fi
