@@ -19,8 +19,6 @@ if [[ "$CC_FOR_BUILD" != "" && "$CC_FOR_BUILD" != "$CC" ]]; then
   CMAKE_ARGS="${CMAKE_ARGS} -DCROSS_TOOLCHAIN_FLAGS_NATIVE=${NATIVE_FLAGS}"
 fi
 
-CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_HOST_TRIPLE=${CONDA_TOOLCHAIN_HOST} -DLLVM_DEFAULT_TARGET_TRIPLE=${CONDA_TOOLCHAIN_HOST}"
-
 # disable -fno-plt due to https://bugs.llvm.org/show_bug.cgi?id=51863 due to some GCC bug
 if [[ "$target_platform" == "linux-ppc64le" ]]; then
   CFLAGS="$(echo $CFLAGS | sed 's/-fno-plt //g')"
@@ -37,6 +35,8 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DLLVM_ENABLE_TERMINFO=OFF \
       -DLLVM_ENABLE_ZLIB=FORCE_ON \
       -DLLVM_ENABLE_ZSTD=FORCE_ON \
+      -DLLVM_DEFAULT_TARGET_TRIPLE=${CONDA_TOOLCHAIN_HOST} \
+      -DLLVM_HOST_TRIPLE=${CONDA_TOOLCHAIN_HOST} \
       -DLLVM_INCLUDE_BENCHMARKS=OFF \
       -DLLVM_INCLUDE_DOCS=OFF \
       -DLLVM_INCLUDE_EXAMPLES=OFF \
