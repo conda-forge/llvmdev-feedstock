@@ -9,15 +9,16 @@ source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
   sha256: 8b3cfd7bc695bd6cea0f37f53f0981f34f87496e79e2529874fd03a2f9dd3a8a
   patches:
-    # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
-    # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
-    - patches/no-windows-symlinks.patch
-    - patches/0001-RuntimeDyld-RuntimeDyldELF-Clear-GOTOffsetMap-when-r.patch
+    - patches/0002-Always-copy-on-windows.patch
+    # backport https://reviews.llvm.org/D146938 to unblock numba on aarch
+    - patches/0003-RuntimeDyld-RuntimeDyldELF-Clear-GOTOffsetMap-when-r.patch
+    # Discussion about upstreaming: https://discourse.llvm.org/t/x86-finalizing-svml-support-in-llvm/70977
+    - patches/0004-Fixes-vectorizer-and-extends-SVML-support.patch
 
 build:
-  number: 3
+  number: 4
   merge_build_host: false
 
 requirements:
