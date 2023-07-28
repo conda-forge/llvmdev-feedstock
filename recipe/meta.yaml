@@ -14,6 +14,7 @@ source:
     - patches/0002-Always-copy-on-windows.patch
     # backport https://reviews.llvm.org/D146938 to unblock numba on aarch
     - patches/0003-RuntimeDyld-RuntimeDyldELF-Clear-GOTOffsetMap-when-r.patch
+    # Discussion about upstreaming: https://discourse.llvm.org/t/x86-finalizing-svml-support-in-llvm/70977
     - patches/0004-Fixes-vectorizer-and-extends-SVML-support.patch
 
 build:
