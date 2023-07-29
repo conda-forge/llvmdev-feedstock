@@ -6,9 +6,11 @@ ninja install
 
 IFS='.' read -ra VER_ARR <<< "$PKG_VERSION"
 
-VER_MAJOR=${VER_ARR[0]}
+# default SOVER for tagged releases is just the major version
+SOVER_EXT=${VER_ARR[0]}
 if [[ "${PKG_VERSION}" == *dev0 ]]; then
-    SOVER_EXT="${VER_MAJOR}git"
+    # otherwise with git suffix
+    SOVER_EXT="${SOVER_EXT}git"
 fi
 
 if [[ "${PKG_NAME}" == libllvm* ]]; then
