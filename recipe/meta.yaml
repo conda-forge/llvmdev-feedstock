@@ -53,12 +53,14 @@ outputs:
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [osx or win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - libxml2
         - zlib
         - zstd
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [osx or win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - libcxx >={{ cxx_compiler_version }}                           # [osx]
     test:
@@ -154,6 +156,35 @@ outputs:
         - $PREFIX/bin/llc -version                               # [not win]
         - if not exist "%LIBRARY_BIN%"\\llc.exe exit 1           # [win]
         - llc -version                                           # [win]
+
+  # Contains LLVM-C shared library
+  - name: libllvm-c{{ major_ver }}
+    script: install_llvm.sh   # [unix]
+    script: install_llvm.bat  # [win]
+    build:
+      activate_in_script: true
+      # not supported on linux, see
+      # https://github.com/llvm/llvm-project/blob/llvmorg-16.0.6/llvm/tools/llvm-shlib/CMakeLists.txt#L82-L85
+      skip: true  # [linux]
+    requirements:
+      build:
+        - {{ compiler('cxx') }}
+        - cmake
+        - ninja
+        - libcxx {{ cxx_compiler_version }}  # [osx]
+      host:
+        - libcxx {{ cxx_compiler_version }}  # [osx]
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - libxml2
+        - zlib
+        - zstd
+      run_constrained:
+        - llvmdev {{ version }}
+    test:
+      commands:
+        - test -f $PREFIX/lib/libLLVM-C.{{ major_ver }}.dylib   # [osx]
+        - if not exist %LIBRARY_BIN%\LLVM-C.dll exit 1          # [win]
+        - if not exist %LIBRARY_LIB%\LLVM-C.lib exit 1          # [win]
 
   - name: lit
     build:

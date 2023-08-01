@@ -6,9 +6,13 @@ IFS='.' read -ra VER_ARR <<< "$PKG_VERSION"
 # temporary prefix to be able to install files more granularly
 mkdir temp_prefix
 
-if [[ "${PKG_NAME}" == libllvm* ]]; then
+if [[ "${PKG_NAME}" == libllvm-c* ]]; then
     cmake --install ./build --prefix=./temp_prefix
-    # all libraries
+    # only libLLVM-C
+    mv ./temp_prefix/lib/libLLVM-C${VER_ARR[0]}${SHLIB_EXT} $PREFIX/lib
+elif [[ "${PKG_NAME}" == libllvm* ]]; then
+    cmake --install ./build --prefix=./temp_prefix
+    # all other libraries
     mv ./temp_prefix/lib/libLLVM-${VER_ARR[0]}${SHLIB_EXT} $PREFIX/lib
     mv ./temp_prefix/lib/lib*.so.${VER_ARR[0]} $PREFIX/lib || true
     mv ./temp_prefix/lib/lib*.${VER_ARR[0]}.dylib $PREFIX/lib || true
