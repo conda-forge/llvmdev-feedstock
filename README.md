@@ -83,6 +83,7 @@ Current release info
 
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm--c16-green.svg)](https://anaconda.org/conda-forge/libllvm-c16) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm-c16.svg)](https://anaconda.org/conda-forge/libllvm-c16) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm-c16.svg)](https://anaconda.org/conda-forge/libllvm-c16) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm-c16.svg)](https://anaconda.org/conda-forge/libllvm-c16) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm16-green.svg)](https://anaconda.org/conda-forge/libllvm16) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm16.svg)](https://anaconda.org/conda-forge/libllvm16) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm16.svg)](https://anaconda.org/conda-forge/libllvm16) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm16.svg)](https://anaconda.org/conda-forge/libllvm16) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-lit-green.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvm-green.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) |
@@ -99,41 +100,41 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libllvm16, lit, llvm, llvm-tools, llvmdev` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `libllvm-c16, libllvm16, lit, llvm, llvm-tools, llvmdev` can be installed with `conda`:
 
 ```
-conda install libllvm16 lit llvm llvm-tools llvmdev
-```
-
-or with `mamba`:
-
-```
-mamba install libllvm16 lit llvm llvm-tools llvmdev
-```
-
-It is possible to list all of the versions of `libllvm16` available on your platform with `conda`:
-
-```
-conda search libllvm16 --channel conda-forge
+conda install libllvm-c16 libllvm16 lit llvm llvm-tools llvmdev
 ```
 
 or with `mamba`:
 
 ```
-mamba search libllvm16 --channel conda-forge
+mamba install libllvm-c16 libllvm16 lit llvm llvm-tools llvmdev
+```
+
+It is possible to list all of the versions of `libllvm-c16` available on your platform with `conda`:
+
+```
+conda search libllvm-c16 --channel conda-forge
+```
+
+or with `mamba`:
+
+```
+mamba search libllvm-c16 --channel conda-forge
 ```
 
 Alternatively, `mamba repoquery` may provide more information:
 
 ```
 # Search all versions available on your platform:
-mamba repoquery search libllvm16 --channel conda-forge
+mamba repoquery search libllvm-c16 --channel conda-forge
 
-# List packages depending on `libllvm16`:
-mamba repoquery whoneeds libllvm16 --channel conda-forge
+# List packages depending on `libllvm-c16`:
+mamba repoquery whoneeds libllvm-c16 --channel conda-forge
 
-# List dependencies of `libllvm16`:
-mamba repoquery depends libllvm16 --channel conda-forge
+# List dependencies of `libllvm-c16`:
+mamba repoquery depends libllvm-c16 --channel conda-forge
 ```
 
 
