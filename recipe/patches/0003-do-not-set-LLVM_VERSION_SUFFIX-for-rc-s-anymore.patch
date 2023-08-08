@@ -1,4 +1,4 @@
-From e9abf85fbe8f91e9144613d9bdf865b7b69b4471 Mon Sep 17 00:00:00 2001
+From 75e80526b68355b6124a922cee841f3a42b8bb06 Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Sun, 30 Jul 2023 09:46:00 +1100
 Subject: [PATCH 3/3] do not set LLVM_VERSION_SUFFIX for rc's anymore
@@ -9,14 +9,14 @@ see https://github.com/llvm/llvm-project/issues/64225
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/llvm/CMakeLists.txt b/llvm/CMakeLists.txt
-index 1a9ad06bdf8..6c1c6600771 100644
+index a9b85b433c75..6c1c6600771d 100644
 --- a/llvm/CMakeLists.txt
 +++ b/llvm/CMakeLists.txt
 @@ -18,7 +18,7 @@ if(NOT DEFINED LLVM_VERSION_PATCH)
    set(LLVM_VERSION_PATCH 0)
  endif()
  if(NOT DEFINED LLVM_VERSION_SUFFIX)
--  set(LLVM_VERSION_SUFFIX git)
+-  set(LLVM_VERSION_SUFFIX -rc1)
 +  set(LLVM_VERSION_SUFFIX)
  endif()
  
