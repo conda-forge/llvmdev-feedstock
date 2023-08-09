@@ -1,4 +1,4 @@
-From ac4fefa429551f7a789924235d5b6813216e0bc5 Mon Sep 17 00:00:00 2001
+From 3506041b5f318c3c6a2f9979db43f3c4a4ec109f Mon Sep 17 00:00:00 2001
 From: Isuru Fernando <isuruf@gmail.com>
 Date: Wed, 22 Mar 2023 12:25:49 -0500
 Subject: [PATCH 2/3] restore macos 10.9 support
@@ -10,7 +10,7 @@ just like Linux/Windows when macOS is version 10.9
  1 file changed, 23 insertions(+), 11 deletions(-)
 
 diff --git a/llvm/lib/Support/Unix/Threading.inc b/llvm/lib/Support/Unix/Threading.inc
-index 819748db4ec..2541a0ca8e5 100644
+index 819748db4ec2..2541a0ca8e5c 100644
 --- a/llvm/lib/Support/Unix/Threading.inc
 +++ b/llvm/lib/Support/Unix/Threading.inc
 @@ -276,19 +276,31 @@ SetThreadPriorityResult llvm::set_thread_priority(ThreadPriority Priority) {
