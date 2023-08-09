@@ -162,6 +162,8 @@ outputs:
     script: install_llvm.sh   # [unix]
     script: install_llvm.bat  # [win]
     build:
+      run_exports:
+        - {{ pin_subpackage("libllvm-c" + major_ver, max_pin="x.x") }}
       activate_in_script: true
       # not supported on linux, see
       # https://github.com/llvm/llvm-project/blob/llvmorg-16.0.6/llvm/tools/llvm-shlib/CMakeLists.txt#L82-L85
