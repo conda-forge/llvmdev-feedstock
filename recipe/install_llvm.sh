@@ -1,26 +1,31 @@
 #!/bin/bash
-set -x
-
-cd build
-ninja install
+set -ex
 
 IFS='.' read -ra VER_ARR <<< "$PKG_VERSION"
 
-if [[ "${PKG_NAME}" == libllvm* ]]; then
-    rm -rf $PREFIX/bin
-    rm -rf $PREFIX/include
-    rm -rf $PREFIX/share
-    rm -rf $PREFIX/libexec
-    mv $PREFIX/lib $PREFIX/lib2
-    mkdir -p $PREFIX/lib
-    mv $PREFIX/lib2/libLLVM-${VER_ARR[0]}${SHLIB_EXT} $PREFIX/lib
-    mv $PREFIX/lib2/lib*.so.${VER_ARR[0]} $PREFIX/lib || true
-    mv $PREFIX/lib2/lib*.${VER_ARR[0]}.dylib $PREFIX/lib || true
-    rm -rf $PREFIX/lib2
+# temporary prefix to be able to install files more granularly
+mkdir temp_prefix
+
+if [[ "${PKG_NAME}" == libllvm-c* ]]; then
+    cmake --install ./build --prefix=./temp_prefix
+    # only libLLVM-C
+    mv ./temp_prefix/lib/libLLVM-C${VER_ARR[0]}${SHLIB_EXT} $PREFIX/lib
+elif [[ "${PKG_NAME}" == libllvm* ]]; then
+    cmake --install ./build --prefix=./temp_prefix
+    # all other libraries
+    mv ./temp_prefix/lib/libLLVM-${VER_ARR[0]}${SHLIB_EXT} $PREFIX/lib
+    mv ./temp_prefix/lib/lib*.so.${VER_ARR[0]} $PREFIX/lib || true
+    mv ./temp_prefix/lib/lib*.${VER_ARR[0]}.dylib $PREFIX/lib || true
 elif [[ "${PKG_NAME}" == "llvm-tools" ]]; then
-    rm -rf $PREFIX/lib
-    rm -rf $PREFIX/include
+    cmake --install ./build --prefix=./temp_prefix
+    # everything in /bin & /share
+    mv ./temp_prefix/bin/* $PREFIX/bin
+    mv ./temp_prefix/share/* $PREFIX/share
+    # except one binary that belongs to llvmdev
     rm $PREFIX/bin/llvm-config
-    rm -rf $PREFIX/libexec
+else
+    # llvmdev: install everything else
+    cmake --install ./build --prefix=$PREFIX
 fi
 
+rm -rf temp_prefix
