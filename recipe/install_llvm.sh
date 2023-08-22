@@ -8,7 +8,10 @@ mkdir temp_prefix
 
 # default SOVER for tagged releases is just the major version
 SOVER_EXT=${VER_ARR[0]}
-if [[ "${PKG_VERSION}" == *dev0 ]]; then
+if [[ "${PKG_VERSION}" == *rc* ]]; then
+    # rc's get "rc" without the number
+    SOVER_EXT="${SOVER_EXT}rc"
+elif [[ "${PKG_VERSION}" == *dev0 ]]; then
     # otherwise with git suffix
     SOVER_EXT="${SOVER_EXT}git"
 fi
