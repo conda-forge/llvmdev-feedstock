@@ -169,7 +169,7 @@ outputs:
       activate_in_script: true
       # not supported on linux, see
       # https://github.com/llvm/llvm-project/blob/llvmorg-16.0.6/llvm/tools/llvm-shlib/CMakeLists.txt#L82-L85
-      # TODO osx currently (16.0.6) does not build: raise issue as soon as we've caught up to last release
+      # osx currently fails as well, see https://github.com/llvm/llvm-project/issues/64657
       skip: true  # [not win]
     requirements:
       build:
