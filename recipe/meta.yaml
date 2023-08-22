@@ -1,6 +1,9 @@
 {% set version = "17.0.0.rc3" %}
 {% set major_ver = version.split(".")[0] %}
-{% set git = "git" if version.split(".")[-1] == "dev0" else "" %}
+
+# as of LLVM 17, we expect an "rc" suffix for the release candidates
+{% set extra = "rc" if version.split(".")[-1] not in range(7) else "" %}
+{% set extra = "git" if version.split(".")[-1] == "dev0" else extra %}
 
 package:
   name: llvm-package
@@ -105,8 +108,8 @@ outputs:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
-        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ git }}.so     # [linux]
-        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ git }}.dylib  # [osx]
+        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.so     # [linux]
+        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.dylib  # [osx]
 
   # This is a meta package so that people can use the latest libllvm and also
   # for run_exports
