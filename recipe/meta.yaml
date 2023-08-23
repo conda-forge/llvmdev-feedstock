@@ -1,6 +1,9 @@
-{% set version = "17.0.0.rc2" %}
+{% set version = "17.0.0.rc3" %}
 {% set major_ver = version.split(".")[0] %}
-{% set git = "git" if version.split(".")[-1] == "dev0" else "" %}
+
+# as of LLVM 17, we expect an "rc" suffix for the release candidates
+{% set extra = "rc" if version.split(".")[-1] not in range(7) else "" %}
+{% set extra = "git" if version.split(".")[-1] == "dev0" else extra %}
 
 package:
   name: llvm-package
@@ -8,14 +11,13 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  sha256: 71c018a6c0d3f7ccfe66a8ea7a68281a256fcd3bc35099e61616a92dcbbf0859
+  sha256: 60493f4e974fcca7b739aea4901af2d957b0eaea34b42815359be59cf6c88fa2
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     - patches/0002-restore-macos-10.9-support.patch
-    - patches/0003-do-not-set-LLVM_VERSION_SUFFIX-for-rc-s-anymore.patch
 
 build:
   number: 0
@@ -54,12 +56,14 @@ outputs:
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - libxml2
         - zlib
-        - zstd     # [build_platform == target_platform]
+        - zstd
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - libcxx >={{ cxx_compiler_version }}                           # [osx]
     test:
@@ -104,8 +108,8 @@ outputs:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
-        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ git }}.so     # [linux]
-        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ git }}.dylib  # [osx]
+        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.so     # [linux]
+        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.dylib  # [osx]
 
   # This is a meta package so that people can use the latest libllvm and also
   # for run_exports
@@ -156,6 +160,38 @@ outputs:
         - $PREFIX/bin/llc -version                               # [not win]
         - if not exist "%LIBRARY_BIN%"\\llc.exe exit 1           # [win]
         - llc -version                                           # [win]
+
+  # Contains LLVM-C shared library
+  - name: libllvm-c{{ major_ver }}
+    script: install_llvm.sh   # [unix]
+    script: install_llvm.bat  # [win]
+    build:
+      run_exports:
+        - {{ pin_subpackage("libllvm-c" + major_ver, max_pin="x.x") }}
+      activate_in_script: true
+      # not supported on linux, see
+      # https://github.com/llvm/llvm-project/blob/llvmorg-16.0.6/llvm/tools/llvm-shlib/CMakeLists.txt#L82-L85
+      # osx currently fails as well, see https://github.com/llvm/llvm-project/issues/64657
+      skip: true  # [not win]
+    requirements:
+      build:
+        - {{ compiler('cxx') }}
+        - cmake
+        - ninja
+        - libcxx {{ cxx_compiler_version }}  # [osx]
+      host:
+        - libcxx {{ cxx_compiler_version }}  # [osx]
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - libxml2
+        - zlib
+        - zstd
+      run_constrained:
+        - llvmdev {{ version }}
+    test:
+      commands:
+        - test -f $PREFIX/lib/libLLVM-C.{{ major_ver }}.dylib   # [osx]
+        - if not exist %LIBRARY_BIN%\LLVM-C.dll exit 1          # [win]
+        - if not exist %LIBRARY_LIB%\LLVM-C.lib exit 1          # [win]
 
   - name: lit
     build:
