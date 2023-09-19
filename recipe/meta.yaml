@@ -18,6 +18,9 @@ source:
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     - patches/0002-restore-macos-10.9-support.patch
+    # backport https://github.com/llvm/llvm-project/commit/01f8ba70ac1c82590b63162ad6e410e787a871b0,
+    # which landed just after the 17.0.0 tag
+    - patches/0003-Remove-RC-suffix.patch
 
 build:
   number: 0

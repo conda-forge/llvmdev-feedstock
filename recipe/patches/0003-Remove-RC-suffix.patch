@@ -1,0 +1,22 @@
+From 76c2683487cb2a572087d2c841a869a13ba39524 Mon Sep 17 00:00:00 2001
+From: Tobias Hieta <tobias@hieta.se>
+Date: Tue, 19 Sep 2023 09:44:33 +0200
+Subject: [PATCH 3/3] Remove RC suffix
+
+---
+ llvm/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/llvm/CMakeLists.txt b/llvm/CMakeLists.txt
+index 3a591b112f55..6c1c6600771d 100644
+--- a/llvm/CMakeLists.txt
++++ b/llvm/CMakeLists.txt
+@@ -18,7 +18,7 @@ if(NOT DEFINED LLVM_VERSION_PATCH)
+   set(LLVM_VERSION_PATCH 0)
+ endif()
+ if(NOT DEFINED LLVM_VERSION_SUFFIX)
+-  set(LLVM_VERSION_SUFFIX rc)
++  set(LLVM_VERSION_SUFFIX)
+ endif()
+ 
+ if (NOT PACKAGE_VERSION)
