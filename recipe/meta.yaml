@@ -1,5 +1,9 @@
-{% set version = "16.0.6" %}
+{% set version = "17.0.0.rc3" %}
 {% set major_ver = version.split(".")[0] %}
+
+# as of LLVM 17, we expect an "rc" suffix for the release candidates
+{% set extra = "rc" if version.split(".")[-1] not in range(7) else "" %}
+{% set extra = "git" if version.split(".")[-1] == "dev0" else extra %}
 
 package:
   name: llvm-package
@@ -7,17 +11,16 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  sha256: ce5e71081d17ce9e86d7cbcfa28c4b04b9300f8fb7e78422b1feb6bc52c3028e
+  sha256: 60493f4e974fcca7b739aea4901af2d957b0eaea34b42815359be59cf6c88fa2
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
-    - patches/0002-Always-copy-on-windows.patch
-    - patches/0003-restore-macos-10.9-support.patch
+    - patches/0002-restore-macos-10.9-support.patch
 
 build:
-  number: 2
+  number: 0
   merge_build_host: false
 
 requirements:
@@ -38,7 +41,7 @@ requirements:
 outputs:
   # Contains everything
   - name: llvmdev
-    script: install_llvm.sh  # [not win]
+    script: install_llvm.sh   # [unix]
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
@@ -87,7 +90,7 @@ outputs:
     script: install_llvm.sh  # [not win]
     build:
       activate_in_script: true
-      run_exports:   # [not win]
+      run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
@@ -105,13 +108,14 @@ outputs:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
-        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}${SHLIB_EXT}     # [not win]
+        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.so     # [linux]
+        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.dylib  # [osx]
 
   # This is a meta package so that people can use the latest libllvm and also
   # for run_exports
   - name: llvm
     build:
-      run_exports:   # [not win]
+      run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
@@ -120,9 +124,9 @@ outputs:
         - libxml2
         - zlib
         - zstd
-      run:   # [not win]
+      run:                                                            # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
-      run_constrained:   # [not win]
+      run_constrained:                                                # [not win]
         - llvmdev   {{ version }}                                     # [not win]
     test:
       commands:
@@ -130,7 +134,7 @@ outputs:
 
   # Contains LLVM tools
   - name: llvm-tools
-    script: install_llvm.sh  # [not win]
+    script: install_llvm.sh   # [unix]
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
@@ -167,7 +171,7 @@ outputs:
       activate_in_script: true
       # not supported on linux, see
       # https://github.com/llvm/llvm-project/blob/llvmorg-16.0.6/llvm/tools/llvm-shlib/CMakeLists.txt#L82-L85
-      # TODO osx currently (16.0.6) does not build: raise issue as soon as we've caught up to last release
+      # osx currently fails as well, see https://github.com/llvm/llvm-project/issues/64657
       skip: true  # [not win]
     requirements:
       build:
