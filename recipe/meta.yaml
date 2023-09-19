@@ -2,7 +2,7 @@
 {% set major_ver = version.split(".")[0] %}
 
 # as of LLVM 17, we expect an "rc" suffix for the release candidates
-{% set extra = "rc" if version.split(".")[-1] not in range(7) else "" %}
+{% set extra = "rc" if version.split(".")[-1]|int not in range(7) else "" %}
 {% set extra = "git" if version.split(".")[-1] == "dev0" else extra %}
 
 package:
