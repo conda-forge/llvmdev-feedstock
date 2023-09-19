@@ -1,4 +1,4 @@
-{% set version = "17.0.0" %}
+{% set version = "17.0.1" %}
 {% set major_ver = version.split(".")[0] %}
 
 # as of LLVM 17, we expect an "rc" suffix for the release candidates
@@ -11,16 +11,13 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  sha256: e71ba1f238c47d6cc6a747ce3a407bfd0c3bf81cd7e10ba88b45c47f740efcbd
+  sha256: b0e42aafc01ece2ca2b42e3526f54bebc4b1f1dc8de6e34f46a0446a13e882b9
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     - patches/0002-restore-macos-10.9-support.patch
-    # backport https://github.com/llvm/llvm-project/commit/01f8ba70ac1c82590b63162ad6e410e787a871b0,
-    # which landed just after the 17.0.0 tag
-    - patches/0003-Remove-RC-suffix.patch
 
 build:
   number: 0
