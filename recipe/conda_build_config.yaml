@@ -5,3 +5,12 @@ cxx_compiler:          # [osx]
 
 MACOSX_SDK_VERSION:    # [osx and x86_64]
   - 10.12              # [osx and x86_64]
+
+# NOTE: compilation with clang-16 on
+# osx x86_64 results in undefined symbols.
+# Let us pin clang to version 15 as a
+# workaround for the time being.
+c_compiler_version:     # [osx and x86_64]
+  - 15                  # [osx and x86_64]
+cxx_compiler_version:   # [osx and x86_64]
+  - 15                  # [osx and x86_64]
