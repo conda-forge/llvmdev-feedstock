@@ -23,7 +23,7 @@ source:
     - patches/0003-ORC-Use-EPC-bootstrap-symbols-to-communicate-eh-fram.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
