@@ -23,7 +23,7 @@ source:
     - patches/0003-ORC-Use-EPC-bootstrap-symbols-to-communicate-eh-fram.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
@@ -69,6 +69,11 @@ outputs:
         - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - libcxx >={{ cxx_compiler_version }}                           # [osx]
+      run_constrained:
+        - llvm        {{ version }}
+        - llvm-tools  {{ version }}
+        - clang       {{ version }}
+        - clang-tools {{ version }}
     test:
       requires:
         - ripgrep  # [win]
@@ -129,8 +134,11 @@ outputs:
         - zstd
       run:                                                            # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
-      run_constrained:                                                # [not win]
-        - llvmdev   {{ version }}                                     # [not win]
+      run_constrained:
+        - llvmdev     {{ version }}
+        - llvm-tools  {{ version }}
+        - clang       {{ version }}
+        - clang-tools {{ version }}
     test:
       commands:
         - echo "Hello World!"
@@ -157,7 +165,10 @@ outputs:
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
       run_constrained:
-        - llvmdev   {{ version }}
+        - llvm        {{ version }}
+        - llvmdev     {{ version }}
+        - clang       {{ version }}
+        - clang-tools {{ version }}
     test:
       commands:
         - $PREFIX/bin/llc -version                               # [not win]
