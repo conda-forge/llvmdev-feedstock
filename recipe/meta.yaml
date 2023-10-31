@@ -1,4 +1,4 @@
-{% set version = "17.0.3" %}
+{% set version = "17.0.4" %}
 {% set major_ver = version.split(".")[0] %}
 
 # as of LLVM 17, we expect an "rc" suffix for the release candidates
@@ -11,7 +11,7 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  sha256: be5a1e44d64f306bb44fce7d36e3b3993694e8e6122b2348608906283c176db8
+  sha256: a225eb96f52e7d8c6c275b351fcc66d7a21d925eecff53730900404f244ff16a
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
@@ -23,7 +23,7 @@ source:
     - patches/0003-ORC-Use-EPC-bootstrap-symbols-to-communicate-eh-fram.patch
 
 build:
-  number: 1
+  number: 0
   merge_build_host: false
 
 requirements:
