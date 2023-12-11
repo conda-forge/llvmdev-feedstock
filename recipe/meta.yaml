@@ -10,6 +10,9 @@ source:
   sha256: 58a8818c60e6627064f312dbf46c02d9949956558340938b71cf731ad8bc0813
   patches:
     - patches/0002-restore-macos-10.9-support.patch
+    # These two patches remove expected test failures.
+    - patches/0004-remove-unsupported-intrinsic-test.patch
+    - patches/0005-remove-permission-based-unit-tests.patch
     # This patches cmake code which isn't hit in the current configuration, however it's kept in case we want to build
     # libllvm-c in the future
     - patches/osx_ver.patch
@@ -71,12 +74,15 @@ outputs:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
-        - $PREFIX/bin/llvm-config --libs                   # [not win]
-        - test -f $PREFIX/include/llvm/Pass.h              # [not win]
-        - test -f $PREFIX/lib/libLLVMCore.a                # [not win]
-        - $PREFIX/libexec/llvm/not false                   # [not win]
-        - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1  # [win]
+        - $PREFIX/bin/llvm-config --libs                                 # [not win]
+        - test -f $PREFIX/include/llvm/Pass.h                           # [not win]
+        - test -f $PREFIX/lib/libLLVMCore.a                             # [not win]
+        - $PREFIX/libexec/llvm/not false                                # [not win]
+        - $PREFIX/bin/llvm-nm --help                                    # [not win]
+        - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1               # [win]
         - if not exist "%LIBRARY_PREFIX%"\\libexec\llvm\not.exe exit 1  # [win]
+        - if not exist "%LIBRARY_BIN%"\\llvm-nm.exe exit 1              # [win]
+        - llvm-nm.exe --help                                            # [win]
 
   # Contains the shared libraries. To make different LLVM libraries co-installable
   # soversion is appended to the package name.
@@ -177,8 +183,12 @@ outputs:
     test:
       imports:
         - lit
+      requires:
+        - pip
       commands:
+        - pip check
         - lit -h
+        - llvm-lit -h
 
 about:
   home: https://llvm.org/

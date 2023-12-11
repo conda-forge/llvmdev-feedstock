@@ -2,3 +2,8 @@
 build_parameters:
   - ""
 
+# Four unit tests crash on big sur builders, but not ventura.
+# These tests call /usr/lib/system/libsystem_pthread.dylib
+# before crashing.
+extra_labels_for_os:
+  osx-arm64: [ventura]
