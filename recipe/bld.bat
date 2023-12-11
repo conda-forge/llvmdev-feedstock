@@ -27,6 +27,7 @@ cmake -G "Ninja" ^
     -DLLVM_UTILS_INSTALL_DIR=libexec\llvm ^
     -DLLVM_BUILD_LLVM_C_DYLIB=no ^
     -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly ^
+    -DCMAKE_POLICY_DEFAULT_CMP0111=NEW ^
     %SRC_DIR%/llvm
 if %ERRORLEVEL% neq 0 exit 1
 
