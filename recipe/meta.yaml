@@ -166,7 +166,10 @@ outputs:
       script: python -m pip install llvm/utils/lit --no-deps --no-build-isolation -vv
       skip: true  # [py<30]
       entry_points:
+        # upstream LLVM is inconsistent; there's one way specified in lit's setup.py...
         - lit = lit.main:main
+        # ... and then the CMake files we install here (e.g. AddLLVM.cmake) look for another
+        - llvm-lit = lit.main:main
     requirements:
       host:
         - python
