@@ -39,9 +39,11 @@ requirements:
     - m2-git      # [win]
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
-    - zlib 1.2.13
-    - libxml2 2.10 # [win]
-    - libffi 3.4   # [unix]
+    - libffi {{ libffi }}   # [unix]
+    # libxml2 supports a windows-only feature, see https://github.com/llvm/llvm-project/blob/llvmorg-17.0.6/llvm/include/llvm/WindowsManifest/WindowsManifestMerger.h
+    - libxml2 {{ libxml2 }}  # [win]
+    - zlib {{ zlib }}
+    - zstd {{ zstd }}
 
 outputs:
   # Contains everything
@@ -60,7 +62,9 @@ outputs:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - zlib 1.2.13
+        - libxml2 {{ libxml2 }}  # [win]
+        - zlib {{ zlib }}
+        - zstd {{ zstd }}
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
@@ -90,12 +94,14 @@ outputs:
         - cmake                  # [not win]
         - python >=3             # [not win]
       host:
-        - libcxx >={{ cxx_compiler_version }}  # [osx]
-        - zlib 1.2.13
-        - libffi 3.4  # [unix]
+        - libcxx {{ cxx_compiler_version }}  # [osx]
+        - libffi {{ libffi }}  # [unix]
+        - libxml2 {{ libxml2 }}  # [win]
+        - zlib {{ zlib }}
+        - zstd {{ zstd }}
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
-        - libffi >=3.4,<3.5  # [unix]
+        - {{ pin_compatible('libffi', max_pin='x.x') }}  # [unix]
         - zlib    # [osx]
     test:
       commands:
@@ -112,7 +118,9 @@ outputs:
       build:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
-        - zlib 1.2.13
+        - libxml2 {{ libxml2 }}  # [win]
+        - zlib {{ zlib }}
+        - zstd {{ zstd }}
       run:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
       run_constrained:             # [not win]
@@ -136,10 +144,13 @@ outputs:
         - python >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libxml2 2.10  # [win]
-        - zlib 1.2.13
+        - libxml2 {{ libxml2 }}  # [win]
+        - zlib {{ zlib }}
+        - zstd {{ zstd }}
+        - libcxx {{ cxx_compiler_version }}  # [osx]
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - libcxx >={{ cxx_compiler_version }}  # [osx]
       run_constrained:
         - llvmdev   {{ version }}
     test:
