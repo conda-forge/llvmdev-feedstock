@@ -4,11 +4,11 @@ when the LLVMExports.cmake file was generated.
 This is problematic, as the path was machine-specific,
 and therefore may not exist, even if the DIA SDK is available.
 
-diff --git a/llvm/lib/DebugInfo/PDB/CMakeLists.txt b/llvm/lib/DebugInfo/PDB/CMakeLists.txt
-index 9088bc86f668..fd7523e91bb5 100644
---- a/llvm/lib/DebugInfo/PDB/CMakeLists.txt
-+++ b/llvm/lib/DebugInfo/PDB/CMakeLists.txt
-@@ -4,17 +4,7 @@ macro(add_pdb_impl_folder group)
+Index: llvm-project/llvm/lib/DebugInfo/PDB/CMakeLists.txt
+===================================================================
+--- llvm-project.orig/llvm/lib/DebugInfo/PDB/CMakeLists.txt	2023-10-31 15:14:12.511846472 -0500
++++ llvm-project/llvm/lib/DebugInfo/PDB/CMakeLists.txt	2023-10-31 15:33:18.887437203 -0500
+@@ -4,17 +4,7 @@
  endmacro()
  
  if(LLVM_ENABLE_DIA_SDK)
@@ -27,7 +27,7 @@ index 9088bc86f668..fd7523e91bb5 100644
  
    add_pdb_impl_folder(DIA
      DIA/DIADataStream.cpp
-@@ -150,4 +140,7 @@ add_llvm_component_library(LLVMDebugInfo
+@@ -153,4 +143,7 @@
    DebugInfoMSF
    )
  
@@ -36,11 +36,11 @@ index 9088bc86f668..fd7523e91bb5 100644
 +  target_link_libraries(LLVMDebugInfoPDB INTERFACE MSVC_diaguids)
 +endif()
 +
-diff --git a/llvm/cmake/modules/LLVMConfig.cmake.in b/llvm/cmake/modules/LLVMConfig.cmake.in
-index 4d8e33711d27..73bb7200f29b 100644
---- a/llvm/cmake/modules/LLVMConfig.cmake.in
-+++ b/llvm/cmake/modules/LLVMConfig.cmake.in
-@@ -133,6 +133,10 @@ set(LLVM_LIT_ARGS "@LLVM_LIT_ARGS@")
+Index: llvm-project/llvm/cmake/modules/LLVMConfig.cmake.in
+===================================================================
+--- llvm-project.orig/llvm/cmake/modules/LLVMConfig.cmake.in	2023-10-31 15:15:37.491076023 -0500
++++ llvm-project/llvm/cmake/modules/LLVMConfig.cmake.in	2023-10-31 15:33:18.887757077 -0500
+@@ -145,6 +145,10 @@
  
  set(LLVM_HAVE_LIBXAR "@LLVM_HAVE_LIBXAR@")
  
@@ -51,11 +51,10 @@ index 4d8e33711d27..73bb7200f29b 100644
  if(NOT TARGET LLVMSupport)
    @LLVM_CONFIG_INCLUDE_EXPORTS@
    @llvm_config_include_buildtree_only_exports@
-diff --git a/llvm/cmake/modules/AddDIA.cmake b/llvm/cmake/modules/AddDIA.cmake
-new file mode 100644
-index 000000000000..261b68a4c31d
---- /dev/null
-+++ b/llvm/cmake/modules/AddDIA.cmake
+Index: llvm-project/llvm/cmake/modules/AddDIA.cmake
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ llvm-project/llvm/cmake/modules/AddDIA.cmake	2023-10-31 15:33:18.888018159 -0500
 @@ -0,0 +1,23 @@
 +# Allows LLVMDebugInfoPDB to import the DIA SDK as a library target.
 +

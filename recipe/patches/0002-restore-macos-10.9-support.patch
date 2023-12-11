@@ -1,0 +1,58 @@
+From 5a0157c1ec9881737279adab8fdfd5482d45c781 Mon Sep 17 00:00:00 2001
+From: Isuru Fernando <isuruf@gmail.com>
+Date: Wed, 22 Mar 2023 12:25:49 -0500
+Subject: [PATCH 2/3] restore macos 10.9 support
+
+ThreadPriority::Low is mapped to ThreadPriority::Background
+just like Linux/Windows when macOS is version 10.9
+---
+ llvm/lib/Support/Unix/Threading.inc | 34 +++++++++++++++++++----------
+ 1 file changed, 23 insertions(+), 11 deletions(-)
+
+diff --git a/llvm/lib/Support/Unix/Threading.inc b/llvm/lib/Support/Unix/Threading.inc
+index 819748db4ec2..2541a0ca8e5c 100644
+--- a/llvm/lib/Support/Unix/Threading.inc
++++ b/llvm/lib/Support/Unix/Threading.inc
+@@ -276,19 +276,31 @@ SetThreadPriorityResult llvm::set_thread_priority(ThreadPriority Priority) {
+   // minutes to complete. Examples include downloading a document or importing
+   // data. This class offers a balance between responsiveness, performance, and
+   // energy efficiency.
+-  const auto qosClass = [&]() {
+-    switch (Priority) {
+-    case ThreadPriority::Background:
+-      return QOS_CLASS_BACKGROUND;
+-    case ThreadPriority::Low:
+-      return QOS_CLASS_UTILITY;
+-    case ThreadPriority::Default:
+-      return QOS_CLASS_DEFAULT;
+-    }
+-  }();
+-  return !pthread_set_qos_class_self_np(qosClass, 0)
++#if __has_builtin(__builtin_available)
++  if (__builtin_available(macos 10.10, *)) {
++    const auto qosClass = [&]() {
++      switch (Priority) {
++      case ThreadPriority::Background:
++        return QOS_CLASS_BACKGROUND;
++      case ThreadPriority::Low:
++        return QOS_CLASS_UTILITY;
++      case ThreadPriority::Default:
++        return QOS_CLASS_DEFAULT;
++      }
++    }();
++    return !pthread_set_qos_class_self_np(qosClass, 0)
++               ? SetThreadPriorityResult::SUCCESS
++               : SetThreadPriorityResult::FAILURE;
++  } else {
++#endif
++    return !setpriority(PRIO_DARWIN_THREAD, 0,
++                      Priority != ThreadPriority::Default ? PRIO_DARWIN_BG
++                                                             : 0)
+              ? SetThreadPriorityResult::SUCCESS
+              : SetThreadPriorityResult::FAILURE;
++#if __has_builtin(__builtin_available)
++  }
++#endif
+ #endif
+   return SetThreadPriorityResult::FAILURE;
+ }

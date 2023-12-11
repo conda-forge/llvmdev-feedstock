@@ -9,15 +9,12 @@ source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
   sha256: 58a8818c60e6627064f312dbf46c02d9949956558340938b71cf731ad8bc0813
   patches:
-    # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
-    # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
-    # - patches/amd-roc-2.7.0.diff
-    - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
-    - patches/llvm-config-no-libLLVM.diff
-    # https://reviews.llvm.org/D101972
+    - patches/0002-restore-macos-10.9-support.patch
+    # This patches cmake code which isn't hit in the current configuration, however it's kept in case we want to build
+    # libllvm-c in the future
     - patches/osx_ver.patch
+    # A different approach to this fix: https://github.com/conda-forge/llvmdev-feedstock/commit/1da42e54b055d26bc58da77bd1f88ad460ac90f4
     - patches/MSVC_DIA_SDK_path_fix.diff  # [win]
-    - patches/llvm14-clear-gotoffsetmap.patch
 
 build:
   number: 0
