@@ -196,8 +196,17 @@ about:
   license_file: llvm/LICENSE.TXT
   license_family: Apache
   summary: Development headers and libraries for LLVM
+  description: |
+    A toolkit for the construction of highly optimized compilers,
+    optimizers, and run-time environments.
 
 extra:
+  skip-lints:
+    # there are false positives for these checks,
+    # for some of the individual outputs.
+    - output_missing_script
+    - missing_tests
+    - wrong_output_script_key
   recipe-maintainers:
     - inducer
     - jakirkham
