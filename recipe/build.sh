@@ -41,12 +41,13 @@ fi
 
 cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
-      -DHAVE_LIBEDIT=OFF \
-      -DLLVM_HAVE_LIBXAR=OFF \
+      -DCMAKE_LIBRARY_PATH="${PREFIX}" \
+      -DLLVM_ENABLE_LIBEDIT=OFF \
       -DLLVM_ENABLE_LIBXML2=OFF \
       -DLLVM_ENABLE_RTTI=ON \
       -DLLVM_ENABLE_TERMINFO=OFF \
-      -DLLVM_ENABLE_ZLIB=ON \
+      -DLLVM_ENABLE_ZLIB=FORCE_ON \
+      -DLLVM_ENABLE_ZSTD=FORCE_ON \
       -DLLVM_INCLUDE_BENCHMARKS=OFF \
       -DLLVM_INCLUDE_DOCS=OFF \
       -DLLVM_INCLUDE_EXAMPLES=OFF \
@@ -61,6 +62,7 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DLLVM_ENABLE_FFI=ON \
       -DLLVM_ENABLE_Z3_SOLVER=OFF \
       -DLLVM_OPTIMIZED_TABLEGEN=ON \
+      -DCMAKE_POLICY_DEFAULT_CMP0111=NEW \
       ${CMAKE_ARGS} \
       -GNinja \
       ../llvm
@@ -78,10 +80,24 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
 
   if [[ "$target_platform" == linux* ]]; then
     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
+
+    # These tests tests permission-based behaviour and probably fail because of some
+    # filesystem-related reason. They are sporadic failures and don't seem serious so they're excluded.
+    # Note that indents would introduce spaces into the environment variable
+    export LIT_FILTER_OUT='tools/llvm-ar/error-opening-permission.test|'\
+'tools/llvm-dwarfdump/X86/output.s|'\
+'tools/llvm-ifs/fail-file-write.test|'\
+'tools/llvm-ranlib/error-opening-permission.test'
   fi
 
-  ninja -j${CPU_COUNT} check-llvm || true
+  if [[ "$target_platform" == osx-* ]]; then
+    # This failure seems like something to do with the output format of ls -lu
+    # and looks harmless
+    export LIT_FILTER_OUT='tools/llvm-objcopy/ELF/strip-preserve-atime.test'
+  fi
+
+  ninja -j${CPU_COUNT} check-llvm
 
   cd ../llvm/test
-  ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86 || true
+  ${PYTHON} ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
 fi

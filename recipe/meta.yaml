@@ -1,4 +1,4 @@
-{% set version = "14.0.6" %}
+{% set version = "17.0.6" %}
 {% set major_ver = version.split(".")[0] %}
 
 package:
@@ -7,20 +7,20 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  sha256: 8b3cfd7bc695bd6cea0f37f53f0981f34f87496e79e2529874fd03a2f9dd3a8a
+  sha256: 58a8818c60e6627064f312dbf46c02d9949956558340938b71cf731ad8bc0813
   patches:
-    # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
-    # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
-    # - patches/amd-roc-2.7.0.diff
-    - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
-    - patches/llvm-config-no-libLLVM.diff
-    # https://reviews.llvm.org/D101972
+    - patches/0002-restore-macos-10.9-support.patch
+    # These two patches remove expected test failures.
+    - patches/0004-remove-unsupported-intrinsic-test.patch
+    - patches/0005-remove-permission-based-unit-tests.patch
+    # This patches cmake code which isn't hit in the current configuration, however it's kept in case we want to build
+    # libllvm-c in the future
     - patches/osx_ver.patch
+    # A different approach to this fix: https://github.com/conda-forge/llvmdev-feedstock/commit/1da42e54b055d26bc58da77bd1f88ad460ac90f4
     - patches/MSVC_DIA_SDK_path_fix.diff  # [win]
-    - patches/llvm14-clear-gotoffsetmap.patch
 
 build:
-  number: 3
+  number: 0
   merge_build_host: false
 
 requirements:
@@ -30,21 +30,16 @@ requirements:
     - ninja
     - python >=3
     - libcxx {{ cxx_compiler_version }}  # [osx]
-    - make      # [not win]
-    - m2-coreutils  # [win]
-    - m2-make   # [win]
-    - m2-patch  # [win]
-    - m2-grep   # [win]
-    - m2-sed    # [win]
     - patch       # [not win]
     - m2-patch    # [win]
-    - git         # [unix]
-    - m2-git      # [win]
+    - git         # [(linux and x86_64)]
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
-    - zlib 1.2.13
-    - libxml2 2.10 # [win]
-    - libffi 3.4   # [unix]
+    - libffi {{ libffi }}   # [unix]
+    # libxml2 supports a windows-only feature, see https://github.com/llvm/llvm-project/blob/llvmorg-17.0.6/llvm/include/llvm/WindowsManifest/WindowsManifestMerger.h
+    - libxml2 {{ libxml2 }}  # [win]
+    - zlib {{ zlib }}
+    - zstd {{ zstd }}
 
 outputs:
   # Contains everything
@@ -53,7 +48,8 @@ outputs:
     script: install_llvm.bat  # [win]
     build:
       skip: true  # [(win and vc<14)]
-      activate_in_script: true
+      missing_dso_whitelist:  # [s390x]
+        - $RPATH/ld64.so.1    # [s390x]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -63,19 +59,24 @@ outputs:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - zlib 1.2.13
+        - libxml2 {{ libxml2 }}  # [win]
+        - zlib {{ zlib }}
+        - zstd {{ zstd }}
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
-        - $PREFIX/bin/llvm-config --libs                   # [not win]
-        - test -f $PREFIX/include/llvm/Pass.h              # [not win]
-        - test -f $PREFIX/lib/libLLVMCore.a                # [not win]
-        - $PREFIX/libexec/llvm/not false                   # [not win]
-        - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1  # [win]
+        - $PREFIX/bin/llvm-config --libs                                 # [not win]
+        - test -f $PREFIX/include/llvm/Pass.h                           # [not win]
+        - test -f $PREFIX/lib/libLLVMCore.a                             # [not win]
+        - $PREFIX/libexec/llvm/not false                                # [not win]
+        - $PREFIX/bin/llvm-nm --help                                    # [not win]
+        - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1               # [win]
         - if not exist "%LIBRARY_PREFIX%"\\libexec\llvm\not.exe exit 1  # [win]
+        - if not exist "%LIBRARY_BIN%"\\llvm-nm.exe exit 1              # [win]
+        - llvm-nm.exe --help                                            # [win]
 
   # Contains the shared libraries. To make different LLVM libraries co-installable
   # soversion is appended to the package name.
@@ -83,9 +84,10 @@ outputs:
     script: install_llvm.sh  # [not win]
     build:
       skip: true  # [win and vc<14]
-      activate_in_script: true
       run_exports:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
+      missing_dso_whitelist:  # [s390x]
+        - $RPATH/ld64.so.1    # [s390x]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -93,12 +95,14 @@ outputs:
         - cmake                  # [not win]
         - python >=3             # [not win]
       host:
-        - libcxx >={{ cxx_compiler_version }}  # [osx]
-        - zlib 1.2.13
-        - libffi 3.4  # [unix]
+        - libcxx {{ cxx_compiler_version }}  # [osx]
+        - libffi {{ libffi }}  # [unix]
+        - libxml2 {{ libxml2 }}  # [win]
+        - zlib {{ zlib }}
+        - zstd {{ zstd }}
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
-        - libffi >=3.4,<3.5  # [unix]
+        - {{ pin_compatible('libffi', max_pin='x.x') }}  # [unix]
         - zlib    # [osx]
     test:
       commands:
@@ -115,7 +119,9 @@ outputs:
       build:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
-        - zlib 1.2.13
+        - libxml2 {{ libxml2 }}  # [win]
+        - zlib {{ zlib }}
+        - zstd {{ zstd }}
       run:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
       run_constrained:             # [not win]
@@ -130,7 +136,8 @@ outputs:
     script: install_llvm.bat  # [win]
     build:
       skip: true  # [(win and vc<14)]
-      activate_in_script: true
+      missing_dso_whitelist:  # [s390x]
+        - $RPATH/ld64.so.1    # [s390x]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -139,10 +146,13 @@ outputs:
         - python >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libxml2 2.10  # [win]
-        - zlib 1.2.13
+        - libxml2 {{ libxml2 }}  # [win]
+        - zlib {{ zlib }}
+        - zstd {{ zstd }}
+        - libcxx {{ cxx_compiler_version }}  # [osx]
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - libcxx >={{ cxx_compiler_version }}  # [osx]
       run_constrained:
         - llvmdev   {{ version }}
     test:
@@ -153,11 +163,13 @@ outputs:
 
   - name: lit
     build:
-      script: python -m pip install llvm/utils/lit --no-deps -vv
-      activate_in_script: true
+      script: python -m pip install llvm/utils/lit --no-deps --no-build-isolation -vv
       skip: true  # [py<30]
       entry_points:
+        # upstream LLVM is inconsistent; there's one way specified in lit's setup.py...
         - lit = lit.main:main
+        # ... and then the CMake files we install here (e.g. AddLLVM.cmake) look for another
+        - llvm-lit = lit.main:main
     requirements:
       host:
         - python
@@ -169,8 +181,12 @@ outputs:
     test:
       imports:
         - lit
+      requires:
+        - pip
       commands:
+        - pip check
         - lit -h
+        - llvm-lit -h
 
 about:
   home: https://llvm.org/
@@ -180,8 +196,17 @@ about:
   license_file: llvm/LICENSE.TXT
   license_family: Apache
   summary: Development headers and libraries for LLVM
+  description: |
+    A toolkit for the construction of highly optimized compilers,
+    optimizers, and run-time environments.
 
 extra:
+  skip-lints:
+    # there are false positives for these checks,
+    # for some of the individual outputs.
+    - output_missing_script
+    - missing_tests
+    - wrong_output_script_key
   recipe-maintainers:
     - inducer
     - jakirkham
@@ -191,3 +216,4 @@ extra:
     - timsnyder
     - xhochy
     - h-vetinari
+    - danpetry

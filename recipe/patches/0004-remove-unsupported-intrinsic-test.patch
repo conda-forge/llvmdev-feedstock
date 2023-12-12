@@ -1,0 +1,36 @@
+From: Daniel Petry <dpetry@anaconda.com>
+Date: Mon, 11 Dec 2023 18:29 CST
+Subject: [PATCH] Remove roundevenf from intrinsics tests
+
+roundevenf isn't provided on some platforms:
+
+https://www.gnu.org/software/gnulib/manual/html_node/roundevenf.html
+
+We build with glibc 2.17 for linux-64, and on osx platforms we currently use
+macOS SDK v11.1 or earlier. This results in a test failure in
+ExecutionEngine/Interpreter/intrinsics.ll for those platforms.
+
+This test only runs when llvm is compiled with libffi (LLVM_ENABLE_FFI=ON)
+
+Index: llvm-project/llvm/test/ExecutionEngine/Interpreter/intrinsics.ll
+===================================================================
+--- llvm-project.orig/llvm/test/ExecutionEngine/Interpreter/intrinsics.ll	2023-11-30 16:07:28.019995000 -0600
++++ llvm-project/llvm/test/ExecutionEngine/Interpreter/intrinsics.ll	2023-12-06 14:56:01.428538210 -0600
+@@ -13,8 +13,6 @@
+ declare double @llvm.trunc.f64(double)
+ declare float  @llvm.round.f32(float)
+ declare double @llvm.round.f64(double)
+-declare float  @llvm.roundeven.f32(float)
+-declare double @llvm.roundeven.f64(double)
+ declare float  @llvm.copysign.f32(float, float)
+ declare double @llvm.copysign.f64(double, double)
+ 
+@@ -31,8 +29,6 @@
+   %trunc64 = call double @llvm.trunc.f64(double 0.000000e+00)
+   %round32 = call float @llvm.round.f32(float 0.000000e+00)
+   %round64 = call double @llvm.round.f64(double 0.000000e+00)
+-  %roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)
+-  %roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)
+   %copysign32 = call float @llvm.copysign.f32(float 0.000000e+00, float 0.000000e+00)
+   %copysign64 = call double @llvm.copysign.f64(double 0.000000e+00, double 0.000000e+00)
+   ret i32 0
