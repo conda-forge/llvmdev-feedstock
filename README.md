@@ -1,11 +1,11 @@
-About llvm-for-tensorflow
-=========================
+About llvm-for-tensorflow-feedstock
+===================================
+
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/llvmdev-feedstock/blob/main/LICENSE.txt)
 
 Home: http://llvm.org/
 
 Package license: Apache-2.0 WITH LLVM-exception
-
-Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/llvmdev-feedstock/blob/master/LICENSE.txt)
 
 Summary: Development headers and libraries for LLVM, pre-built for use with tensorflow
 
@@ -22,8 +22,8 @@ Current build status
     <td>
       <details>
         <summary>
-          <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=master">
-            <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master">
+          <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
+            <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main">
           </a>
         </summary>
         <table>
@@ -31,22 +31,22 @@ Current build status
           <tbody><tr>
               <td>linux_64</td>
               <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master&jobName=linux&configuration=linux_64_" alt="variant">
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_" alt="variant">
                 </a>
               </td>
             </tr><tr>
               <td>osx_64</td>
               <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master&jobName=osx&configuration=osx_64_" alt="variant">
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_" alt="variant">
                 </a>
               </td>
             </tr><tr>
               <td>osx_arm64</td>
               <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master&jobName=osx&configuration=osx_arm64_" alt="variant">
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_arm64_" alt="variant">
                 </a>
               </td>
             </tr>
@@ -67,14 +67,14 @@ Current release info
 Installing llvm-for-tensorflow
 ==============================
 
-Installing `llvm-for-tensorflow` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
+Installing `llvm-for-tensorflow` from the `conda-forge/label/llvm_for_tf` channel can be achieved by adding `conda-forge/label/llvm_for_tf` to your channels with:
 
 ```
-conda config --add channels conda-forge
+conda config --add channels conda-forge/label/llvm_for_tf
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `llvm-for-tensorflow` can be installed with `conda`:
+Once the `conda-forge/label/llvm_for_tf` channel has been enabled, `llvm-for-tensorflow` can be installed with `conda`:
 
 ```
 conda install llvm-for-tensorflow
@@ -89,26 +89,26 @@ mamba install llvm-for-tensorflow
 It is possible to list all of the versions of `llvm-for-tensorflow` available on your platform with `conda`:
 
 ```
-conda search llvm-for-tensorflow --channel conda-forge
+conda search llvm-for-tensorflow --channel conda-forge/label/llvm_for_tf
 ```
 
 or with `mamba`:
 
 ```
-mamba search llvm-for-tensorflow --channel conda-forge
+mamba search llvm-for-tensorflow --channel conda-forge/label/llvm_for_tf
 ```
 
 Alternatively, `mamba repoquery` may provide more information:
 
 ```
 # Search all versions available on your platform:
-mamba repoquery search llvm-for-tensorflow --channel conda-forge
+mamba repoquery search llvm-for-tensorflow --channel conda-forge/label/llvm_for_tf
 
 # List packages depending on `llvm-for-tensorflow`:
-mamba repoquery whoneeds llvm-for-tensorflow --channel conda-forge
+mamba repoquery whoneeds llvm-for-tensorflow --channel conda-forge/label/llvm_for_tf
 
 # List dependencies of `llvm-for-tensorflow`:
-mamba repoquery depends llvm-for-tensorflow --channel conda-forge
+mamba repoquery depends llvm-for-tensorflow --channel conda-forge/label/llvm_for_tf
 ```
 
 
@@ -130,7 +130,7 @@ available continuous integration services. Thanks to the awesome service provide
 [CircleCI](https://circleci.com/), [AppVeyor](https://www.appveyor.com/),
 [Drone](https://cloud.drone.io/welcome), and [TravisCI](https://travis-ci.com/)
 it is possible to build and upload installable packages to the
-[conda-forge](https://anaconda.org/conda-forge) [Anaconda-Cloud](https://anaconda.org/)
+[conda-forge](https://anaconda.org/conda-forge) [anaconda.org](https://anaconda.org/)
 channel for Linux, Windows and OSX respectively.
 
 To manage the continuous integration and simplify feedstock maintenance
