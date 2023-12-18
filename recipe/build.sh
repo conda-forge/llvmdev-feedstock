@@ -2,7 +2,7 @@
 
 set -exuo pipefail
 
-export CXXFLAGS="${CXXFLAGS} -std=c++14"
+export CXXFLAGS="${CXXFLAGS} -std=c++17"
 
 if [[ "${target_platform}" == osx-* ]]; then
   export LDFLAGS="${LDFLAGS} -lz -framework CoreFoundation -Xlinker -undefined -Xlinker dynamic_lookup"
