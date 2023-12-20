@@ -12,7 +12,7 @@ fi
 
 pushd utils/bazel
 source gen-bazel-toolchain
-bazel build --crosstool_top=//bazel_toolchain:toolchain --cpu ${TARGET_CPU}  @llvm-project//llvm/... @llvm-project//mlir/...
+bazel build --repo_env=BAZEL_LLVM_ZLIB_STRATEGY=system --@llvm-project//libc:mpfr=disable --@llvm-project//llvm:pfm=disable --crosstool_top=//bazel_toolchain:toolchain --cpu ${TARGET_CPU}  @llvm-project//llvm/... @llvm-project//mlir/...
 popd
 
 mkdir -p ${PREFIX}/share/llvm_for_tf

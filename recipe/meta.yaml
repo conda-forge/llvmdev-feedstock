@@ -1,6 +1,6 @@
 {% set version = "14.0.0.jax0420_b3e353" %}
 {% set major_ver = version.split(".")[0] %}
-{% set git_commit = "b3e353d263f9d6ef061f4e6d89619c72a3553002" %}
+{% set git_commit = "243588df15ed136b52ca62315c1e18b045cdf915" %}
 {% if git_commit != "" %}
   {% set archive_file = git_commit %}
 {% else %}
@@ -13,7 +13,7 @@ package:
 
 source:
   - url: https://github.com/llvm/llvm-project/archive/{{ archive_file }}.tar.gz
-    sha256: 11de6e114dfd841189f7e6cdd028b8763804b4a6d0d770087f114b27e344b692
+    sha256: 031ecbdc75c4cc6cfd6c50841b74c8ec45a425b8d89859565c09495c2857776f
     patches:
       # Taken from https://github.com/openxla/xla/tree/fa9331a7e557b4ec1381f84cbbf7401a8f41ac66/third_party/llvm
       - patches/build.patch
@@ -22,7 +22,7 @@ source:
       - patches/zstd.patch
 
 build:
-  number: 2
+  number: 3
   skip: true  # [win or ppc64le or aarch64]
   # conda-build breaks on this. There is no need to relocate anything, so skip it.
   binary_relocation: false
