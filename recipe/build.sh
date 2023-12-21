@@ -12,14 +12,20 @@ fi
 
 pushd utils/bazel
 source gen-bazel-toolchain
-bazel build --repo_env=BAZEL_LLVM_ZLIB_STRATEGY=system --@llvm-project//libc:mpfr=disable --@llvm-project//llvm:pfm=disable --crosstool_top=//bazel_toolchain:toolchain --cpu ${TARGET_CPU}  @llvm-project//llvm/... @llvm-project//mlir/...
+bazel build \
+    --repo_env=BAZEL_LLVM_ZLIB_STRATEGY=system \
+    --@llvm-project//libc:mpfr=disable \
+    --@llvm-project//llvm:pfm=disable \
+    --crosstool_top=//bazel_toolchain:toolchain \
+    --cpu ${TARGET_CPU} \
+    @llvm-project//llvm/... @llvm-project//mlir/...
 popd
 
 mkdir -p ${PREFIX}/share/llvm_for_tf
-cp -ap llvm ${PREFIX}/share/llvm_for_tf/
-cp -ap mlir ${PREFIX}/share/llvm_for_tf/
-cp -ap utils ${PREFIX}/share/llvm_for_tf/
+# Copy headers and other sources to be re-used in the downstream project.
+cp -ap llvm mlir utils ${PREFIX}/share/llvm_for_tf/
 cp utils/bazel/bazel-bazel/external/llvm-project/vars.bzl ${PREFIX}/share/llvm_for_tf/
+
 # Remove bazel-build artifacts
 rm -rf ${PREFIX}/share/llvm_for_tf/utils/bazel/bazel-*
 rsync -a utils/bazel/llvm-project-overlay/ ${PREFIX}/share/llvm_for_tf/
@@ -38,4 +44,5 @@ find ${PREFIX}/share/llvm_for_tf -name '*.dll' -delete
 find ${PREFIX}/share/llvm_for_tf -name '*.o' -delete
 
 mkdir -p ${PREFIX}/lib/llvm_for_tf
+# Copy over the static libraries and generate bazel BUILD files that reference them.
 python $RECIPE_DIR/compile_bundle.py

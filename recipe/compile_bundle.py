@@ -20,6 +20,30 @@ def new_kwarg(name, code):
     return ast.keyword(arg="linkopts", value=ast.parse(code).body[0].value)
 
 
+def rewrite_cc_library(node):
+    # Determine the name of the library
+    name = linkopts = None
+    for kw in node.value.keywords:
+        if kw.arg == "name":
+            name = kw.value.value
+        elif kw.arg == "linkopts":
+            linkopts = kw
+
+    # Remove srcs
+    node.value.keywords = [kw for kw in node.value.keywords if kw.arg != "srcs"]
+
+    # Add the compiled library via linkopts
+    expected_lib = BAZEL_OUT / sym / f"lib{name}.a"
+    if expected_lib.exists():
+        libname = f"{symbol}TF{name}"
+        if linkopts is None:
+            node.value.keywords.append(new_kwarg("linkopts", f"['-l{libname}']"))
+        else:
+            extend_linkopts(linkopts, libname)
+        # Move the compiled library into the target folder
+        shutil.copyfile(expected_lib, LIB_TARGET_DIR / f"lib{libname}.a")
+
+
 def rewrite_binaries(code, symbol):
     sym = symbol.lower()
     tree = ast.parse(code)
@@ -27,32 +51,9 @@ def rewrite_binaries(code, symbol):
         # Find all function calls
         if isinstance(node, ast.Expr) and isinstance(node.value, ast.Call):
             if node.value.func.id == "cc_library":
-                # Determine the name of the library
-                name = linkopts = None
-                for kw in node.value.keywords:
-                    if kw.arg == "name":
-                        name = kw.value.value
-                    elif kw.arg == "linkopts":
-                        linkopts = kw
-
-                # Remove srcs
-                node.value.keywords = [kw for kw in node.value.keywords if kw.arg != "srcs"]
-
-                # Add the compiled library via linkopts
-                expected_lib = BAZEL_OUT / sym / f"lib{name}.a"
-                if expected_lib.exists():
-                    libname = f"{symbol}TF{name}"
-                    if linkopts is None:
-                        node.value.keywords.append(new_kwarg("linkopts", f"['-l{libname}']"))
-                    else:
-                        extend_linkopts(linkopts, libname)
-                    # Move the compiled library into the target folder
-                    shutil.copyfile(
-                        expected_lib,
-                        LIB_TARGET_DIR / f"lib{libname}.a"
-                    )
+                rewrite_cc_library(node)
             elif node.value.func.id == "cc_binary":
-                # TODO: Implement this
+                # TODO: Implement this; until then, they get compiled upstream.
                 pass
     return astor.to_source(tree)
 
