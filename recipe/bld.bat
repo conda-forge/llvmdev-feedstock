@@ -39,6 +39,7 @@ if %ERRORLEVEL% neq 0 exit 1
 REM These tests fail because msdia140.dll isn't registered.
 REM The build stalls if registering is attempted in this file, probably because it needs elevated privileges.
 REM See https://llvm.org/docs/GettingStartedVS.html#getting-started
+REM TODO: check that these tests run successfully when msdia140.dll is registered manually on a test machine.
 set "LIT_FILTER_OUT=DebugInfo/PDB/DIA/pdbdump-flags.test"
 set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|DebugInfo/PDB/DIA/pdbdump-linenumbers.test"
 set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|DebugInfo/PDB/DIA/pdbdump-symbol-format.test"
