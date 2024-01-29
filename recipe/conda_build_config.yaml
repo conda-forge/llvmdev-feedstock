@@ -5,6 +5,3 @@ cxx_compiler:          # [osx]
 
 MACOSX_SDK_VERSION:    # [osx and x86_64]
   - 10.12              # [osx and x86_64]
-
-channel_targets:
-  - conda-forge llvm_rc
