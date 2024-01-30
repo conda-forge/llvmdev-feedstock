@@ -1,8 +1,8 @@
-{% set version = "17.0.0.rc3" %}
+{% set version = "18.1.0.rc1" %}
 {% set major_ver = version.split(".")[0] %}
 
 # as of LLVM 17, we expect an "rc" suffix for the release candidates
-{% set extra = "rc" if version.split(".")[-1] not in range(7) else "" %}
+{% set extra = "rc" if version.split(".")[-1] not in "1234567" else "" %}
 {% set extra = "git" if version.split(".")[-1] == "dev0" else extra %}
 
 package:
@@ -11,7 +11,7 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  sha256: 60493f4e974fcca7b739aea4901af2d957b0eaea34b42815359be59cf6c88fa2
+  sha256: eb1a2751408e4cbb08b152285b23dea00e4a1bc2cd28c0df90fe1ce699671154
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
@@ -66,6 +66,11 @@ outputs:
         - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - libcxx >={{ cxx_compiler_version }}                           # [osx]
+      run_constrained:
+        - llvm        {{ version }}
+        - llvm-tools  {{ version }}
+        - clang       {{ version }}
+        - clang-tools {{ version }}
     test:
       requires:
         - ripgrep  # [win]
@@ -126,8 +131,11 @@ outputs:
         - zstd
       run:                                                            # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
-      run_constrained:                                                # [not win]
-        - llvmdev   {{ version }}                                     # [not win]
+      run_constrained:
+        - llvmdev     {{ version }}
+        - llvm-tools  {{ version }}
+        - clang       {{ version }}
+        - clang-tools {{ version }}
     test:
       commands:
         - echo "Hello World!"
@@ -154,7 +162,10 @@ outputs:
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
       run_constrained:
-        - llvmdev   {{ version }}
+        - llvm        {{ version }}
+        - llvmdev     {{ version }}
+        - clang       {{ version }}
+        - clang-tools {{ version }}
     test:
       commands:
         - $PREFIX/bin/llc -version                               # [not win]
