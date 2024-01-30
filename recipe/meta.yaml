@@ -41,7 +41,7 @@ requirements:
 outputs:
   # Contains everything
   - name: llvmdev
-    script: install_llvm.sh  # [unix]
+    script: install_llvm.sh   # [unix]
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
@@ -95,7 +95,7 @@ outputs:
     script: install_llvm.sh  # [not win]
     build:
       activate_in_script: true
-      run_exports:   # [not win]
+      run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
@@ -120,7 +120,7 @@ outputs:
   # for run_exports
   - name: llvm
     build:
-      run_exports:   # [not win]
+      run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
@@ -129,7 +129,7 @@ outputs:
         - libxml2
         - zlib
         - zstd
-      run:   # [not win]
+      run:                                                            # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
       run_constrained:
         - llvmdev     {{ version }}
@@ -142,7 +142,7 @@ outputs:
 
   # Contains LLVM tools
   - name: llvm-tools
-    script: install_llvm.sh  # [unix]
+    script: install_llvm.sh   # [unix]
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
@@ -174,7 +174,7 @@ outputs:
 
   # Contains LLVM-C shared library
   - name: libllvm-c{{ major_ver }}
-    script: install_llvm.sh  # [unix]
+    script: install_llvm.sh   # [unix]
     script: install_llvm.bat  # [win]
     build:
       run_exports:
