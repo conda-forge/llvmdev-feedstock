@@ -1,7 +1,7 @@
-From 5a0157c1ec9881737279adab8fdfd5482d45c781 Mon Sep 17 00:00:00 2001
+From 525dc4031ae95878a34f99de7627d8429094fa1f Mon Sep 17 00:00:00 2001
 From: Isuru Fernando <isuruf@gmail.com>
 Date: Wed, 22 Mar 2023 12:25:49 -0500
-Subject: [PATCH 2/3] restore macos 10.9 support
+Subject: [PATCH 2/2] restore macos 10.9 support
 
 ThreadPriority::Low is mapped to ThreadPriority::Background
 just like Linux/Windows when macOS is version 10.9
@@ -10,7 +10,7 @@ just like Linux/Windows when macOS is version 10.9
  1 file changed, 23 insertions(+), 11 deletions(-)
 
 diff --git a/llvm/lib/Support/Unix/Threading.inc b/llvm/lib/Support/Unix/Threading.inc
-index 819748db4ec2..2541a0ca8e5c 100644
+index 55e7dcfa4678..9d9b764c5ebf 100644
 --- a/llvm/lib/Support/Unix/Threading.inc
 +++ b/llvm/lib/Support/Unix/Threading.inc
 @@ -276,19 +276,31 @@ SetThreadPriorityResult llvm::set_thread_priority(ThreadPriority Priority) {
