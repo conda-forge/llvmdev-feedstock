@@ -1,5 +1,6 @@
 {% set version = "18.1.0.rc4" %}
 {% set major_ver = version.split(".")[0] %}
+{% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
 
 # as of LLVM 17, we expect an "rc" suffix for the release candidates
 {% set extra = "rc" if version.split(".")[-1] not in "1234567" else "" %}
@@ -113,8 +114,8 @@ outputs:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
-        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.so     # [linux]
-        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.dylib  # [osx]
+        - test -f $PREFIX/lib/libLLVM.so.{{ maj_min }}{{ extra }}       # [linux]
+        - test -f $PREFIX/lib/libLLVM.{{ maj_min }}{{ extra }}.dylib    # [osx]
 
   # This is a meta package so that people can use the latest libllvm and also
   # for run_exports
