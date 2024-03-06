@@ -67,7 +67,9 @@ else
     export TEST_CPU_FLAG=""
 fi
 
-if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
+# should be [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]],
+# but osx builds time out when building & running test suite
+if [[ "$target_platform" == "linux-64" ]]; then
   # bin/opt -S -vector-library=SVML $TEST_CPU_FLAG -O3 $RECIPE_DIR/numba-3016.ll | bin/FileCheck $RECIPE_DIR/numba-3016.ll || exit $?
 
   if [[ "$target_platform" == linux* ]]; then

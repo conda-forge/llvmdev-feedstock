@@ -1,8 +1,9 @@
 {% set version = "18.1.0" %}
 {% set major_ver = version.split(".")[0] %}
+{% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
 
 # as of LLVM 17, we expect an "rc" suffix for the release candidates
-{% set extra = "rc" if version.split(".")[-1]|int not in range(7) else "" %}
+{% set extra = "rc" if version.split(".")[-1] not in "1234567" else "" %}
 {% set extra = "git" if version.split(".")[-1] == "dev0" else extra %}
 
 package:
@@ -18,9 +19,6 @@ source:
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     - patches/0002-restore-macos-10.9-support.patch
-    # backports patch for issues with LLJIT, see
-    # https://github.com/llvm/llvm-project/commit/122ebe3b500190b1f408e2e6db753853e297ba28
-    - patches/0003-ORC-Use-EPC-bootstrap-symbols-to-communicate-eh-fram.patch
 
 build:
   number: 0
@@ -44,7 +42,7 @@ requirements:
 outputs:
   # Contains everything
   - name: llvmdev
-    script: install_llvm.sh  # [unix]
+    script: install_llvm.sh   # [unix]
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
@@ -98,7 +96,7 @@ outputs:
     script: install_llvm.sh  # [not win]
     build:
       activate_in_script: true
-      run_exports:   # [not win]
+      run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
@@ -116,14 +114,14 @@ outputs:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
-        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.so     # [linux]
-        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.dylib  # [osx]
+        - test -f $PREFIX/lib/libLLVM.so.{{ maj_min }}{{ extra }}       # [linux]
+        - test -f $PREFIX/lib/libLLVM.{{ maj_min }}{{ extra }}.dylib    # [osx]
 
   # This is a meta package so that people can use the latest libllvm and also
   # for run_exports
   - name: llvm
     build:
-      run_exports:   # [not win]
+      run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
@@ -132,7 +130,7 @@ outputs:
         - libxml2
         - zlib
         - zstd
-      run:   # [not win]
+      run:                                                            # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
       run_constrained:
         - llvmdev     {{ version }}
@@ -145,7 +143,7 @@ outputs:
 
   # Contains LLVM tools
   - name: llvm-tools
-    script: install_llvm.sh  # [unix]
+    script: install_llvm.sh   # [unix]
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
@@ -177,7 +175,7 @@ outputs:
 
   # Contains LLVM-C shared library
   - name: libllvm-c{{ major_ver }}
-    script: install_llvm.sh  # [unix]
+    script: install_llvm.sh   # [unix]
     script: install_llvm.bat  # [win]
     build:
       run_exports:
