@@ -93,14 +93,14 @@ Current release info
 Installing llvmdev
 ==================
 
-Installing `llvmdev` from the `conda-forge/label/llvm_rc` channel can be achieved by adding `conda-forge/label/llvm_rc` to your channels with:
+Installing `llvmdev` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
 
 ```
-conda config --add channels conda-forge/label/llvm_rc
+conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge/label/llvm_rc` channel has been enabled, `libllvm-c18, libllvm18, lit, llvm, llvm-tools, llvmdev` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `libllvm-c18, libllvm18, lit, llvm, llvm-tools, llvmdev` can be installed with `conda`:
 
 ```
 conda install libllvm-c18 libllvm18 lit llvm llvm-tools llvmdev
@@ -115,26 +115,26 @@ mamba install libllvm-c18 libllvm18 lit llvm llvm-tools llvmdev
 It is possible to list all of the versions of `libllvm-c18` available on your platform with `conda`:
 
 ```
-conda search libllvm-c18 --channel conda-forge/label/llvm_rc
+conda search libllvm-c18 --channel conda-forge
 ```
 
 or with `mamba`:
 
 ```
-mamba search libllvm-c18 --channel conda-forge/label/llvm_rc
+mamba search libllvm-c18 --channel conda-forge
 ```
 
 Alternatively, `mamba repoquery` may provide more information:
 
 ```
 # Search all versions available on your platform:
-mamba repoquery search libllvm-c18 --channel conda-forge/label/llvm_rc
+mamba repoquery search libllvm-c18 --channel conda-forge
 
 # List packages depending on `libllvm-c18`:
-mamba repoquery whoneeds libllvm-c18 --channel conda-forge/label/llvm_rc
+mamba repoquery whoneeds libllvm-c18 --channel conda-forge
 
 # List dependencies of `libllvm-c18`:
-mamba repoquery depends libllvm-c18 --channel conda-forge/label/llvm_rc
+mamba repoquery depends libllvm-c18 --channel conda-forge
 ```
 
 
