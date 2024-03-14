@@ -19,6 +19,8 @@ source:
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     - patches/0002-restore-macos-10.9-support.patch
+    # fix for (part of) https://github.com/llvm/llvm-project/issues/84637
+    - patches/0003-fix-libLLVM-major-symlink-on-OSX.patch
 
 build:
   number: 0
