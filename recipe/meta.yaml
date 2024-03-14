@@ -1,8 +1,9 @@
-{% set version = "17.0.6" %}
+{% set version = "18.1.1" %}
 {% set major_ver = version.split(".")[0] %}
+{% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
 
 # as of LLVM 17, we expect an "rc" suffix for the release candidates
-{% set extra = "rc" if version.split(".")[-1]|int not in range(7) else "" %}
+{% set extra = "rc" if version.split(".")[-1] not in "01234567" else "" %}
 {% set extra = "git" if version.split(".")[-1] == "dev0" else extra %}
 
 package:
@@ -11,19 +12,18 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  sha256: 58a8818c60e6627064f312dbf46c02d9949956558340938b71cf731ad8bc0813
+  sha256: 8f34c6206be84b186b4b31f47e1b52758fa38348565953fad453d177ef34c0ad
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     - patches/0002-restore-macos-10.9-support.patch
-    # backports patch for issues with LLJIT, see
-    # https://github.com/llvm/llvm-project/commit/122ebe3b500190b1f408e2e6db753853e297ba28
-    - patches/0003-ORC-Use-EPC-bootstrap-symbols-to-communicate-eh-fram.patch
+    # backport https://github.com/llvm/llvm-project/pull/85163
+    - patches/0003-llvm-shlib-Fix-libLLVM-MAJOR-.so-symlink-on-MacOS.patch
 
 build:
-  number: 1
+  number: 0
   merge_build_host: false
 
 requirements:
@@ -44,7 +44,7 @@ requirements:
 outputs:
   # Contains everything
   - name: llvmdev
-    script: install_llvm.sh  # [unix]
+    script: install_llvm.sh   # [unix]
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
@@ -98,7 +98,7 @@ outputs:
     script: install_llvm.sh  # [not win]
     build:
       activate_in_script: true
-      run_exports:   # [not win]
+      run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
@@ -116,14 +116,18 @@ outputs:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
+        # old style
         - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.so     # [linux]
         - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.dylib  # [osx]
+        # new style
+        - test -f $PREFIX/lib/libLLVM.so.{{ maj_min }}{{ extra }}       # [linux]
+        - test -f $PREFIX/lib/libLLVM.{{ maj_min }}{{ extra }}.dylib    # [osx]
 
   # This is a meta package so that people can use the latest libllvm and also
   # for run_exports
   - name: llvm
     build:
-      run_exports:   # [not win]
+      run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
@@ -132,7 +136,7 @@ outputs:
         - libxml2
         - zlib
         - zstd
-      run:   # [not win]
+      run:                                                            # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
       run_constrained:
         - llvmdev     {{ version }}
@@ -145,7 +149,7 @@ outputs:
 
   # Contains LLVM tools
   - name: llvm-tools
-    script: install_llvm.sh  # [unix]
+    script: install_llvm.sh   # [unix]
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
@@ -177,7 +181,7 @@ outputs:
 
   # Contains LLVM-C shared library
   - name: libllvm-c{{ major_ver }}
-    script: install_llvm.sh  # [unix]
+    script: install_llvm.sh   # [unix]
     script: install_llvm.bat  # [win]
     build:
       run_exports:
