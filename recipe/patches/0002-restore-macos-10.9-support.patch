@@ -1,7 +1,7 @@
-From 4e3d77072d21689f14712cce7d1fc428cd279083 Mon Sep 17 00:00:00 2001
+From 0764048b32759a1f0dec2a5b344e1e8c5a51c96e Mon Sep 17 00:00:00 2001
 From: Isuru Fernando <isuruf@gmail.com>
 Date: Wed, 22 Mar 2023 12:25:49 -0500
-Subject: [PATCH 2/3] restore macos 10.9 support
+Subject: [PATCH 2/2] restore macos 10.9 support
 
 ThreadPriority::Low is mapped to ThreadPriority::Background
 just like Linux/Windows when macOS is version 10.9
