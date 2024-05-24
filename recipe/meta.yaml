@@ -22,6 +22,7 @@ source:
 
 build:
   number: 0
+  skip: true  # [not win]
   merge_build_host: false
 
 requirements:
