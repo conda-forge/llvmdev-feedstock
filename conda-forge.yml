@@ -1,3 +1,7 @@
+azure:
+  settings_win:
+    variables:
+      CONDA_BLD_PATH: C:\\bld\\
 bot:
   abi_migration_branches:
   - 16.x
