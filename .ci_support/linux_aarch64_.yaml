@@ -1,5 +1,9 @@
 BUILD:
 - aarch64-conda_cos7-linux-gnu
+c_stdlib:
+- sysroot
+c_stdlib_version:
+- '2.17'
 cdt_arch:
 - aarch64
 cdt_name:
@@ -7,17 +11,21 @@ cdt_name:
 channel_sources:
 - conda-forge
 channel_targets:
-- conda-forge llvm_rc
+- conda-forge main
 cxx_compiler:
 - gxx
 cxx_compiler_version:
-- '10'
+- '12'
 docker_image:
 - quay.io/condaforge/linux-anvil-cos7-x86_64
-pin_run_as_build:
-  zlib:
-    max_pin: x.x
+libxml2:
+- '2'
 target_platform:
 - linux-aarch64
+zip_keys:
+- - c_stdlib_version
+  - cdt_name
 zlib:
 - '1.2'
+zstd:
+- '1.5'
