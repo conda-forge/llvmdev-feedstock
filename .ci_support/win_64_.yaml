@@ -5,10 +5,10 @@ channel_targets:
 cxx_compiler:
 - vs2019
 libxml2:
-- '2.12'
+- '2'
 target_platform:
 - win-64
 zlib:
-- '1.2'
+- '1'
 zstd:
 - '1.5'
