@@ -9,7 +9,7 @@ c_stdlib_version:
 channel_sources:
 - conda-forge
 channel_targets:
-- conda-forge main
+- conda-forge llvm_dev
 cxx_compiler:
 - clang_bootstrap
 cxx_compiler_version:
@@ -21,6 +21,6 @@ macos_machine:
 target_platform:
 - osx-64
 zlib:
-- '1.2'
+- '1'
 zstd:
 - '1.5'
