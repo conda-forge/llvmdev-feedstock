@@ -21,6 +21,6 @@ macos_machine:
 target_platform:
 - osx-arm64
 zlib:
-- '1.2'
+- '1'
 zstd:
 - '1.5'
