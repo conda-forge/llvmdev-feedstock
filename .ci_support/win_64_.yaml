@@ -1,19 +1,16 @@
+c_stdlib:
+- vs
 channel_sources:
 - conda-forge
 channel_targets:
-- conda-forge llvm_rc
+- conda-forge llvm_dev
 cxx_compiler:
 - vs2019
 libxml2:
-- '2.9'
-pin_run_as_build:
-  libxml2:
-    max_pin: x.x
-  zlib:
-    max_pin: x.x
+- '2'
 target_platform:
 - win-64
-vc:
-- '14'
 zlib:
-- '1.2'
+- '1'
+zstd:
+- '1.5'

@@ -1,15 +1,15 @@
-About llvm-package
-==================
+About llvmdev-feedstock
+=======================
+
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/llvmdev-feedstock/blob/main/LICENSE.txt)
 
 Home: http://llvm.org/
 
 Package license: Apache-2.0 WITH LLVM-exception
 
-Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/llvmdev-feedstock/blob/master/LICENSE.txt)
-
 Summary: Development headers and libraries for LLVM
 
-Development: https://github.com/llvm-mirror/llvm
+Development: https://github.com/llvm/llvm-project
 
 Current build status
 ====================
@@ -22,8 +22,8 @@ Current build status
     <td>
       <details>
         <summary>
-          <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=master">
-            <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master">
+          <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
+            <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main">
           </a>
         </summary>
         <table>
@@ -31,43 +31,43 @@ Current build status
           <tbody><tr>
               <td>linux_64</td>
               <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master&jobName=linux&configuration=linux_64_" alt="variant">
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_" alt="variant">
                 </a>
               </td>
             </tr><tr>
               <td>linux_aarch64</td>
               <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master&jobName=linux&configuration=linux_aarch64_" alt="variant">
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_" alt="variant">
                 </a>
               </td>
             </tr><tr>
               <td>linux_ppc64le</td>
               <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master&jobName=linux&configuration=linux_ppc64le_" alt="variant">
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_ppc64le_" alt="variant">
                 </a>
               </td>
             </tr><tr>
               <td>osx_64</td>
               <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master&jobName=osx&configuration=osx_64_" alt="variant">
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_" alt="variant">
                 </a>
               </td>
             </tr><tr>
               <td>osx_arm64</td>
               <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master&jobName=osx&configuration=osx_arm64_" alt="variant">
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_arm64_" alt="variant">
                 </a>
               </td>
             </tr><tr>
               <td>win_64</td>
               <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=master&jobName=win&configuration=win_64_" alt="variant">
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=win&configuration=win%20win_64_" alt="variant">
                 </a>
               </td>
             </tr>
@@ -83,32 +83,58 @@ Current release info
 
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm14-green.svg)](https://anaconda.org/conda-forge/libllvm14) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm14.svg)](https://anaconda.org/conda-forge/libllvm14) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm14.svg)](https://anaconda.org/conda-forge/libllvm14) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm14.svg)](https://anaconda.org/conda-forge/libllvm14) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm--c19-green.svg)](https://anaconda.org/conda-forge/libllvm-c19) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm-c19.svg)](https://anaconda.org/conda-forge/libllvm-c19) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm-c19.svg)](https://anaconda.org/conda-forge/libllvm-c19) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm-c19.svg)](https://anaconda.org/conda-forge/libllvm-c19) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm19-green.svg)](https://anaconda.org/conda-forge/libllvm19) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm19.svg)](https://anaconda.org/conda-forge/libllvm19) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm19.svg)](https://anaconda.org/conda-forge/libllvm19) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm19.svg)](https://anaconda.org/conda-forge/libllvm19) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-lit-green.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvm-green.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvm--tools-green.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvmdev-green.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) |
 
-Installing llvm-package
-=======================
+Installing llvmdev
+==================
 
-Installing `llvm-package` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
+Installing `llvmdev` from the `conda-forge/label/llvm_dev` channel can be achieved by adding `conda-forge/label/llvm_dev` to your channels with:
 
 ```
-conda config --add channels conda-forge
+conda config --add channels conda-forge/label/llvm_dev
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libllvm14, lit, llvm, llvm-tools, llvmdev` can be installed with:
+Once the `conda-forge/label/llvm_dev` channel has been enabled, `libllvm-c19, libllvm19, lit, llvm, llvm-tools, llvmdev` can be installed with `conda`:
 
 ```
-conda install libllvm14 lit llvm llvm-tools llvmdev
+conda install libllvm-c19 libllvm19 lit llvm llvm-tools llvmdev
 ```
 
-It is possible to list all of the versions of `libllvm14` available on your platform with:
+or with `mamba`:
 
 ```
-conda search libllvm14 --channel conda-forge
+mamba install libllvm-c19 libllvm19 lit llvm llvm-tools llvmdev
+```
+
+It is possible to list all of the versions of `libllvm-c19` available on your platform with `conda`:
+
+```
+conda search libllvm-c19 --channel conda-forge/label/llvm_dev
+```
+
+or with `mamba`:
+
+```
+mamba search libllvm-c19 --channel conda-forge/label/llvm_dev
+```
+
+Alternatively, `mamba repoquery` may provide more information:
+
+```
+# Search all versions available on your platform:
+mamba repoquery search libllvm-c19 --channel conda-forge/label/llvm_dev
+
+# List packages depending on `libllvm-c19`:
+mamba repoquery whoneeds libllvm-c19 --channel conda-forge/label/llvm_dev
+
+# List dependencies of `libllvm-c19`:
+mamba repoquery depends libllvm-c19 --channel conda-forge/label/llvm_dev
 ```
 
 
@@ -126,10 +152,12 @@ for each of the installable packages. Such a repository is known as a *feedstock
 A feedstock is made up of a conda recipe (the instructions on what and how to build
 the package) and the necessary configurations for automatic building using freely
 available continuous integration services. Thanks to the awesome service provided by
-[CircleCI](https://circleci.com/), [AppVeyor](https://www.appveyor.com/)
-and [TravisCI](https://travis-ci.com/) it is possible to build and upload installable
-packages to the [conda-forge](https://anaconda.org/conda-forge)
-[Anaconda-Cloud](https://anaconda.org/) channel for Linux, Windows and OSX respectively.
+[Azure](https://azure.microsoft.com/en-us/services/devops/), [GitHub](https://github.com/),
+[CircleCI](https://circleci.com/), [AppVeyor](https://www.appveyor.com/),
+[Drone](https://cloud.drone.io/welcome), and [TravisCI](https://travis-ci.com/)
+it is possible to build and upload installable packages to the
+[conda-forge](https://anaconda.org/conda-forge) [anaconda.org](https://anaconda.org/)
+channel for Linux, Windows and OSX respectively.
 
 To manage the continuous integration and simplify feedstock maintenance
 [conda-smithy](https://github.com/conda-forge/conda-smithy) has been developed.
@@ -151,17 +179,17 @@ Terminology
                   produce the finished article (built conda distributions)
 
 
-Updating llvm-package-feedstock
-===============================
+Updating llvmdev-feedstock
+==========================
 
-If you would like to improve the llvm-package recipe or build a new
+If you would like to improve the llvmdev recipe or build a new
 package version, please fork this repository and submit a PR. Upon submission,
 your changes will be run on the appropriate platforms to give the reviewer an
 opportunity to confirm that the changes result in a successful build. Once
 merged, the recipe will be re-built and uploaded automatically to the
 `conda-forge` channel, whereupon the built conda packages will be available for
 everybody to install and use from the `conda-forge` channel.
-Note that all branches in the conda-forge/llvm-package-feedstock are
+Note that all branches in the conda-forge/llvmdev-feedstock are
 immediately built and any created packages are uploaded, so PRs should be based
 on branches in forks and branches in the main repository should only be used to
 build distinct package versions.
@@ -176,6 +204,7 @@ In order to produce a uniquely identifiable distribution:
 Feedstock Maintainers
 =====================
 
+* [@JohanMabille](https://github.com/JohanMabille/)
 * [@SylvainCorlay](https://github.com/SylvainCorlay/)
 * [@h-vetinari](https://github.com/h-vetinari/)
 * [@inducer](https://github.com/inducer/)
