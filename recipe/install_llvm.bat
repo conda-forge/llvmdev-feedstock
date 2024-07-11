@@ -9,6 +9,12 @@ if "%PKG_NAME%" == "libllvm-c%PKG_VERSION:~0,2%" (
     REM only libLLVM-C
     move .\temp_prefix\bin\LLVM-C.dll %LIBRARY_BIN%
     move .\temp_prefix\lib\LLVM-C.lib %LIBRARY_LIB%
+) else if "%PKG_NAME%" == "libbolt" (
+    cmake --install ./build --prefix=./temp_prefix
+    if %ERRORLEVEL% neq 0 exit 1
+    REM only bolt libraries
+    mkdir %LIBRARY_LIB%
+    move .\temp_prefix\lib\LLVMBOLT*.lib %LIBRARY_LIB%
 ) else if "%PKG_NAME%" == "bolt" (
     cmake --install ./build --prefix=./temp_prefix
     if %ERRORLEVEL% neq 0 exit 1

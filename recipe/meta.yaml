@@ -65,6 +65,7 @@ outputs:
         - zlib
         - zstd
         # only here to avoid picking up the files twice
+        - {{ pin_subpackage("libbolt", exact=True) }}
         - {{ pin_subpackage("bolt", exact=True) }}
       run:
         # bolt is built in this feedstock, but intentionally not part of llvmdev
@@ -149,6 +150,34 @@ outputs:
       commands:
         - echo "Hello World!"
 
+  # Contains bolt support libraries
+  - name: libbolt
+    script: install_llvm.sh   # [unix]
+    script: install_llvm.bat  # [win]
+    build:
+      activate_in_script: true
+    requirements:
+      build:
+        - {{ stdlib('c') }}
+        - {{ compiler('cxx') }}
+        - cmake
+        - ninja
+        - libcxx {{ cxx_compiler_version }}  # [osx]
+      run_constrained:
+        - llvm        {{ version }}
+        - llvmdev     {{ version }}
+        - clang       {{ version }}
+        - clang-tools {{ version }}
+    test:
+      commands:
+      {% for each_lib in [
+          "Core", "Passes", "Profile", "Rewrite", "RuntimeLibs",
+          "TargetAArch64", "TargetX86", "Utils"
+      ] %}
+        - test -f $PREFIX/lib/libLLVMBOLT{{ each_lib }}.a               # [unix]
+        - if not exist %LIBRARY_LIB%\LLVMBOLT{{ each_lib }}.lib exit 1  # [win]
+      {% endfor %}
+
   # Contains bolt
   - name: bolt
     script: install_llvm.sh   # [unix]
@@ -167,6 +196,7 @@ outputs:
         - zlib
         - zstd
       run:
+        - {{ pin_subpackage("libbolt", exact=True) }}
         # we need to do this manually because clang_bootstrap has no run-export
         - libcxx >={{ cxx_compiler_version }}  # [osx]
       run_constrained:
