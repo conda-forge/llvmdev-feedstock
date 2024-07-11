@@ -62,13 +62,13 @@ outputs:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - libxml2
         - zlib
         - zstd
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
+        # we need to do this manually because clang_bootstrap has no run-export
         - libcxx >={{ cxx_compiler_version }}                           # [osx]
       run_constrained:
         - llvm        {{ version }}
@@ -111,10 +111,11 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
-        - libxml2
+        - libxml2   # [unix]
         - zlib
         - zstd
       run:
+        # we need to do this manually because clang_bootstrap has no run-export
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
@@ -174,6 +175,8 @@ outputs:
         - zstd
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        # we need to do this manually because clang_bootstrap has no run-export
+        - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
         - $PREFIX/bin/llc-{{ major_ver }} -version                               # [not win]
@@ -202,7 +205,7 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [not win]
-        - libxml2
+        - libxml2   # [win]
         - zlib
         - zstd
       run:
@@ -245,7 +248,6 @@ outputs:
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libxml2
         - zlib
         - zstd
       run_constrained:
