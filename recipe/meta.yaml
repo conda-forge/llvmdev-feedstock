@@ -64,7 +64,10 @@ outputs:
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - zlib
         - zstd
+        # only here to avoid picking up the files twice
+        - {{ pin_subpackage("bolt", exact=True) }}
       run:
+        # bolt is built in this feedstock, but intentionally not part of llvmdev
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
@@ -150,6 +153,38 @@ outputs:
       commands:
         - echo "Hello World!"
 
+  # Contains bolt
+  - name: bolt
+    script: install_llvm.sh   # [unix]
+    script: install_llvm.bat  # [win]
+    build:
+      activate_in_script: true
+    requirements:
+      build:
+        - {{ stdlib('c') }}
+        - {{ compiler('cxx') }}
+        - cmake
+        - ninja
+        - libcxx {{ cxx_compiler_version }}  # [osx]
+      host:
+        - libcxx {{ cxx_compiler_version }}  # [osx]
+        - zlib
+        - zstd
+      run:
+        # we need to do this manually because clang_bootstrap has no run-export
+        - libcxx >={{ cxx_compiler_version }}  # [osx]
+      run_constrained:
+        - llvm        {{ version }}
+        - llvmdev     {{ version }}
+        - clang       {{ version }}
+        - clang-tools {{ version }}
+    test:
+      commands:
+        - llvm-bolt -version
+        - llvm-boltdiff -version
+        - llvm-bolt-heatmap -version
+        - perf2bolt -version
+
   # Contains LLVM tools
   - name: llvm-tools
     script: install_llvm.sh   # [unix]
@@ -167,6 +202,8 @@ outputs:
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        # bolt is only in host to avoid picking up the binary again in llvm-tools
+        - {{ pin_subpackage("bolt", exact=True) }}
         - libxml2   # [win]
         - zlib
         - zstd
@@ -181,9 +218,10 @@ outputs:
         - clang-tools {{ version }}
     test:
       commands:
-        - $PREFIX/bin/llc -version                               # [not win]
-        - if not exist "%LIBRARY_BIN%"\\llc.exe exit 1           # [win]
-        - llc -version                                           # [win]
+        - llc -version
+        # absence of bolt
+        - test ! -f $PREFIX/bin/bolt                # [unix]
+        - if exist %LIBRARY_BIN%\bolt.exe exit 1    # [win]
 
   # Contains LLVM-C shared library
   - name: libllvm-c{{ major_ver }}
