@@ -26,6 +26,12 @@ elif [[ "${PKG_NAME}" == libllvm* ]]; then
     mv ./temp_prefix/lib/libLLVM-${SOVER_EXT}${SHLIB_EXT} $PREFIX/lib
     mv ./temp_prefix/lib/lib*.so.${SOVER_EXT} $PREFIX/lib || true
     mv ./temp_prefix/lib/lib*.${SOVER_EXT}.dylib $PREFIX/lib || true
+elif [[ "${PKG_NAME}" == "bolt" ]]; then
+    cmake --install ./build --prefix=./temp_prefix
+    # only bolt binaries
+    mkdir -p $PREFIX/bin
+    mv ./temp_prefix/bin/llvm-bolt* $PREFIX/bin
+    mv ./temp_prefix/bin/perf2bolt $PREFIX/bin
 elif [[ "${PKG_NAME}" == "llvm-tools" ]]; then
     cmake --install ./build --prefix=./temp_prefix
     # everything in /bin & /share
