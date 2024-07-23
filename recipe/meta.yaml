@@ -181,6 +181,9 @@ outputs:
         - test -f $PREFIX/lib/libLLVMBOLT{{ each_lib }}.a               # [unix]
         - if not exist %LIBRARY_LIB%\LLVMBOLT{{ each_lib }}.lib exit 1  # [win]
       {% endfor %}
+        # only on linux-64
+        - test -f $PREFIX/lib/libbolt_rt_hugify.a                       # [linux64]
+        - test -f $PREFIX/lib/libbolt_rt_instr.a                        # [linux64]
 
   # Contains bolt
   - name: bolt
