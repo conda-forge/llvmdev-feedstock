@@ -31,6 +31,8 @@ elif [[ "${PKG_NAME}" == "libbolt" ]]; then
     # only bolt libraries
     mkdir -p $PREFIX/lib
     mv ./temp_prefix/lib/libLLVMBOLT* $PREFIX/lib
+    # only on linux
+    mv ./temp_prefix/lib/libbolt* $PREFIX/lib || true
 elif [[ "${PKG_NAME}" == "bolt" ]]; then
     cmake --install ./build --prefix=./temp_prefix
     # only bolt binaries
