@@ -1,4 +1,5 @@
-set -x
+#!/bin/bash
+set -ex
 
 # Make osx work like linux.
 sed -i.bak "s/NOT APPLE AND ARG_SONAME/ARG_SONAME/g" llvm/cmake/modules/AddLLVM.cmake
@@ -73,9 +74,9 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
 
   if [[ "$target_platform" == linux* ]]; then
     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
+    # check-llvm takes >1.5h to build & run on osx
+    ninja -j${CPU_COUNT} check-llvm
   fi
-
-  ninja -j${CPU_COUNT} check-llvm
 
   cd ../llvm/test
   python ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
