@@ -83,6 +83,8 @@ Current release info
 
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-bolt-green.svg)](https://anaconda.org/conda-forge/bolt) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/bolt.svg)](https://anaconda.org/conda-forge/bolt) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/bolt.svg)](https://anaconda.org/conda-forge/bolt) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/bolt.svg)](https://anaconda.org/conda-forge/bolt) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libbolt-green.svg)](https://anaconda.org/conda-forge/libbolt) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libbolt.svg)](https://anaconda.org/conda-forge/libbolt) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libbolt.svg)](https://anaconda.org/conda-forge/libbolt) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libbolt.svg)](https://anaconda.org/conda-forge/libbolt) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm--c18-green.svg)](https://anaconda.org/conda-forge/libllvm-c18) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm-c18.svg)](https://anaconda.org/conda-forge/libllvm-c18) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm-c18.svg)](https://anaconda.org/conda-forge/libllvm-c18) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm-c18.svg)](https://anaconda.org/conda-forge/libllvm-c18) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm18-green.svg)](https://anaconda.org/conda-forge/libllvm18) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm18.svg)](https://anaconda.org/conda-forge/libllvm18) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm18.svg)](https://anaconda.org/conda-forge/libllvm18) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm18.svg)](https://anaconda.org/conda-forge/libllvm18) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-lit-green.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) |
@@ -100,41 +102,41 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libllvm-c18, libllvm18, lit, llvm, llvm-tools, llvmdev` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `bolt, libbolt, libllvm-c18, libllvm18, lit, llvm, llvm-tools, llvmdev` can be installed with `conda`:
 
 ```
-conda install libllvm-c18 libllvm18 lit llvm llvm-tools llvmdev
-```
-
-or with `mamba`:
-
-```
-mamba install libllvm-c18 libllvm18 lit llvm llvm-tools llvmdev
-```
-
-It is possible to list all of the versions of `libllvm-c18` available on your platform with `conda`:
-
-```
-conda search libllvm-c18 --channel conda-forge
+conda install bolt libbolt libllvm-c18 libllvm18 lit llvm llvm-tools llvmdev
 ```
 
 or with `mamba`:
 
 ```
-mamba search libllvm-c18 --channel conda-forge
+mamba install bolt libbolt libllvm-c18 libllvm18 lit llvm llvm-tools llvmdev
+```
+
+It is possible to list all of the versions of `bolt` available on your platform with `conda`:
+
+```
+conda search bolt --channel conda-forge
+```
+
+or with `mamba`:
+
+```
+mamba search bolt --channel conda-forge
 ```
 
 Alternatively, `mamba repoquery` may provide more information:
 
 ```
 # Search all versions available on your platform:
-mamba repoquery search libllvm-c18 --channel conda-forge
+mamba repoquery search bolt --channel conda-forge
 
-# List packages depending on `libllvm-c18`:
-mamba repoquery whoneeds libllvm-c18 --channel conda-forge
+# List packages depending on `bolt`:
+mamba repoquery whoneeds bolt --channel conda-forge
 
-# List dependencies of `libllvm-c18`:
-mamba repoquery depends libllvm-c18 --channel conda-forge
+# List dependencies of `bolt`:
+mamba repoquery depends bolt --channel conda-forge
 ```
 
 

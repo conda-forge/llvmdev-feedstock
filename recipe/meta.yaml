@@ -22,7 +22,7 @@ source:
     - patches/0002-lljit-respect-codemodel.patch
 
 build:
-  number: 1
+  number: 2
   merge_build_host: false
 
 requirements:
@@ -62,13 +62,17 @@ outputs:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - libxml2
         - zlib
         - zstd
+        # only here to avoid picking up the files twice
+        - {{ pin_subpackage("libbolt", exact=True) }}
+        - {{ pin_subpackage("bolt", exact=True) }}
       run:
+        # bolt is built in this feedstock, but intentionally not part of llvmdev
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
+        # we need to do this manually because clang_bootstrap has no run-export
         - libcxx >={{ cxx_compiler_version }}                           # [osx]
       run_constrained:
         - llvm        {{ version }}
@@ -111,10 +115,11 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
-        - libxml2
+        - libxml2   # [unix]
         - zlib
         - zstd
       run:
+        # we need to do this manually because clang_bootstrap has no run-export
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
@@ -149,6 +154,70 @@ outputs:
       commands:
         - echo "Hello World!"
 
+  # Contains bolt support libraries
+  - name: libbolt
+    script: install_llvm.sh   # [unix]
+    script: install_llvm.bat  # [win]
+    build:
+      activate_in_script: true
+    requirements:
+      build:
+        - {{ stdlib('c') }}
+        - {{ compiler('cxx') }}
+        - cmake
+        - ninja
+        - libcxx {{ cxx_compiler_version }}  # [osx]
+      run_constrained:
+        - llvm        {{ version }}
+        - llvmdev     {{ version }}
+        - clang       {{ version }}
+        - clang-tools {{ version }}
+    test:
+      commands:
+      {% for each_lib in [
+          "Core", "Passes", "Profile", "Rewrite", "RuntimeLibs",
+          "TargetAArch64", "TargetX86", "Utils"
+      ] %}
+        - test -f $PREFIX/lib/libLLVMBOLT{{ each_lib }}.a               # [unix]
+        - if not exist %LIBRARY_LIB%\LLVMBOLT{{ each_lib }}.lib exit 1  # [win]
+      {% endfor %}
+        # only on linux-64
+        - test -f $PREFIX/lib/libbolt_rt_hugify.a                       # [linux64]
+        - test -f $PREFIX/lib/libbolt_rt_instr.a                        # [linux64]
+
+  # Contains bolt
+  - name: bolt
+    script: install_llvm.sh   # [unix]
+    script: install_llvm.bat  # [win]
+    build:
+      activate_in_script: true
+    requirements:
+      build:
+        - {{ stdlib('c') }}
+        - {{ compiler('cxx') }}
+        - cmake
+        - ninja
+        - libcxx {{ cxx_compiler_version }}  # [osx]
+      host:
+        - libcxx {{ cxx_compiler_version }}  # [osx]
+        - zlib
+        - zstd
+      run:
+        - {{ pin_subpackage("libbolt", exact=True) }}
+        # we need to do this manually because clang_bootstrap has no run-export
+        - libcxx >={{ cxx_compiler_version }}  # [osx]
+      run_constrained:
+        - llvm        {{ version }}
+        - llvmdev     {{ version }}
+        - clang       {{ version }}
+        - clang-tools {{ version }}
+    test:
+      commands:
+        - llvm-bolt -version
+        - llvm-boltdiff -version
+        - llvm-bolt-heatmap -version
+        - perf2bolt -version
+
   # Contains LLVM tools
   - name: llvm-tools
     script: install_llvm.sh   # [unix]
@@ -166,11 +235,15 @@ outputs:
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libxml2
+        # bolt is only in host to avoid picking up the binary again in llvm-tools
+        - {{ pin_subpackage("bolt", exact=True) }}
+        - libxml2   # [win]
         - zlib
         - zstd
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        # we need to do this manually because clang_bootstrap has no run-export
+        - libcxx >={{ cxx_compiler_version }}  # [osx]
       run_constrained:
         - llvm        {{ version }}
         - llvmdev     {{ version }}
@@ -178,9 +251,10 @@ outputs:
         - clang-tools {{ version }}
     test:
       commands:
-        - $PREFIX/bin/llc -version                               # [not win]
-        - if not exist "%LIBRARY_BIN%"\\llc.exe exit 1           # [win]
-        - llc -version                                           # [win]
+        - llc -version
+        # absence of bolt
+        - test ! -f $PREFIX/bin/llvm-bolt               # [unix]
+        - if exist %LIBRARY_BIN%\llvm-bolt.exe exit 1   # [win]
 
   # Contains LLVM-C shared library
   - name: libllvm-c{{ major_ver }}
@@ -204,7 +278,6 @@ outputs:
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libxml2
         - zlib
         - zstd
       run_constrained:
