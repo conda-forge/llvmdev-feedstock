@@ -16,6 +16,7 @@ cmake -G "Ninja" ^
     -DLLVM_USE_INTEL_JITEVENTS=ON ^
     -DLLVM_ENABLE_DUMP=ON ^
     -DLLVM_ENABLE_LIBXML2=FORCE_ON ^
+    -DLLVM_ENABLE_PROJECTS="bolt" ^
     -DLLVM_ENABLE_RTTI=ON ^
     -DLLVM_ENABLE_ZLIB=FORCE_ON ^
     -DLLVM_ENABLE_ZSTD=FORCE_ON ^
@@ -25,6 +26,7 @@ cmake -G "Ninja" ^
     -DLLVM_INCLUDE_TESTS=ON ^
     -DLLVM_INCLUDE_UTILS=ON ^
     -DLLVM_INSTALL_UTILS=ON ^
+    -DLLVM_TARGETS_TO_BUILD="X86;AArch64" ^
     -DLLVM_USE_SYMLINKS=OFF ^
     -DLLVM_UTILS_INSTALL_DIR=libexec\llvm ^
     -DLLVM_BUILD_LLVM_C_DYLIB=ON ^
@@ -39,5 +41,7 @@ if %ERRORLEVEL% neq 0 exit 1
 REM bin\opt -S -vector-library=SVML -mcpu=haswell -O3 %RECIPE_DIR%\numba-3016.ll | bin\FileCheck %RECIPE_DIR%\numba-3016.ll
 REM if %ERRORLEVEL% neq 0 exit 1
 
-cd ..\llvm\test
-python ..\..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
+:: :: takes ~30min; disabled due to timeouts
+:: cd ..\llvm\test
+:: python ..\..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
+:: if %ERRORLEVEL% neq 0 exit 1

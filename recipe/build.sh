@@ -1,4 +1,5 @@
-set -x
+#!/bin/bash
+set -ex
 
 # Make osx work like linux.
 sed -i.bak "s/NOT APPLE AND ARG_SONAME/ARG_SONAME/g" llvm/cmake/modules/AddLLVM.cmake
@@ -14,7 +15,7 @@ elif [[ "$target_platform" == osx-* ]]; then
   # https://github.com/llvm/llvm-project/blob/llvmorg-16.0.6/llvm/tools/llvm-shlib/CMakeLists.txt#L82-L85
   # currently off though, because it doesn't build yet
   # CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_BUILD_LLVM_C_DYLIB=ON"
-  true
+  CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_TARGETS_TO_BUILD=X86;AArch64"
 fi
 
 if [[ "$CC_FOR_BUILD" != "" && "$CC_FOR_BUILD" != "$CC" ]]; then
@@ -38,6 +39,7 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DLLVM_ENABLE_DUMP=ON \
       -DLLVM_ENABLE_LIBEDIT=OFF \
       -DLLVM_ENABLE_LIBXML2=FORCE_ON \
+      -DLLVM_ENABLE_PROJECTS="bolt" \
       -DLLVM_ENABLE_RTTI=ON \
       -DLLVM_ENABLE_TERMINFO=OFF \
       -DLLVM_ENABLE_ZLIB=FORCE_ON \
@@ -72,9 +74,9 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
 
   if [[ "$target_platform" == linux* ]]; then
     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
+    # check-llvm takes >1.5h to build & run on osx
+    ninja -j${CPU_COUNT} check-llvm
   fi
-
-  ninja -j${CPU_COUNT} check-llvm
 
   cd ../llvm/test
   python ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
