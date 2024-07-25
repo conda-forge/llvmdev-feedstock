@@ -1,9 +1,9 @@
-{% set version = "18.1.0.rc4" %}
+{% set version = "18.1.8" %}
 {% set major_ver = version.split(".")[0] %}
 {% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
 
 # as of LLVM 17, we expect an "rc" suffix for the release candidates
-{% set extra = "rc" if version.split(".")[-1] not in "1234567" else "" %}
+{% set extra = "rc" if version.split(".")[-1] not in "0123456789" else "" %}
 {% set extra = "git" if version.split(".")[-1] == "dev0" else extra %}
 
 package:
@@ -11,21 +11,23 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  sha256: bc1d243472ee4868e20760c100049078343a89aa34549c69dbab389c68e0c473
+  url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
+  sha256: 09c08693a9afd6236f27a2ebae62cda656eba19021ef3f94d59e931d662d4856
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
-    - patches/0002-restore-macos-10.9-support.patch
+    # backport https://github.com/llvm/llvm-project/pull/90599
+    - patches/0002-lljit-respect-codemodel.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
   build:
+    - {{ stdlib('c') }}
     - {{ compiler('cxx') }}
     - cmake
     - ninja
@@ -48,6 +50,7 @@ outputs:
       activate_in_script: true
     requirements:
       build:
+        - {{ stdlib('c') }}
         - {{ compiler('cxx') }}
         - cmake
         - ninja
@@ -100,6 +103,7 @@ outputs:
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
+        - {{ stdlib('c') }}
         - {{ compiler('cxx') }}
         - ninja                    # [not win]
         - cmake                    # [not win]
@@ -114,6 +118,10 @@ outputs:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
+        # old style
+        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.so     # [linux]
+        - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.dylib  # [osx]
+        # new style
         - test -f $PREFIX/lib/libLLVM.so.{{ maj_min }}{{ extra }}       # [linux]
         - test -f $PREFIX/lib/libLLVM.{{ maj_min }}{{ extra }}.dylib    # [osx]
 
@@ -149,6 +157,7 @@ outputs:
       activate_in_script: true
     requirements:
       build:
+        - {{ stdlib('c') }}
         - {{ compiler('cxx') }}
         - cmake
         - ninja
@@ -187,6 +196,7 @@ outputs:
       skip: true  # [not win]
     requirements:
       build:
+        - {{ stdlib('c') }}
         - {{ compiler('cxx') }}
         - cmake
         - ninja
@@ -221,7 +231,7 @@ outputs:
         - python >=3
         - pip
       run:
-        - python
+        - python >=3
     test:
       imports:
         - lit

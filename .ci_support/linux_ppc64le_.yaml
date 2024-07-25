@@ -1,9 +1,13 @@
+c_stdlib:
+- sysroot
+c_stdlib_version:
+- '2.17'
 cdt_name:
 - cos7
 channel_sources:
 - conda-forge
 channel_targets:
-- conda-forge llvm_rc
+- conda-forge main
 cxx_compiler:
 - gxx
 cxx_compiler_version:
@@ -14,7 +18,10 @@ libxml2:
 - '2'
 target_platform:
 - linux-ppc64le
+zip_keys:
+- - c_stdlib_version
+  - cdt_name
 zlib:
-- '1.2'
+- '1'
 zstd:
 - '1.5'

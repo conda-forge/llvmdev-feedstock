@@ -6,13 +6,17 @@ IFS='.' read -ra VER_ARR <<< "$PKG_VERSION"
 # temporary prefix to be able to install files more granularly
 mkdir temp_prefix
 
+MAJOR_EXT="${VER_ARR[0]}"
 # default SOVER for tagged releases is major.minor version
 SOVER_EXT="${VER_ARR[0]}.${VER_ARR[1]}"
+# for rc's, both MAJOR_EXT & SOVER_EXT get suffixes
 if [[ "${PKG_VERSION}" == *rc* ]]; then
     # rc's get "rc" without the number
+    MAJOR_EXT="${MAJOR_EXT}rc"
     SOVER_EXT="${SOVER_EXT}rc"
 elif [[ "${PKG_VERSION}" == *dev0 ]]; then
     # otherwise with git suffix
+    MAJOR_EXT="${MAJOR_EXT}git"
     SOVER_EXT="${SOVER_EXT}git"
 fi
 
@@ -23,6 +27,7 @@ if [[ "${PKG_NAME}" == libllvm-c* ]]; then
 elif [[ "${PKG_NAME}" == libllvm* ]]; then
     cmake --install ./build --prefix=./temp_prefix
     # all other libraries
+    mv ./temp_prefix/lib/libLLVM-${MAJOR_EXT}${SHLIB_EXT} $PREFIX/lib
     mv ./temp_prefix/lib/lib*.so.${SOVER_EXT} $PREFIX/lib || true
     mv ./temp_prefix/lib/lib*.${SOVER_EXT}.dylib $PREFIX/lib || true
 elif [[ "${PKG_NAME}" == "llvm-tools" ]]; then
