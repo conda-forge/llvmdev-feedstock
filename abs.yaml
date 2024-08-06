@@ -1,6 +1,3 @@
-# to build 3.8 to 3.12 on prefect
-aggregate_branch: 3.12
-
 # Four unit tests crash on big sur builders, but not ventura.
 # These tests call /usr/lib/system/libsystem_pthread.dylib
 # before crashing.
