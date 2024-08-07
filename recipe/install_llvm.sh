@@ -30,13 +30,26 @@ elif [[ "${PKG_NAME}" == libllvm* ]]; then
     mv ./temp_prefix/lib/libLLVM-${MAJOR_EXT}${SHLIB_EXT} $PREFIX/lib
     mv ./temp_prefix/lib/lib*.so.${SOVER_EXT} $PREFIX/lib || true
     mv ./temp_prefix/lib/lib*.${SOVER_EXT}.dylib $PREFIX/lib || true
-elif [[ "${PKG_NAME}" == "llvm-tools" ]]; then
+elif [[ "${PKG_NAME}" == "llvm-tools-${MAJOR_EXT}" ]]; then
     cmake --install ./build --prefix=./temp_prefix
-    # everything in /bin & /share
-    mv ./temp_prefix/bin/* $PREFIX/bin
-    mv ./temp_prefix/share/* $PREFIX/share
+    # install all binaries with a -${MAJOR_EXT}
+    pushd ./temp_prefix
+      for f in bin/*; do
+        cp $f $PREFIX/bin/$f-${MAJOR_EXT}
+      done
+    popd
     # except one binary that belongs to llvmdev
-    rm $PREFIX/bin/llvm-config
+    rm $PREFIX/bin/llvm-config-${MAJOR_EXT}
+elif [[ "${PKG_NAME}" == "llvm-tools-${MAJOR_EXT}" ]]; then
+    cmake --install ./build --prefix=./temp_prefix
+    # Install a symlink without the major version
+    pushd ./temp_prefix
+      for f in bin/*; do
+        ln -sf $PREFIX/bin/$f-${MAJOR_EXT} $PREFIX/bin/$f
+      done
+    popd
+    # opt-viewer tool
+    mv ./temp_prefix/share/* $PREFIX/share
 else
     # llvmdev: install everything else
     cmake --install ./build --prefix=$PREFIX

@@ -9,6 +9,17 @@ if "%PKG_NAME%" == "libllvm-c%PKG_VERSION:~0,2%" (
     REM only libLLVM-C
     move .\temp_prefix\bin\LLVM-C.dll %LIBRARY_BIN%
     move .\temp_prefix\lib\LLVM-C.lib %LIBRARY_LIB%
+) else if "%PKG_NAME%" == "llvm-tools-%PKG_VERSION:~0,2%" (
+    cmake --install ./build --prefix=./temp_prefix
+    if %ERRORLEVEL% neq 0 exit 1
+
+    mkdir %LIBRARY_PREFIX%\share
+    REM all the executables (not .dll's) in \bin with a version suffix
+    cd .\temp_prefix\bin
+    for %%f in (*.exe) do (
+        echo %%~nf
+        copy "%%~nf.exe" %LIBRARY_BIN%\%%~nf-%PKG_VERSION:~0,2%.exe
+    )
 ) else if "%PKG_NAME%" == "llvm-tools" (
     cmake --install ./build --prefix=./temp_prefix
     if %ERRORLEVEL% neq 0 exit 1
