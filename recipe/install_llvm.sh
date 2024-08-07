@@ -35,7 +35,7 @@ elif [[ "${PKG_NAME}" == "llvm-tools-${MAJOR_EXT}" ]]; then
     # install all binaries with a -${MAJOR_EXT}
     pushd ./temp_prefix
       for f in bin/*; do
-        cp $f $PREFIX/bin/$f-${MAJOR_EXT}
+        cp $f $PREFIX/bin/$(basename $f)-${MAJOR_EXT}
       done
     popd
     # except one binary that belongs to llvmdev
@@ -45,7 +45,7 @@ elif [[ "${PKG_NAME}" == "llvm-tools-${MAJOR_EXT}" ]]; then
     # Install a symlink without the major version
     pushd ./temp_prefix
       for f in bin/*; do
-        ln -sf $PREFIX/bin/$f-${MAJOR_EXT} $PREFIX/bin/$f
+        ln -sf $PREFIX/bin/$(basename $f)-${MAJOR_EXT} $PREFIX/bin/$(basename $f)
       done
     popd
     # opt-viewer tool
