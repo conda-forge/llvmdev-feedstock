@@ -174,7 +174,10 @@ outputs:
     test:
       commands:
         - $PREFIX/bin/llc-{{ major_ver }} -version                               # [not win]
-        - "%LIBRARY_BIN%"\\llc-{{ major_ver }}.exe -version                      # [win]
+        # The test for windows is split into two lines instead of having it in one line
+        # like its unix variant because of a YAML parsing issue.
+        - if not exist "%LIBRARY_BIN%"\\llc-{{ major_ver }}.exe exit 1           # [win]
+        - llc-{{ major_ver }} -version                                           # [win]
         - test ! -f $PREFIX/bin/llvm-config-{{ major_ver }}                      # [not win]
         - if exist "%LIBRARY_BIN%"\\llvm-config-{{ major_ver }}.exe exit 1       # [win]
 
@@ -210,7 +213,10 @@ outputs:
     test:
       commands:
         - $PREFIX/bin/llc -version                               # [not win]
-        - "%LIBRARY_BIN%"\\llc.exe -version                      # [win]
+        # The test for windows is split into two lines instead of having it in one line
+        # like its unix variant because of a YAML parsing issue.
+        - if not exist "%LIBRARY_BIN%"\\llc.exe exit 1           # [win]
+        - llc -version                                           # [win]
         - test ! -f $PREFIX/bin/llvm-config                      # [not win]
         - if exist "%LIBRARY_BIN%"\\llvm-config.exe exit 1       # [win]
 
