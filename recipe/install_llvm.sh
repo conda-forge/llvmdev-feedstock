@@ -40,7 +40,7 @@ elif [[ "${PKG_NAME}" == "llvm-tools-${MAJOR_EXT}" ]]; then
     popd
     # except one binary that belongs to llvmdev
     rm $PREFIX/bin/llvm-config-${MAJOR_EXT}
-elif [[ "${PKG_NAME}" == "llvm-tools-${MAJOR_EXT}" ]]; then
+elif [[ "${PKG_NAME}" == "llvm-tools" ]]; then
     cmake --install ./build --prefix=./temp_prefix
     # Install a symlink without the major version
     pushd ./temp_prefix

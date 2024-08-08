@@ -174,8 +174,9 @@ outputs:
     test:
       commands:
         - $PREFIX/bin/llc-{{ major_ver }} -version                               # [not win]
-        - if not exist "%LIBRARY_BIN%"\\llc-{{ major_ver }}.exe exit 1           # [win]
-        - llc-{{ major_ver }} -version                                           # [win]
+        - "%LIBRARY_BIN%"\\llc-{{ major_ver }}.exe -version                      # [win]
+        - test ! -f $PREFIX/bin/llvm-config-{{ major_ver }}                      # [not win]
+        - if exist "%LIBRARY_BIN%"\\llvm-config-{{ major_ver }}.exe exit 1       # [win]
 
   # Contains LLVM tools
   - name: llvm-tools
@@ -209,8 +210,9 @@ outputs:
     test:
       commands:
         - $PREFIX/bin/llc -version                               # [not win]
-        - if not exist "%LIBRARY_BIN%"\\llc.exe exit 1           # [win]
-        - llc -version                                           # [win]
+        - "%LIBRARY_BIN%"\\llc.exe -version                      # [win]
+        - test ! -f $PREFIX/bin/llvm-config                      # [not win]
+        - if exist "%LIBRARY_BIN%"\\llvm-config.exe exit 1       # [win]
 
   # Contains LLVM-C shared library
   - name: libllvm-c{{ major_ver }}
