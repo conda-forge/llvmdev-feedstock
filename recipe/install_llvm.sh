@@ -50,6 +50,7 @@ elif [[ "${PKG_NAME}" == "llvm-tools" ]]; then
     popd
     # opt-viewer tool
     mv ./temp_prefix/share/* $PREFIX/share
+    rm $PREFIX/bin/llvm-config
 else
     # llvmdev: install everything else
     cmake --install ./build --prefix=$PREFIX
