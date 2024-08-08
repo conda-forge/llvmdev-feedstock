@@ -20,6 +20,7 @@ if "%PKG_NAME%" == "libllvm-c%PKG_VERSION:~0,2%" (
         echo %%~nf
         copy "%%~nf.exe" %LIBRARY_BIN%\%%~nf-%PKG_VERSION:~0,2%.exe
     )
+    cd ..\..
 ) else if "%PKG_NAME%" == "llvm-tools" (
     cmake --install ./build --prefix=./temp_prefix
     if %ERRORLEVEL% neq 0 exit 1
