@@ -155,6 +155,9 @@ outputs:
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
+      # On Windows there are no symlinks and copying will create a new package
+      # that is 300MB+
+      skip: true  # [win]
     requirements:
       build:
         - {{ stdlib('c') }}
@@ -198,13 +201,13 @@ outputs:
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}
+        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [not win]
         - libxml2
         - zlib
         - zstd
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}
+        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [not win]
       run_constrained:
         - llvm        {{ version }}
         - llvmdev     {{ version }}
