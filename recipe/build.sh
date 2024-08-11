@@ -81,3 +81,23 @@ if [[ "$target_platform" == "linux-64" ]]; then
   cd ../llvm/test
   python ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
 fi
+
+# install everything (will be sliced & diced in meta.yaml)
+cmake --install . --prefix=$PREFIX
+
+# install again in separate folder so we can handle llvm binaries
+# separately from whatever else is already in $PREFIX/bin
+mkdir temp_prefix
+cmake --install . --prefix=./temp_prefix
+
+IFS='.' read -ra VER_ARR <<< "$PKG_VERSION"
+
+cd ./temp_prefix
+for f in bin/*; do
+    # remove already installed binary
+    rm $PREFIX/bin/$(basename $f)
+    # version the binary
+    mv $f $PREFIX/bin/$(basename $f)-${VER_ARR[0]}
+    # create symlink from unversioned to versioned
+    ln -sf $PREFIX/bin/$(basename $f)-${VER_ARR[0]} $PREFIX/bin/$(basename $f)
+done
