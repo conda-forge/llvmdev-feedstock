@@ -52,7 +52,7 @@ outputs:
       host:
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - {{ pin_subpackage("libllvm-c" ~ major_ver, exact=True) }}     # [win]
-        - {{ pin_subpackage("llvm-tools" ~ major_ver, exact=True) }}    # [unix]
+        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}    # [unix]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - zlib
         - zstd
