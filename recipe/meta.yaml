@@ -32,6 +32,7 @@ requirements:
     - cmake
     - ninja
     - python >=3
+    - m2-sed                             # [win]
     - libcxx {{ cxx_compiler_version }}  # [osx]
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
@@ -44,31 +45,23 @@ requirements:
 outputs:
   # Contains everything
   - name: llvmdev
-    script: install_llvm.sh   # [unix]
-    script: install_llvm.bat  # [win]
-    build:
-      activate_in_script: true
+    files:
+      include:
+        # everything not already in other outputs
+        - "*"
     requirements:
-      build:
-        - {{ stdlib('c') }}
-        - {{ compiler('cxx') }}
-        - cmake
-        - ninja
-        - python >=3
-        - m2-sed                             # [win]
-        - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
-        - libcxx {{ cxx_compiler_version }}  # [osx]
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [win]
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm-c" ~ major_ver, exact=True) }}     # [win]
+        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [unix]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - libxml2
         - zlib
         - zstd
       run:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [win]
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm-c" ~ major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
+        # we need to do this manually because clang_bootstrap has no run-export
         - libcxx >={{ cxx_compiler_version }}                           # [osx]
       run_constrained:
         - llvm        {{ version }}
@@ -96,25 +89,27 @@ outputs:
   # Contains the shared libraries. To make different LLVM libraries co-installable
   # soversion is appended to the package name.
   - name: libllvm{{ major_ver }}
-    script: install_llvm.sh  # [not win]
     build:
-      activate_in_script: true
       run_exports:                                                    # [not win]
-        - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
+        - {{ pin_subpackage("libllvm" ~ major_ver, max_pin="x.x") }}  # [not win]
+    files:
+      include:
+        - lib/lib*                  # [unix]
+      exclude:
+        # separate output, see below
+        - lib/libLLVM-C.*           # [unix]
+        - Library/**/libLLVM-C.*    # [win]
     requirements:
       build:
+        # for run-exports
         - {{ stdlib('c') }}
         - {{ compiler('cxx') }}
-        - ninja                    # [not win]
-        - cmake                    # [not win]
-        - python >=3               # [not win]
-        - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
-        - libcxx {{ cxx_compiler_version }}  # [osx]
-        - libxml2
+        - libxml2   # [unix]
         - zlib
         - zstd
       run:
+        # we need to do this manually because clang_bootstrap has no run-export
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
@@ -130,16 +125,16 @@ outputs:
   - name: llvm
     build:
       run_exports:                                                    # [not win]
-        - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
+        - {{ pin_subpackage("libllvm" ~ major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
       host:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}     # [not win]
         - libxml2
         - zlib
         - zstd
       run:                                                            # [not win]
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}     # [not win]
       run_constrained:
         - llvmdev     {{ version }}
         - llvm-tools  {{ version }}
@@ -151,29 +146,30 @@ outputs:
 
   # Contains LLVM tools with a version suffix
   - name: llvm-tools-{{ major_ver }}
-    script: install_llvm.sh   # [unix]
-    script: install_llvm.bat  # [win]
     build:
-      activate_in_script: true
       # On Windows there are no symlinks and copying will create a new package
       # that is 300MB+
       skip: true  # [win]
+    files:
+      include:
+        - bin/*-{{ major_ver }}     # [unix]
+      exclude:
+        # belongs into llvmdev
+        - bin/llvm-config*          # [unix]
     requirements:
       build:
+        # for run-exports
         - {{ stdlib('c') }}
         - {{ compiler('cxx') }}
-        - cmake
-        - ninja
-        - python >=3
-        - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
-        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - libxml2
         - zlib
         - zstd
       run:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
+        # we need to do this manually because clang_bootstrap has no run-export
+        - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
         - $PREFIX/bin/llc-{{ major_ver }} -version                               # [not win]
@@ -186,27 +182,26 @@ outputs:
 
   # Contains LLVM tools
   - name: llvm-tools
-    script: install_llvm.sh   # [unix]
-    script: install_llvm.bat  # [win]
-    build:
-      activate_in_script: true
+    files:
+      include:
+        # opt-viewer tool is in share
+        - bin/*                     # [unix]
+        - share/*                   # [unix]
+        - Library/bin/*.exe         # [win]
+        - Library/share/*           # [win]
+      exclude:
+        # belongs into llvmdev
+        - bin/llvm-config*          # [unix]
+        - Library/bin/llvm-config*  # [win]
     requirements:
-      build:
-        - {{ stdlib('c') }}
-        - {{ compiler('cxx') }}
-        - cmake
-        - ninja
-        - python >=3
-        - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
-        - libcxx {{ cxx_compiler_version }}  # [osx]
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [not win]
-        - libxml2
+        - libxml2   # [win]
         - zlib
         - zstd
       run:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [not win]
       run_constrained:
         - llvm        {{ version }}
@@ -225,34 +220,25 @@ outputs:
 
   # Contains LLVM-C shared library
   - name: libllvm-c{{ major_ver }}
-    script: install_llvm.sh   # [unix]
-    script: install_llvm.bat  # [win]
     build:
       run_exports:
-        - {{ pin_subpackage("libllvm-c" + major_ver, max_pin="x.x") }}
-      activate_in_script: true
+        - {{ pin_subpackage("libllvm-c" ~ major_ver, max_pin="x.x") }}
       # not supported on linux, see
       # https://github.com/llvm/llvm-project/blob/llvmorg-16.0.6/llvm/tools/llvm-shlib/CMakeLists.txt#L82-L85
       # osx currently fails as well, see https://github.com/llvm/llvm-project/issues/64657
       skip: true  # [not win]
+    files:
+      include:
+        - Library/bin/libLLVM-C.dll     # [win]
+        - Library/lib/libLLVM-C.lib     # [win]
     requirements:
-      build:
-        - {{ stdlib('c') }}
-        - {{ compiler('cxx') }}
-        - cmake
-        - ninja
-        - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
-        - libcxx {{ cxx_compiler_version }}  # [osx]
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libxml2
         - zlib
         - zstd
       run_constrained:
         - llvmdev {{ version }}
     test:
       commands:
-        - test -f $PREFIX/lib/libLLVM-C.{{ major_ver }}.dylib   # [osx]
         - if not exist %LIBRARY_BIN%\LLVM-C.dll exit 1          # [win]
         - if not exist %LIBRARY_LIB%\LLVM-C.lib exit 1          # [win]
 
