@@ -32,6 +32,7 @@ requirements:
     - cmake
     - ninja
     - python >=3
+    - m2-sed                             # [win]
     - libcxx {{ cxx_compiler_version }}  # [osx]
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
@@ -52,7 +53,7 @@ outputs:
       host:
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - {{ pin_subpackage("libllvm-c" ~ major_ver, exact=True) }}     # [win]
-        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}    # [unix]
+        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [unix]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - zlib
         - zstd
@@ -99,6 +100,10 @@ outputs:
         - lib/libLLVM-C.*           # [unix]
         - Library/**/libLLVM-C.*    # [win]
     requirements:
+      build:
+        # for run-exports
+        - {{ stdlib('c') }}
+        - {{ compiler('cxx') }}
       host:
         - libxml2   # [unix]
         - zlib
@@ -152,6 +157,10 @@ outputs:
         # belongs into llvmdev
         - bin/llvm-config*          # [unix]
     requirements:
+      build:
+        # for run-exports
+        - {{ stdlib('c') }}
+        - {{ compiler('cxx') }}
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - libxml2
