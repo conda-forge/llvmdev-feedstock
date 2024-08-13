@@ -1,4 +1,1 @@
-# the conda-build parameters to use for disabling --skip-existing
-build_parameters:
-  - ""
-
+aggregate_check: False
