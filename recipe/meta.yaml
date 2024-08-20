@@ -148,6 +148,42 @@ outputs:
       commands:
         - echo "Hello World!"
 
+  # Contains LLVM tools with a version suffix
+  - name: llvm-tools-{{ major_ver }}
+    script: install_llvm.sh   # [unix]
+    script: install_llvm.bat  # [win]
+    build:
+      activate_in_script: true
+      # On Windows there are no symlinks and copying will create a new package
+      # that is 300MB+
+      skip: true  # [win]
+    requirements:
+      build:
+        - {{ stdlib('c') }}
+        - {{ compiler('cxx') }}
+        - cmake
+        - ninja
+        - python >=3
+        - libcxx {{ cxx_compiler_version }}  # [osx]
+      host:
+        - libcxx {{ cxx_compiler_version }}  # [osx]
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
+        - zlib
+        - zstd
+      run:
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        # we need to do this manually because clang_bootstrap has no run-export
+        - libcxx >={{ cxx_compiler_version }}  # [osx]
+    test:
+      commands:
+        - $PREFIX/bin/llc-{{ major_ver }} -version                               # [not win]
+        # The test for windows is split into two lines instead of having it in one line
+        # like its unix variant because of a YAML parsing issue.
+        - if not exist "%LIBRARY_BIN%"\\llc-{{ major_ver }}.exe exit 1           # [win]
+        - llc-{{ major_ver }} -version                                           # [win]
+        - test ! -f $PREFIX/bin/llvm-config-{{ major_ver }}                      # [not win]
+        - if exist "%LIBRARY_BIN%"\\llvm-config-{{ major_ver }}.exe exit 1       # [win]
+
   # Contains LLVM tools
   - name: llvm-tools
     script: install_llvm.sh   # [unix]
@@ -163,15 +199,15 @@ outputs:
         - python >=3
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
-        - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [not win]
+        # on unix, there's only symlinks
         - libxml2   # [win]
-        - zlib
-        - zstd
+        - zlib      # [win]
+        - zstd      # [win]
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        # we need to do this manually because clang_bootstrap has no run-export
-        - libcxx >={{ cxx_compiler_version }}  # [osx]
+        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [not win]
       run_constrained:
         - llvm        {{ version }}
         - llvmdev     {{ version }}
@@ -180,8 +216,12 @@ outputs:
     test:
       commands:
         - $PREFIX/bin/llc -version                               # [not win]
+        # The test for windows is split into two lines instead of having it in one line
+        # like its unix variant because of a YAML parsing issue.
         - if not exist "%LIBRARY_BIN%"\\llc.exe exit 1           # [win]
         - llc -version                                           # [win]
+        - test ! -f $PREFIX/bin/llvm-config                      # [not win]
+        - if exist "%LIBRARY_BIN%"\\llvm-config.exe exit 1       # [win]
 
   # Contains LLVM-C shared library
   - name: libllvm-c{{ major_ver }}
