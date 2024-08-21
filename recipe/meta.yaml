@@ -192,6 +192,8 @@ outputs:
         - ninja
         - python >=3
         - libcxx {{ cxx_compiler_version }}  # [osx]
+        # for preparing win_forwarder.c
+        - m2-sed    # [win]
       host:
         - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}
       run:
@@ -205,6 +207,21 @@ outputs:
       commands:
         - $PREFIX/bin/llc -version                          # [unix]
         - "%LIBRARY_BIN%\\llc.exe -version"                 # [win]
+        # test different styles to call forwarder
+        - call llc.exe -version                             # [win]
+        - call llc -version                                 # [win]
+        - llc.exe -version                                  # [win]
+        - llc -version                                      # [win]
+        # test correct return value for failure (passing directory instead of file)
+        - call llc.exe . & if ERRORLEVEL ==1 (exit 0) else (exit 1)     # [win]
+        - call llc . & if ERRORLEVEL ==1 (exit 0) else (exit 1)         # [win]
+        - llc.exe . & if ERRORLEVEL ==1 (exit 0) else (exit 1)          # [win]
+        - llc . & if ERRORLEVEL ==1 (exit 0) else (exit 1)              # [win]
+        # do not use %ERRORLEVEL% or !ERRORLEVEL!, but ERRORLEVEL, c.f.
+        # https://devblogs.microsoft.com/oldnewthing/20080926-00/?p=20743;
+        # while `if ... NEQ 1 exit 1` would be nicer, NEQ is incompatible with
+        # using bare ERRORLEVEL, see https://stackoverflow.com/a/74148543
+
         # llvm-config belongs into llvmdev
         - test ! -f $PREFIX/bin/llvm-config                 # [unix]
         - if exist %LIBRARY_BIN%\llvm-config.exe exit 1     # [win]

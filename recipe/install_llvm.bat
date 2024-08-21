@@ -31,11 +31,19 @@ if "%PKG_NAME%" == "libllvm-c%PKG_VERSION:~0,2%" (
     REM all the executables (not .dll's) in \bin & everything in \share
     move .\temp_prefix\share\* %LIBRARY_PREFIX%\share
 
-    REM create wrappers (can't do symlinks on windows by default)
+    REM create wrappers (can't do symlinks on windows by default,
+    REM needs to be compiled to be usable without extra ceremony)
     pushd .\temp_prefix\bin
+    REM forwarder to call the versioned binary
+    copy %RECIPE_DIR%\win_forwarder.c .\win_forwarder.c
+    REM replace templated version number in code
+    sed -i "s/{{ majorversion }}/%PKG_VERSION:~0,2%/g" .\win_forwarder.c
+    REM the forwarder constructs the call based on its own filename,
+    REM so we only need to compile it once...
+    %CC% .\win_forwarder.c
     for %%f in (*.exe) do (
-        echo call %LIBRARY_BIN%\%%~nf-%PKG_VERSION:~0,2%.exe %%* > %LIBRARY_BIN%\%%~nf.exe
-        echo IF %%ERRORLEVEL%% NEQ 0 EXIT /B %%ERRORLEVEL%% >> %LIBRARY_BIN%\%%~nf.exe
+        REM .. and then create copies for each binary
+        copy .\win_forwarder.exe %LIBRARY_BIN%\%%~nf.exe
     )
     popd
     del %LIBRARY_BIN%\llvm-config.exe
