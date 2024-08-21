@@ -20,7 +20,7 @@ source:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
@@ -152,9 +152,6 @@ outputs:
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
-      # On Windows there are no symlinks and copying will create a new package
-      # that is 300MB+
-      skip: true  # [win]
     requirements:
       build:
         - {{ stdlib('c') }}
@@ -166,6 +163,7 @@ outputs:
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
+        - libxml2   # [win]
         - zlib
         - zstd
       run:
@@ -174,13 +172,11 @@ outputs:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
-        - $PREFIX/bin/llc-{{ major_ver }} -version                               # [not win]
-        # The test for windows is split into two lines instead of having it in one line
-        # like its unix variant because of a YAML parsing issue.
-        - if not exist "%LIBRARY_BIN%"\\llc-{{ major_ver }}.exe exit 1           # [win]
-        - llc-{{ major_ver }} -version                                           # [win]
-        - test ! -f $PREFIX/bin/llvm-config-{{ major_ver }}                      # [not win]
-        - if exist "%LIBRARY_BIN%"\\llvm-config-{{ major_ver }}.exe exit 1       # [win]
+        - $PREFIX/bin/llc-{{ major_ver }} -version                          # [unix]
+        - "%LIBRARY_BIN%\\llc-{{ major_ver }}.exe -version"                 # [win]
+        # llvm-config belongs into llvmdev
+        - test ! -f $PREFIX/bin/llvm-config-{{ major_ver }}                 # [unix]
+        - if exist %LIBRARY_BIN%\llvm-config-{{ major_ver }}.exe exit 1     # [win]
 
   # Contains LLVM tools
   - name: llvm-tools
@@ -197,15 +193,9 @@ outputs:
         - python >=3
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
-        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
-        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [unix]
-        # on unix, there's only symlinks
-        - libxml2   # [win]
-        - zlib      # [win]
-        - zstd      # [win]
+        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}
       run:
-        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
-        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [unix]
+        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}
       run_constrained:
         - llvm        {{ version }}
         - llvmdev     {{ version }}
@@ -213,13 +203,11 @@ outputs:
         - clang-tools {{ version }}
     test:
       commands:
-        - $PREFIX/bin/llc -version                               # [not win]
-        # The test for windows is split into two lines instead of having it in one line
-        # like its unix variant because of a YAML parsing issue.
-        - if not exist "%LIBRARY_BIN%"\\llc.exe exit 1           # [win]
-        - llc -version                                           # [win]
-        - test ! -f $PREFIX/bin/llvm-config                      # [not win]
-        - if exist "%LIBRARY_BIN%"\\llvm-config.exe exit 1       # [win]
+        - $PREFIX/bin/llc -version                          # [unix]
+        - "%LIBRARY_BIN%\\llc.exe -version"                 # [win]
+        # llvm-config belongs into llvmdev
+        - test ! -f $PREFIX/bin/llvm-config                 # [unix]
+        - if exist %LIBRARY_BIN%\llvm-config.exe exit 1     # [win]
 
   # Contains LLVM-C shared library
   - name: libllvm-c{{ major_ver }}
