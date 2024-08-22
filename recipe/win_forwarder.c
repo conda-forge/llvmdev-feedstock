@@ -27,10 +27,14 @@ int _tmain( int argc, TCHAR *argv[] )
         forwarded[len-4] = '\0';
     // point to versioned binary
     strcat(forwarded, "-{{ majorversion }}.exe");
-    // rest stays the same
+    // rest stays the same, but wrap everything in quotes, because
+    // the contents of argv[i] get stripped of those, which fails
+    // if there's any argument that relies on atomicity, e.g. paths
+    // with spaces in them (c.f. "C:\Program Files\...")
     for (int i = 1; i < argc; i++) {
-        strcat(forwarded, " ");
+        strcat(forwarded, " \"");
         strcat(forwarded, argv[i]);
+        strcat(forwarded, "\"");
     }
 
     // Start the child process.
