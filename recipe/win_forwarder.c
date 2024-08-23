@@ -5,6 +5,18 @@
 #include <string.h>
 #include <tchar.h>
 
+// the idea here is as follows; this wrapper will be compiled and renamed into
+// a file corresponding to the versioned binaries created in install_llvm.bat.
+// For example, we'll have llc.exe and llc-19.exe, both under %LIBRARY_BIN%.
+// To avoid security holes, we ensure that the wrapper can only call binaries
+// in %LIBRARY_BIN%, otherwise we fail. For example:
+//  * user calls `llc -version`; argv[0] == "llc", argv[1] == "-version"
+//  * determine path of calling binary, i.e. %LIBRARY_BIN%\llc.exe
+//  * construct versioned path, i.e. %LIBRARY_BIN%\llc-19.exe
+//  * collect all other arguments & quote them, e.g. `"argv[1]" "argv[2]" ...`
+//  * invoke `%LIBRARY_BIN%\llc-19.exe "argv[1]" "argv[2]" ...`
+//  * collect return value from inner call and return the same from wrapper
+
 int _tmain( int argc, TCHAR *argv[] )
 {
     STARTUPINFO si;
