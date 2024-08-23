@@ -40,7 +40,7 @@ if "%PKG_NAME%" == "libllvm-c%PKG_VERSION:~0,2%" (
     sed -i "s/{{ majorversion }}/%PKG_VERSION:~0,2%/g" .\win_forwarder.c
     REM the forwarder constructs the call based on its own filename,
     REM so we only need to compile it once...
-    %CC% .\win_forwarder.c
+    %CC% /MD .\win_forwarder.c
     for %%f in (*.exe) do (
         REM .. and then create copies for each binary
         copy .\win_forwarder.exe %LIBRARY_BIN%\%%~nf.exe
