@@ -268,6 +268,7 @@ outputs:
       host:
         - python >=3
         - pip
+        - setuptools
       run:
         - python >=3
     test:
