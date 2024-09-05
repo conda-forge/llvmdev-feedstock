@@ -142,6 +142,7 @@ outputs:
         - zlib {{ zlib }}
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - libcxx >={{ cxx_compiler_version }}  # [osx]
       run_constrained:
         - llvmdev   {{ version }}
     test:
