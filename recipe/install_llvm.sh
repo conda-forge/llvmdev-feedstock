@@ -17,6 +17,7 @@ if [[ "${PKG_NAME}" == libllvm* ]]; then
 elif [[ "${PKG_NAME}" == "llvm-tools" ]]; then
     cmake --install ./build --prefix=./temp_prefix
     # everything in /bin & /share
+    mkdir -p $PREFIX/bin
     mv ./temp_prefix/bin/* $PREFIX/bin
     mv ./temp_prefix/share/* $PREFIX/share
     # except one binary that belongs to llvmdev
