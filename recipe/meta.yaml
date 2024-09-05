@@ -18,6 +18,7 @@ source:
     - patches/osx_ver.patch
     - patches/MSVC_DIA_SDK_path_fix.diff  # [win]
     - patches/llvm14-clear-gotoffsetmap.patch
+    - patches/0004-Fixes-vectorizer-and-extends-SVML-support.patch
 
 build:
   number: 4
@@ -42,9 +43,9 @@ requirements:
     - m2-git      # [win]
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
-    - zlib 1.2.13
-    - libxml2 2.10 # [win]
-    - libffi 3.4   # [unix]
+    - zlib {{ zlib }}
+    - libxml2 {{ libxml2 }} # [win]
+    - libffi {{ libffi }}   # [unix]
 
 outputs:
   # Contains everything
@@ -63,7 +64,7 @@ outputs:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - zlib 1.2.13
+        - zlib {{ zlib }}
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
@@ -94,12 +95,10 @@ outputs:
         - python >=3             # [not win]
       host:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
-        - zlib 1.2.13
-        - libffi 3.4  # [unix]
+        - zlib {{ zlib }}
+        - libffi {{ libffi }} # [unix]
       run:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
-        - libffi >=3.4,<3.5  # [unix]
-        - zlib    # [osx]
     test:
       commands:
         - test -f $PREFIX/lib/libLLVM-{{ major_ver }}${SHLIB_EXT}  # [not win]
@@ -115,7 +114,7 @@ outputs:
       build:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
-        - zlib 1.2.13
+        - zlib {{ zlib }}
       run:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}  # [not win]
       run_constrained:             # [not win]
@@ -139,8 +138,8 @@ outputs:
         - python >=3
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libxml2 2.10  # [win]
-        - zlib 1.2.13
+        - libxml2 {{ libxml2 }}  # [win]
+        - zlib {{ zlib }}
       run:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
       run_constrained:
