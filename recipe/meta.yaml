@@ -55,6 +55,8 @@ outputs:
     build:
       skip: true  # [(win and vc<14)]
       activate_in_script: true
+      missing_dso_whitelist:  # [s390x]
+        - '$RPATH/ld64.so.1'  # [s390x]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -87,6 +89,8 @@ outputs:
       activate_in_script: true
       run_exports:   # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
+      missing_dso_whitelist:  # [s390x]
+        - '$RPATH/ld64.so.1'  # [s390x]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -130,6 +134,8 @@ outputs:
     build:
       skip: true  # [(win and vc<14)]
       activate_in_script: true
+      missing_dso_whitelist:  # [s390x]
+        - '$RPATH/ld64.so.1'  # [s390x]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -152,12 +158,14 @@ outputs:
         - llc -version                                           # [win]
 
   - name: lit
+    script: {{ PYTHON }} -m pip install llvm/utils/lit --no-deps --no-build-isolation -vv
     build:
-      script: python -m pip install llvm/utils/lit --no-deps -vv
       activate_in_script: true
       skip: true  # [py<30]
       entry_points:
         - lit = lit.main:main
+      missing_dso_whitelist:  # [s390x]
+        - '$RPATH/ld64.so.1'  # [s390x]
     requirements:
       host:
         - python
