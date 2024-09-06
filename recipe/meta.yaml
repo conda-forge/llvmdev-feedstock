@@ -158,8 +158,8 @@ outputs:
         - llc -version                                           # [win]
 
   - name: lit
-    script: {{ PYTHON }} -m pip install llvm/utils/lit --no-deps --no-build-isolation -vv
     build:
+      script: python -m pip install llvm/utils/lit --no-deps --no-build-isolation -vv
       activate_in_script: true
       skip: true  # [py<30]
       entry_points:
