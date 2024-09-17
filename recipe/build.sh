@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -exuo pipefail
 
 # Make osx work like linux.
 sed -i.bak "s/NOT APPLE AND ARG_SONAME/ARG_SONAME/g" llvm/cmake/modules/AddLLVM.cmake
@@ -68,7 +68,7 @@ else
     export TEST_CPU_FLAG=""
 fi
 
-if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
+if [[ ${CONDA_BUILD_CROSS_COMPILATION:-0} != "1" ]]; then
   # bin/opt -S -vector-library=SVML $TEST_CPU_FLAG -O3 $RECIPE_DIR/numba-3016.ll | bin/FileCheck $RECIPE_DIR/numba-3016.ll || exit $?
 
   if [[ "$target_platform" == linux* ]]; then
