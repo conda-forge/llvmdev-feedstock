@@ -57,11 +57,13 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
+        # we're deliberately excluding "libllvm-c<maj>" on windows
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - zlib
         - zstd
       run:
+        # we're deliberately excluding "libllvm-c<maj>" on windows
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         # we need to do this manually because clang_bootstrap has no run-export
