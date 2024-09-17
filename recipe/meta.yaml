@@ -97,8 +97,8 @@ outputs:
     script: install_llvm.sh  # [not win]
     build:
       activate_in_script: true
-      run_exports:                                                    # [unix]
-        - {{ pin_subpackage("libllvm" ~ major_ver, max_pin="x.x") }}  # [unix]
+      run_exports:                                                    # [not win]
+        - {{ pin_subpackage("libllvm" ~ major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
         - {{ stdlib('c') }}
@@ -128,17 +128,17 @@ outputs:
   # for run_exports
   - name: llvm
     build:
-      run_exports:                                                    # [unix]
-        - {{ pin_subpackage("libllvm" ~ major_ver, max_pin="x.x") }}  # [unix]
+      run_exports:                                                    # [not win]
+        - {{ pin_subpackage("libllvm" ~ major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
       host:
-        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}     # [unix]
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}     # [not win]
         - libxml2
         - zlib
         - zstd
-      run:                                                            # [unix]
-        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}     # [unix]
+      run:                                                            # [not win]
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}     # [not win]
       run_constrained:
         - llvmdev     {{ version }}
         - llvm-tools  {{ version }}
@@ -200,14 +200,14 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
-        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [unix]
+        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [not win]
         # on unix, there's only symlinks
         - libxml2   # [win]
         - zlib      # [win]
         - zstd      # [win]
       run:
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
-        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [unix]
+        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [not win]
       run_constrained:
         - llvm        {{ version }}
         - llvmdev     {{ version }}
