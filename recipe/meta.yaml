@@ -1,9 +1,9 @@
-{% set version = "18.1.8" %}
+{% set version = "19.1.0" %}
 {% set major_ver = version.split(".")[0] %}
 {% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
 
-# as of LLVM 17, we expect an "rc" suffix for the release candidates
-{% set extra = "rc" if version.split(".")[-1] not in "0123456789" else "" %}
+# as of LLVM 19, we expect an "-rcX" suffix for the release candidates
+{% set extra = "-" ~ version.split(".")[-1] if version.split(".")[-1] not in "0123456789" else "" %}
 {% set extra = "git" if version.split(".")[-1] == "dev0" else extra %}
 
 package:
@@ -12,17 +12,15 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-  sha256: 09c08693a9afd6236f27a2ebae62cda656eba19021ef3f94d59e931d662d4856
+  sha256: 0a08341036ca99a106786f50f9c5cb3fbe458b3b74cab6089fd368d0edb2edfe
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
-    # backport https://github.com/llvm/llvm-project/pull/90599
-    - patches/0002-lljit-respect-codemodel.patch
 
 build:
-  number: 2
+  number: 0
   merge_build_host: false
 
 requirements:
@@ -59,16 +57,16 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [win]
+        # we're deliberately excluding "libllvm-c<maj>" on windows
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - libxml2
         - zlib
         - zstd
       run:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [win]
+        # we're deliberately excluding "libllvm-c<maj>" on windows
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
+        # we need to do this manually because clang_bootstrap has no run-export
         - libcxx >={{ cxx_compiler_version }}                           # [osx]
       run_constrained:
         - llvm        {{ version }}
@@ -100,7 +98,7 @@ outputs:
     build:
       activate_in_script: true
       run_exports:                                                    # [not win]
-        - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
+        - {{ pin_subpackage("libllvm" ~ major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
         - {{ stdlib('c') }}
@@ -111,10 +109,11 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
-        - libxml2
+        - libxml2   # [unix]
         - zlib
         - zstd
       run:
+        # we need to do this manually because clang_bootstrap has no run-export
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
@@ -130,16 +129,16 @@ outputs:
   - name: llvm
     build:
       run_exports:                                                    # [not win]
-        - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
+        - {{ pin_subpackage("libllvm" ~ major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
       host:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}     # [not win]
         - libxml2
         - zlib
         - zstd
       run:                                                            # [not win]
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}     # [not win]
       run_constrained:
         - llvmdev     {{ version }}
         - llvm-tools  {{ version }}
@@ -169,11 +168,12 @@ outputs:
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
-        - libxml2
         - zlib
         - zstd
       run:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
+        # we need to do this manually because clang_bootstrap has no run-export
+        - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
         - $PREFIX/bin/llc-{{ major_ver }} -version                               # [not win]
@@ -199,14 +199,14 @@ outputs:
         - python >=3
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
-        - libcxx {{ cxx_compiler_version }}  # [osx]
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [not win]
-        - libxml2
-        - zlib
-        - zstd
+        # on unix, there's only symlinks
+        - libxml2   # [win]
+        - zlib      # [win]
+        - zstd      # [win]
       run:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [not win]
       run_constrained:
         - llvm        {{ version }}
@@ -229,7 +229,7 @@ outputs:
     script: install_llvm.bat  # [win]
     build:
       run_exports:
-        - {{ pin_subpackage("libllvm-c" + major_ver, max_pin="x.x") }}
+        - {{ pin_subpackage("libllvm-c" ~ major_ver, max_pin="x.x") }}
       activate_in_script: true
       # not supported on linux, see
       # https://github.com/llvm/llvm-project/blob/llvmorg-16.0.6/llvm/tools/llvm-shlib/CMakeLists.txt#L82-L85
@@ -244,8 +244,7 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libxml2
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - zlib
         - zstd
       run_constrained:
@@ -271,6 +270,7 @@ outputs:
       host:
         - python >=3
         - pip
+        - setuptools
       run:
         - python >=3
     test:
