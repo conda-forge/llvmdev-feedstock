@@ -1,3 +1,7 @@
+azure:
+  settings_win:
+    variables:
+      SET_PAGEFILE: 'True'
 bot:
   abi_migration_branches:
   - 18.x
