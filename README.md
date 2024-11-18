@@ -88,53 +88,54 @@ Current release info
 | [![Conda Recipe](https://img.shields.io/badge/recipe-lit-green.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvm-green.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvm--tools-green.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-llvm--tools--19-green.svg)](https://anaconda.org/conda-forge/llvm-tools-19) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm-tools-19.svg)](https://anaconda.org/conda-forge/llvm-tools-19) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm-tools-19.svg)](https://anaconda.org/conda-forge/llvm-tools-19) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm-tools-19.svg)](https://anaconda.org/conda-forge/llvm-tools-19) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvmdev-green.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) |
 
 Installing llvmdev
 ==================
 
-Installing `llvmdev` from the `conda-forge/label/llvm_dev` channel can be achieved by adding `conda-forge/label/llvm_dev` to your channels with:
+Installing `llvmdev` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
 
 ```
-conda config --add channels conda-forge/label/llvm_dev
+conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge/label/llvm_dev` channel has been enabled, `libllvm-c19, libllvm19, lit, llvm, llvm-tools, llvmdev` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `libllvm-c19, libllvm19, lit, llvm, llvm-tools, llvm-tools-19, llvmdev` can be installed with `conda`:
 
 ```
-conda install libllvm-c19 libllvm19 lit llvm llvm-tools llvmdev
+conda install libllvm-c19 libllvm19 lit llvm llvm-tools llvm-tools-19 llvmdev
 ```
 
 or with `mamba`:
 
 ```
-mamba install libllvm-c19 libllvm19 lit llvm llvm-tools llvmdev
+mamba install libllvm-c19 libllvm19 lit llvm llvm-tools llvm-tools-19 llvmdev
 ```
 
 It is possible to list all of the versions of `libllvm-c19` available on your platform with `conda`:
 
 ```
-conda search libllvm-c19 --channel conda-forge/label/llvm_dev
+conda search libllvm-c19 --channel conda-forge
 ```
 
 or with `mamba`:
 
 ```
-mamba search libllvm-c19 --channel conda-forge/label/llvm_dev
+mamba search libllvm-c19 --channel conda-forge
 ```
 
 Alternatively, `mamba repoquery` may provide more information:
 
 ```
 # Search all versions available on your platform:
-mamba repoquery search libllvm-c19 --channel conda-forge/label/llvm_dev
+mamba repoquery search libllvm-c19 --channel conda-forge
 
 # List packages depending on `libllvm-c19`:
-mamba repoquery whoneeds libllvm-c19 --channel conda-forge/label/llvm_dev
+mamba repoquery whoneeds libllvm-c19 --channel conda-forge
 
 # List dependencies of `libllvm-c19`:
-mamba repoquery depends libllvm-c19 --channel conda-forge/label/llvm_dev
+mamba repoquery depends libllvm-c19 --channel conda-forge
 ```
 
 
