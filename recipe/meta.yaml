@@ -60,8 +60,9 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
-        # we're deliberately excluding "libllvm-c<maj>" on windows
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
+        # to avoid picking up LLVM-C.{dll,lib} as part of llvmdev
+        - {{ pin_subpackage("libllvm-c" ~ major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - zlib
         - zstd
@@ -85,10 +86,12 @@ outputs:
         - test -f $PREFIX/lib/libLLVMCore.a                             # [not win]
         - $PREFIX/libexec/llvm/not false                                # [not win]
         - $PREFIX/bin/llvm-nm --help                                    # [not win]
-        - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1               # [win]
-        - if not exist "%LIBRARY_PREFIX%"\\libexec\llvm\not.exe exit 1  # [win]
-        - if not exist "%LIBRARY_BIN%"\\llvm-nm.exe exit 1              # [win]
+        - if not exist %LIBRARY_INC%\llvm\Pass.h exit 1                 # [win]
+        - if not exist %LIBRARY_PREFIX%\libexec\llvm\not.exe exit 1     # [win]
+        - if not exist %LIBRARY_BIN%\llvm-nm.exe exit 1                 # [win]
         - llvm-nm.exe --help                                            # [win]
+        - if exist %LIBRARY_BIN%\LLVM-C.dll exit 1                      # [win]
+        - if exist %LIBRARY_LIB%\LLVM-C.lib exit 1                      # [win]
 
         # ensure we've correctly inserted %VSINSTALLDIR% into the CMake metadata for LLVM;
         # we're looking for: `INTERFACE_LINK_LIBRARIES "$ENV{VSINSTALLDIR}/DIA SDK/lib/amd64/diaguids.lib;[...]`instead
