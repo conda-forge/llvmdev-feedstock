@@ -1,9 +1,11 @@
 echo on
 
-mkdir build
-cd build
+:: this is essentially `bld.bat` with -DLLVM_BUILD_LLVM_C_DYLIB=ON,
+:: plus the installation part from `install_llvm.bat`
 
-REM remove GL flag for now
+cd %SRC_DIR%\build
+
+:: remove GL flag for now
 set "CXXFLAGS=-MD"
 set "CC=cl.exe"
 set "CXX=cl.exe"
@@ -27,7 +29,7 @@ cmake -G "Ninja" ^
     -DLLVM_INSTALL_UTILS=ON ^
     -DLLVM_USE_SYMLINKS=OFF ^
     -DLLVM_UTILS_INSTALL_DIR=libexec\llvm ^
-    -DLLVM_BUILD_LLVM_C_DYLIB=OFF ^
+    -DLLVM_BUILD_LLVM_C_DYLIB=ON ^
     -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly ^
     %SRC_DIR%/llvm
 if %ERRORLEVEL% neq 0 exit 1
@@ -35,10 +37,16 @@ if %ERRORLEVEL% neq 0 exit 1
 cmake --build .
 if %ERRORLEVEL% neq 0 exit 1
 
-REM bin\opt -S -vector-library=SVML -mcpu=haswell -O3 %RECIPE_DIR%\numba-3016.ll | bin\FileCheck %RECIPE_DIR%\numba-3016.ll
-REM if %ERRORLEVEL% neq 0 exit 1
+cd ..
+mkdir temp_prefix
+mkdir %LIBRARY_LIB%\cmake\llvm
 
-:: :: takes ~30min
-:: cd ..\llvm\test
-:: python ..\..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
-:: if %ERRORLEVEL% neq 0 exit 1
+cmake --install .\build --prefix=.\temp_prefix
+if %ERRORLEVEL% neq 0 exit 1
+
+:: only libLLVM-C & CMake metadata
+move .\temp_prefix\bin\LLVM-C.dll %LIBRARY_BIN%
+move .\temp_prefix\lib\LLVM-C.lib %LIBRARY_LIB%
+move .\temp_prefix\lib\cmake\llvm\LLVM* %LIBRARY_LIB%\cmake\llvm
+
+rmdir /s /q temp_prefix

@@ -21,7 +21,7 @@ source:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
@@ -76,7 +76,12 @@ outputs:
         - clang-tools {{ version }}
     test:
       requires:
-        - ripgrep  # [win]
+        # cmake needs a compiler to run package detection
+        - {{ compiler('c') }}   # [win]
+        - cmake                 # [win]
+        - ripgrep               # [win]
+      files:
+        - cmake_test/           # [win]
       commands:
         - $PREFIX/bin/llvm-config --libs                                # [not win]
         - test -f $PREFIX/include/llvm/Pass.h                           # [not win]
@@ -87,10 +92,17 @@ outputs:
         - if not exist %LIBRARY_PREFIX%\libexec\llvm\not.exe exit 1     # [win]
         - if not exist %LIBRARY_BIN%\llvm-nm.exe exit 1                 # [win]
         - llvm-nm.exe --help                                            # [win]
+        - if exist %LIBRARY_BIN%\LLVM-C.dll exit 1                      # [win]
+        - if exist %LIBRARY_LIB%\LLVM-C.lib exit 1                      # [win]
 
         # ensure we've correctly inserted %VSINSTALLDIR% into the CMake metadata for LLVM;
         # we're looking for: `INTERFACE_LINK_LIBRARIES "$ENV{VSINSTALLDIR}/DIA SDK/lib/amd64/diaguids.lib;[...]`instead
         - rg -e "INTERFACE_LINK_LIBRARIES\s\"\$ENV\{VSINSTALLDIR\}[/\w\s]+/diaguids\.lib" %LIBRARY_LIB%\cmake\llvm\LLVMExports.cmake  # [win]
+
+        # test that llvmdev is CMake-includable without libllvm-c{maj}
+        - cd cmake_test                 # [win]
+        - cmake -GNinja %CMAKE_ARGS% .  # [win]
+        - cmake --build .               # [win]
 
   # Contains the shared libraries. To make different LLVM libraries co-installable
   # soversion is appended to the package name.
@@ -220,8 +232,7 @@ outputs:
 
   # Contains LLVM-C shared library
   - name: libllvm-c{{ major_ver }}
-    script: install_llvm.sh   # [unix]
-    script: install_llvm.bat  # [win]
+    script: install_llvm_c.bat  # [win]
     build:
       run_exports:
         - {{ pin_subpackage("libllvm-c" ~ major_ver, max_pin="x.x") }}
@@ -230,25 +241,43 @@ outputs:
       # https://github.com/llvm/llvm-project/blob/llvmorg-16.0.6/llvm/tools/llvm-shlib/CMakeLists.txt#L82-L85
       # osx currently fails as well, see https://github.com/llvm/llvm-project/issues/64657
       skip: true  # [not win]
+      always_include_files:
+        # need to overwrite CMake metadata from llvmdev
+        - Library/lib/cmake/llvm/LLVM*
     requirements:
       build:
         - {{ stdlib('c') }}
         - {{ compiler('cxx') }}
         - cmake
         - ninja
+        - python >=3
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
+        # depend on full llvmdev, because reconfig/rebuild needs to come
+        # after we've installed the CMake metadata without LLVM-C.{dll,lib}
+        - {{ pin_subpackage("llvmdev", exact=True) }}
         - libcxx {{ cxx_compiler_version }}  # [osx]
-        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
+        - libxml2
         - zlib
         - zstd
-      run_constrained:
-        - llvmdev {{ version }}
+      run:
+        - {{ pin_subpackage("llvmdev", exact=True) }}
     test:
+      requires:
+        # cmake needs a compiler to run package detection
+        - {{ compiler('c') }}
+        - cmake
+      files:
+        - cmake_test/
       commands:
         - test -f $PREFIX/lib/libLLVM-C.{{ major_ver }}.dylib   # [osx]
         - if not exist %LIBRARY_BIN%\LLVM-C.dll exit 1          # [win]
         - if not exist %LIBRARY_LIB%\LLVM-C.lib exit 1          # [win]
+
+        # test that llvmdev is CMake-includable also with libllvm-c{maj}
+        - cd cmake_test                 # [win]
+        - cmake -GNinja %CMAKE_ARGS% .  # [win]
+        - cmake --build .               # [win]
 
   - name: lit
     build:

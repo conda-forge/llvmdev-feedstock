@@ -22,11 +22,7 @@ elif [[ "${PKG_VERSION}" == *dev0 ]]; then
     SOVER_EXT="${SOVER_EXT}git"
 fi
 
-if [[ "${PKG_NAME}" == libllvm-c* ]]; then
-    cmake --install ./build --prefix=./temp_prefix
-    # only libLLVM-C
-    mv ./temp_prefix/lib/libLLVM-C${SOVER_EXT}${SHLIB_EXT} $PREFIX/lib
-elif [[ "${PKG_NAME}" == libllvm* ]]; then
+if [[ "${PKG_NAME}" == libllvm* ]]; then
     cmake --install ./build --prefix=./temp_prefix
     # all other libraries
     mv ./temp_prefix/lib/libLLVM-${MAJOR_EXT}${SHLIB_EXT} $PREFIX/lib
