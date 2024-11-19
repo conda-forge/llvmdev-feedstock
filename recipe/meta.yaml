@@ -83,9 +83,9 @@ outputs:
         - test -f $PREFIX/lib/libLLVMCore.a                             # [not win]
         - $PREFIX/libexec/llvm/not false                                # [not win]
         - $PREFIX/bin/llvm-nm --help                                    # [not win]
-        - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1               # [win]
-        - if not exist "%LIBRARY_PREFIX%"\\libexec\llvm\not.exe exit 1  # [win]
-        - if not exist "%LIBRARY_BIN%"\\llvm-nm.exe exit 1              # [win]
+        - if not exist %LIBRARY_INC%\llvm\Pass.h exit 1                 # [win]
+        - if not exist %LIBRARY_PREFIX%\libexec\llvm\not.exe exit 1     # [win]
+        - if not exist %LIBRARY_BIN%\llvm-nm.exe exit 1                 # [win]
         - llvm-nm.exe --help                                            # [win]
 
         # ensure we've correctly inserted %VSINSTALLDIR% into the CMake metadata for LLVM;
@@ -177,13 +177,10 @@ outputs:
         - libcxx >={{ cxx_compiler_version }}  # [osx]
     test:
       commands:
-        - $PREFIX/bin/llc-{{ major_ver }} -version                               # [not win]
-        # The test for windows is split into two lines instead of having it in one line
-        # like its unix variant because of a YAML parsing issue.
-        - if not exist "%LIBRARY_BIN%"\\llc-{{ major_ver }}.exe exit 1           # [win]
-        - llc-{{ major_ver }} -version                                           # [win]
-        - test ! -f $PREFIX/bin/llvm-config-{{ major_ver }}                      # [not win]
-        - if exist "%LIBRARY_BIN%"\\llvm-config-{{ major_ver }}.exe exit 1       # [win]
+        - $PREFIX/bin/llc-{{ major_ver }} -version                          # [unix]
+        - test ! -f $PREFIX/bin/llvm-config-{{ major_ver }}                 # [unix]
+        - "%LIBRARY_BIN%\\llc-{{ major_ver }}.exe -version"                 # [win]
+        - if exist %LIBRARY_BIN%\llvm-config-{{ major_ver }}.exe exit 1     # [win]
 
   # Contains LLVM tools
   - name: llvm-tools
@@ -216,13 +213,10 @@ outputs:
         - clang-tools {{ version }}
     test:
       commands:
-        - $PREFIX/bin/llc -version                               # [not win]
-        # The test for windows is split into two lines instead of having it in one line
-        # like its unix variant because of a YAML parsing issue.
-        - if not exist "%LIBRARY_BIN%"\\llc.exe exit 1           # [win]
-        - llc -version                                           # [win]
-        - test ! -f $PREFIX/bin/llvm-config                      # [not win]
-        - if exist "%LIBRARY_BIN%"\\llvm-config.exe exit 1       # [win]
+        - $PREFIX/bin/llc -version                          # [unix]
+        - test ! -f $PREFIX/bin/llvm-config                 # [unix]
+        - "%LIBRARY_BIN%\\llc.exe -version"                 # [win]
+        - if exist %LIBRARY_BIN%\llvm-config.exe exit 1     # [win]
 
   # Contains LLVM-C shared library
   - name: libllvm-c{{ major_ver }}
