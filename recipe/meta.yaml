@@ -1,10 +1,11 @@
 {% set version = "20.0.0.dev0" %}
 {% set major_ver = version.split(".")[0] %}
+{% set tail_ver = version.split(".")[-1] %}
 {% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
 
 # as of LLVM 19, we expect an "-rcX" suffix for the release candidates
-{% set extra = "-" ~ version.split(".")[-1] if version.split(".")[-1] not in "0123456789" else "" %}
-{% set extra = "git" if version.split(".")[-1] == "dev0" else extra %}
+{% set extra = "-" ~ tail_ver if tail_ver not in "0123456789" else "" %}
+{% set extra = "git" if tail_ver|trim("0123456789") == "dev" else extra %}
 
 package:
   name: llvm-package
@@ -23,7 +24,7 @@ source:
     - patches/0002-llvm-LLVM_ENABLE_RUNTIMES-flang-rt.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
@@ -61,14 +62,13 @@ outputs:
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
-        # to avoid picking up LLVM-C.{dll,lib} as part of llvmdev
         - {{ pin_subpackage("libllvm-c" ~ major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - zlib
         - zstd
       run:
-        # we're deliberately excluding "libllvm-c<maj>" on windows
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm-c" ~ major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         # we need to do this manually because clang_bootstrap has no run-export
         - libcxx >={{ cxx_compiler_version }}                           # [osx]
