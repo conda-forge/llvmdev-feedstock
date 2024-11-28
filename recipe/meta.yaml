@@ -22,6 +22,8 @@ source:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     # backport llvm-bits of https://github.com/llvm/llvm-project/pull/110217
     - patches/0002-llvm-LLVM_ENABLE_RUNTIMES-flang-rt.patch
+    # backport https://github.com/llvm/llvm-project/pull/117949
+    - patches/0003-ExecutionEngine-reinstate-necessary-include.patch
 
 build:
   number: 0

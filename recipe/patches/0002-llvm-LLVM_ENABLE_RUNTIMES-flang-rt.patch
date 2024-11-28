@@ -1,7 +1,7 @@
-From 6ad1d64cf35db9f989a9626d8d3d1cc4b64ac3bb Mon Sep 17 00:00:00 2001
+From 082e81a3cb43c04a49684ebd918726cc1dbfa05c Mon Sep 17 00:00:00 2001
 From: Michael Kruse <llvm-project@meinersbur.de>
 Date: Fri, 27 Sep 2024 09:18:49 +0200
-Subject: [PATCH 2/2] [llvm] LLVM_ENABLE_RUNTIMES=flang-rt
+Subject: [PATCH 2/3] [llvm] LLVM_ENABLE_RUNTIMES=flang-rt
 
 Extract Flang's runtime library to use the LLVM_ENABLE_RUNTIME
 mechanism.
@@ -13,7 +13,7 @@ mechanism.
  4 files changed, 44 insertions(+), 10 deletions(-)
 
 diff --git a/llvm/CMakeLists.txt b/llvm/CMakeLists.txt
-index cde4a999ea2e..bb0fd378b38e 100644
+index cfcf1404d82b..7c5122bdb1ef 100644
 --- a/llvm/CMakeLists.txt
 +++ b/llvm/CMakeLists.txt
 @@ -150,12 +150,18 @@ if ("flang" IN_LIST LLVM_ENABLE_PROJECTS)
