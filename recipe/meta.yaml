@@ -1,4 +1,4 @@
-{% set version = "19.1.4" %}
+{% set version = "19.1.5" %}
 {% set major_ver = version.split(".")[0] %}
 {% set tail_ver = version.split(".")[-1] %}
 {% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
@@ -13,7 +13,7 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-  sha256: 010e1fd3cabee8799bd2f8a6fbc68f28207494f315cf9da7057a2820f79fd531
+  sha256: e2204b9903cd9d7ee833a2f56a18bef40a33df4793e31cc090906b32cbd8a1f5
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
@@ -21,7 +21,7 @@ source:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
 
 build:
-  number: 1
+  number: 0
   merge_build_host: false
 
 requirements:
