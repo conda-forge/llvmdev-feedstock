@@ -16,7 +16,7 @@ if [[ "${PKG_VERSION}" == *rc* ]]; then
     # (e.g. 19.1.0.rc1), so take the last part after splitting on "."
     MAJOR_EXT="${MAJOR_EXT}-${VER_ARR[3]}"
     SOVER_EXT="${SOVER_EXT}-${VER_ARR[3]}"
-elif [[ "${PKG_VERSION}" == *dev0 ]]; then
+elif [[ "${PKG_VERSION}" == *dev* ]]; then
     # otherwise with git suffix
     MAJOR_EXT="${MAJOR_EXT}git"
     SOVER_EXT="${SOVER_EXT}git"
