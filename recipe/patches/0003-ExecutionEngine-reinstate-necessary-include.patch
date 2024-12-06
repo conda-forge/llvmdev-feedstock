@@ -1,0 +1,21 @@
+From 6672bc7778552032853ef84c3e071b5f8e9e0787 Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Thu, 28 Nov 2024 12:30:26 +1100
+Subject: [PATCH 3/3] [ExecutionEngine] reinstate necessary include
+
+---
+ llvm/lib/ExecutionEngine/Orc/TargetProcess/JITLoaderVTune.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/llvm/lib/ExecutionEngine/Orc/TargetProcess/JITLoaderVTune.cpp b/llvm/lib/ExecutionEngine/Orc/TargetProcess/JITLoaderVTune.cpp
+index fb7cf94fa065..57ac991ee37f 100644
+--- a/llvm/lib/ExecutionEngine/Orc/TargetProcess/JITLoaderVTune.cpp
++++ b/llvm/lib/ExecutionEngine/Orc/TargetProcess/JITLoaderVTune.cpp
+@@ -11,6 +11,7 @@
+ 
+ #include "llvm/ExecutionEngine/Orc/TargetProcess/JITLoaderVTune.h"
+ #include "llvm/ExecutionEngine/Orc/Shared/VTuneSharedStructs.h"
++#include <map>
+ 
+ #if LLVM_USE_INTEL_JITEVENTS
+ #include "IntelJITEventsWrapper.h"
