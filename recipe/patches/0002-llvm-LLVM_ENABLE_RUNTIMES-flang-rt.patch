@@ -1,4 +1,4 @@
-From 4f9f2ed0d9270f15496da245a83acff04b7b93f7 Mon Sep 17 00:00:00 2001
+From 279f6ee37a822a9f4db3a24bf66252fda07e6aa4 Mon Sep 17 00:00:00 2001
 From: Michael Kruse <llvm-project@meinersbur.de>
 Date: Fri, 27 Sep 2024 09:18:49 +0200
 Subject: [PATCH 2/3] [llvm] LLVM_ENABLE_RUNTIMES=flang-rt
@@ -128,7 +128,7 @@ index 08f2fa522420..f254cf10806d 100644
  
  add_llvm_external_project(dragonegg)
 diff --git a/llvm/runtimes/CMakeLists.txt b/llvm/runtimes/CMakeLists.txt
-index 40fdb14e8133..c237c0be2afe 100644
+index 70e85c123e41..2370b41fb7f0 100644
 --- a/llvm/runtimes/CMakeLists.txt
 +++ b/llvm/runtimes/CMakeLists.txt
 @@ -230,7 +230,7 @@ foreach(entry ${runtimes})
@@ -140,7 +140,7 @@ index 40fdb14e8133..c237c0be2afe 100644
  
    include(${LLVM_BINARY_DIR}/runtimes/Components.cmake OPTIONAL)
    set(SUB_CHECK_TARGETS ${SUB_CHECK_TARGETS} PARENT_SCOPE)
-@@ -270,13 +270,15 @@ function(runtime_default_target)
+@@ -270,14 +270,16 @@ function(runtime_default_target)
                                        -DLLVM_BUILD_TOOLS=${LLVM_BUILD_TOOLS}
                                        -DCMAKE_C_COMPILER_WORKS=ON
                                        -DCMAKE_CXX_COMPILER_WORKS=ON
@@ -152,12 +152,13 @@ index 40fdb14e8133..c237c0be2afe 100644
                             PASSTHROUGH_PREFIXES LLVM_ENABLE_RUNTIMES
                                                  LLVM_USE_LINKER
 -                                                CUDA # For runtimes that may look for the CUDA SDK (libc, offload)
-+                                                CUDA # For runtimes that may look for the CUDA SDK (libc, offload, flang-rt)
++                                                CUDA CMAKE_CUDA # For runtimes that may look for the CUDA compiler and/or SDK (libc, offload, flang-rt)
+                                                 FFI # offload uses libffi
 +                                                FLANG_RUNTIME # Shared between Flang and Flang-RT
                                                  ${ARG_PREFIXES}
                             EXTRA_TARGETS ${extra_targets}
                                           ${test_targets}
-@@ -286,7 +288,7 @@ function(runtime_default_target)
+@@ -287,7 +289,7 @@ function(runtime_default_target)
                             USE_TOOLCHAIN
                             TARGET_TRIPLE ${LLVM_TARGET_TRIPLE}
                             FOLDER "Runtimes"
@@ -166,7 +167,7 @@ index 40fdb14e8133..c237c0be2afe 100644
  endfunction()
  
  # runtime_register_target(name)
-@@ -403,6 +405,7 @@ function(runtime_register_target name)
+@@ -404,6 +406,7 @@ function(runtime_register_target name)
                                        -DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR=${LLVM_ENABLE_PER_TARGET_RUNTIME_DIR}
                                        -DCMAKE_C_COMPILER_WORKS=ON
                                        -DCMAKE_CXX_COMPILER_WORKS=ON
@@ -174,7 +175,7 @@ index 40fdb14e8133..c237c0be2afe 100644
                                        -DCMAKE_ASM_COMPILER_WORKS=ON
                                        -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON
                                        -DLLVM_RUNTIMES_TARGET=${name}
-@@ -462,10 +465,13 @@ if(build_runtimes)
+@@ -463,10 +466,13 @@ if(build_runtimes)
    # together in a single CMake invocation.
    set(extra_deps "")
    set(extra_cmake_args "")
@@ -188,7 +189,7 @@ index 40fdb14e8133..c237c0be2afe 100644
                  count
                  lld
                  lli
-@@ -548,19 +554,24 @@ if(build_runtimes)
+@@ -549,19 +555,24 @@ if(build_runtimes)
    if(LLVM_LIBC_FULL_BUILD)
      list(APPEND extra_cmake_args "-DLLVM_LIBC_FULL_BUILD=ON")
    endif()
@@ -215,7 +216,7 @@ index 40fdb14e8133..c237c0be2afe 100644
        list(REMOVE_ITEM LLVM_RUNTIME_TARGETS "default")
      else()
        add_custom_target(runtimes)
-@@ -607,7 +618,7 @@ if(build_runtimes)
+@@ -608,7 +619,7 @@ if(build_runtimes)
        runtime_register_target(${name}
          DEPENDS ${builtins_dep_name} ${extra_deps}
          CMAKE_ARGS -DLLVM_DEFAULT_TARGET_TRIPLE=${name} ${extra_cmake_args}
@@ -224,7 +225,7 @@ index 40fdb14e8133..c237c0be2afe 100644
      endforeach()
  
      foreach(multilib ${LLVM_RUNTIME_MULTILIBS})
-@@ -619,7 +630,7 @@ if(build_runtimes)
+@@ -620,7 +631,7 @@ if(build_runtimes)
                       -DLLVM_RUNTIMES_LIBDIR_SUBDIR=${multilib}
                       ${extra_cmake_args}
            BASE_NAME ${name}
