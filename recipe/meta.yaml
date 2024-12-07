@@ -13,8 +13,8 @@ package:
 
 source:
   # url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-  url: https://github.com/llvm/llvm-project/archive/0cda970ecc8a885acf7298a61370a1368b0ea39b.tar.gz
-  sha256: a9749646c9889a850b4bdac253d5db148e043e6a631c6a4556a2ade5a42a4cd0
+  url: https://github.com/llvm/llvm-project/archive/d6ec7c82f383ae4268f350f4d2e267af45fae8c0.tar.gz
+  sha256: 81e2a81196ac36405b480236e864e76ba79f1707d29e000a627fdbed6e345f2b
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
@@ -26,7 +26,7 @@ source:
     - patches/0003-ExecutionEngine-reinstate-necessary-include.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
