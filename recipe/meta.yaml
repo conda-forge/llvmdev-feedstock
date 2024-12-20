@@ -24,6 +24,8 @@ source:
     - patches/0002-llvm-LLVM_ENABLE_RUNTIMES-flang-rt.patch
     # backport https://github.com/llvm/llvm-project/pull/117949
     - patches/0003-ExecutionEngine-reinstate-necessary-include.patch
+    # fix for https://github.com/llvm/llvm-project/issues/107687
+    - patches/0004-add-vt_gen-target-as-a-dependency-of-llvm-lib-Analys.patch
 
 build:
   number: 0
