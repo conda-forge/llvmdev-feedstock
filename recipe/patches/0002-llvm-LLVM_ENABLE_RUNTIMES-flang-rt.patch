@@ -1,7 +1,7 @@
-From 279f6ee37a822a9f4db3a24bf66252fda07e6aa4 Mon Sep 17 00:00:00 2001
+From 0dc3ed50b8c34062a08ab7771620d35e96fce9c2 Mon Sep 17 00:00:00 2001
 From: Michael Kruse <llvm-project@meinersbur.de>
 Date: Fri, 27 Sep 2024 09:18:49 +0200
-Subject: [PATCH 2/3] [llvm] LLVM_ENABLE_RUNTIMES=flang-rt
+Subject: [PATCH 2/4] [llvm] LLVM_ENABLE_RUNTIMES=flang-rt
 
 Extract Flang's runtime library to use the LLVM_ENABLE_RUNTIME
 mechanism.

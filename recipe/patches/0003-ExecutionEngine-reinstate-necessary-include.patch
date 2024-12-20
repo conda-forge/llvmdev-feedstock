@@ -1,7 +1,7 @@
-From 9ea319a74ee7e1d4180d4c5cf3fc705a175ff73b Mon Sep 17 00:00:00 2001
+From 4fbc7d44eef0fb53a3f2e69dbbe81cc47340dda8 Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Thu, 28 Nov 2024 12:30:26 +1100
-Subject: [PATCH 3/3] [ExecutionEngine] reinstate necessary include
+Subject: [PATCH 3/4] [ExecutionEngine] reinstate necessary include
 
 ---
  llvm/lib/ExecutionEngine/Orc/TargetProcess/JITLoaderVTune.cpp | 1 +
