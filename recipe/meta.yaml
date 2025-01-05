@@ -13,8 +13,8 @@ package:
 
 source:
   # url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-  url: https://github.com/llvm/llvm-project/archive/70f326c4bcb4f45744ff93c12a963ffad28136ef.tar.gz
-  sha256: ef41ca7e9f0d853e56cb95e38c7879574738fb6e854b101c676ff45112d902be
+  url: https://github.com/llvm/llvm-project/archive/27f30029741ecf023baece7b3dde1ff9011ffefc.tar.gz
+  sha256: c54da9278c7708b64fc9a61ffe55193fea6093dc11028617a7c0dba16cb26161
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
@@ -24,11 +24,9 @@ source:
     - patches/0002-llvm-LLVM_ENABLE_RUNTIMES-flang-rt.patch
     # backport https://github.com/llvm/llvm-project/pull/117949
     - patches/0003-ExecutionEngine-reinstate-necessary-include.patch
-    # fix for https://github.com/llvm/llvm-project/issues/107687
-    - patches/0004-add-vt_gen-target-as-a-dependency-of-llvm-lib-Analys.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
