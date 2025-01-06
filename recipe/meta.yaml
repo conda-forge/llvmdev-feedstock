@@ -1,4 +1,4 @@
-{% set version = "20.0.0.dev4" %}
+{% set version = "20.0.0.dev5" %}
 {% set major_ver = version.split(".")[0] %}
 {% set tail_ver = version.split(".")[-1] %}
 {% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
@@ -13,8 +13,8 @@ package:
 
 source:
   # url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-  url: https://github.com/llvm/llvm-project/archive/27f30029741ecf023baece7b3dde1ff9011ffefc.tar.gz
-  sha256: c54da9278c7708b64fc9a61ffe55193fea6093dc11028617a7c0dba16cb26161
+  url: https://github.com/llvm/llvm-project/archive/8f17c908e3858c0a2a9b1bed3f6506fec3c6f910.tar.gz
+  sha256: dee6faf7412e337e888057aab1eb69ee26308e41305006d1897941372dc47c6b
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
@@ -26,7 +26,7 @@ source:
     - patches/0003-ExecutionEngine-reinstate-necessary-include.patch
 
 build:
-  number: 1
+  number: 0
   merge_build_host: false
 
 requirements:
