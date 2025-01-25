@@ -22,7 +22,7 @@ source:
     - patches/0002-ORC-Use-EPC-bootstrap-symbols-to-communicate-eh-fram.patch
 
 build:
-  number: 2
+  number: 3
   merge_build_host: false
 
 requirements:
@@ -224,11 +224,13 @@ outputs:
         - llvm-lit = lit.main:main
     requirements:
       host:
-        - python >=3
+        - python {{ python_min }}
         - pip
       run:
-        - python >=3
+        - python >={{ python_min }}
     test:
+      requires:
+        - python {{ python_min }}
       imports:
         - lit
       commands:
