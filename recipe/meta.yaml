@@ -26,7 +26,7 @@ source:
     - patches/0003-ExecutionEngine-reinstate-necessary-include.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
@@ -274,12 +274,14 @@ outputs:
         - llvm-lit = lit.main:main
     requirements:
       host:
-        - python >=3
+        - python {{ python_min }}
         - pip
         - setuptools
       run:
-        - python >=3
+        - python >={{ python_min }}
     test:
+      requires:
+        - python {{ python_min }}
       imports:
         - lit
       commands:
