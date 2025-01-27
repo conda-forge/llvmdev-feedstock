@@ -13,8 +13,8 @@ package:
 
 source:
   # url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-  url: https://github.com/llvm/llvm-project/archive/57466db7a459ce285f053ecac3c309f49f2cce6a.tar.gz
-  sha256: e4ca2098231f4d293cd3768de2916492a65f0e410a57eb69d9cc8424a140ad44
+  url: https://github.com/llvm/llvm-project/archive/3b5e9eed2f67c1fb6dcf7033e92509ba2b0381e9.tar.gz
+  sha256: 29c26ef6c079376cf4dfdbca1cd2e6c53bb2e47eaafc66e13d396bdacdde1336
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
@@ -22,11 +22,9 @@ source:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     # backport llvm-bits of https://github.com/llvm/llvm-project/pull/110217
     - patches/0002-llvm-LLVM_ENABLE_RUNTIMES-flang-rt.patch
-    # backport https://github.com/llvm/llvm-project/pull/124083
-    - patches/0003-ExecutionEngine-Include-map-124083.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
