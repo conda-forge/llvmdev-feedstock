@@ -1,4 +1,4 @@
-From 970ef6bc0b173de6fe8a4d69f645b1bcef434257 Mon Sep 17 00:00:00 2001
+From e978c329f69b3fed54e5b6c499535447d0d2811e Mon Sep 17 00:00:00 2001
 From: Michael Kruse <llvm-project@meinersbur.de>
 Date: Fri, 27 Sep 2024 09:18:49 +0200
 Subject: [PATCH 2/3] [llvm] LLVM_ENABLE_RUNTIMES=flang-rt
@@ -37,10 +37,10 @@ index f14065ab0379..9a1dc824658f 100644
    "Semicolon-separated list of runtimes to build, or \"all\" (${LLVM_DEFAULT_RUNTIMES}). Supported runtimes are ${LLVM_SUPPORTED_RUNTIMES}.")
  if(LLVM_ENABLE_RUNTIMES STREQUAL "all")
 diff --git a/llvm/cmake/modules/LLVMExternalProjectUtils.cmake b/llvm/cmake/modules/LLVMExternalProjectUtils.cmake
-index f7e1165bc4b9..e89f25018c6f 100644
+index 55422c2a4c02..caccb62d666c 100644
 --- a/llvm/cmake/modules/LLVMExternalProjectUtils.cmake
 +++ b/llvm/cmake/modules/LLVMExternalProjectUtils.cmake
-@@ -34,6 +34,8 @@ endfunction()
+@@ -38,6 +38,8 @@ endfunction()
  
  
  # llvm_ExternalProject_Add(name source_dir ...
@@ -49,7 +49,7 @@ index f7e1165bc4b9..e89f25018c6f 100644
  #   USE_TOOLCHAIN
  #     Use just-built tools (see TOOLCHAIN_TOOLS)
  #   EXCLUDE_FROM_ALL
-@@ -61,7 +63,7 @@ endfunction()
+@@ -65,7 +67,7 @@ endfunction()
  #   )
  function(llvm_ExternalProject_Add name source_dir)
    cmake_parse_arguments(ARG
@@ -58,7 +58,7 @@ index f7e1165bc4b9..e89f25018c6f 100644
      "SOURCE_DIR;FOLDER"
      "CMAKE_ARGS;TOOLCHAIN_TOOLS;RUNTIME_LIBRARIES;DEPENDS;EXTRA_TARGETS;PASSTHROUGH_PREFIXES;STRIP_TOOL;TARGET_TRIPLE"
      ${ARGN})
-@@ -89,6 +91,9 @@ function(llvm_ExternalProject_Add name source_dir)
+@@ -93,6 +95,9 @@ function(llvm_ExternalProject_Add name source_dir)
  
    if(NOT ARG_TOOLCHAIN_TOOLS)
      set(ARG_TOOLCHAIN_TOOLS clang)
@@ -68,7 +68,7 @@ index f7e1165bc4b9..e89f25018c6f 100644
      # AIX 64-bit XCOFF and big AR format is not yet supported in some of these tools.
      if(NOT _cmake_system_name STREQUAL AIX)
        list(APPEND ARG_TOOLCHAIN_TOOLS lld llvm-ar llvm-ranlib llvm-nm llvm-objdump)
-@@ -139,6 +144,10 @@ function(llvm_ExternalProject_Add name source_dir)
+@@ -143,6 +148,10 @@ function(llvm_ExternalProject_Add name source_dir)
      set(CLANG_IN_TOOLCHAIN On)
    endif()
  
@@ -79,7 +79,7 @@ index f7e1165bc4b9..e89f25018c6f 100644
    if(RUNTIME_LIBRARIES AND CLANG_IN_TOOLCHAIN)
      list(APPEND TOOLCHAIN_BINS ${RUNTIME_LIBRARIES})
    endif()
-@@ -221,6 +230,9 @@ function(llvm_ExternalProject_Add name source_dir)
+@@ -225,6 +234,9 @@ function(llvm_ExternalProject_Add name source_dir)
                            -DCMAKE_ASM_COMPILER=${LLVM_RUNTIME_OUTPUT_INTDIR}/clang${CMAKE_EXECUTABLE_SUFFIX})
        endif()
      endif()
@@ -89,7 +89,7 @@ index f7e1165bc4b9..e89f25018c6f 100644
      if(lld IN_LIST TOOLCHAIN_TOOLS)
        if(is_msvc_target)
          list(APPEND compiler_args -DCMAKE_LINKER=${LLVM_RUNTIME_OUTPUT_INTDIR}/lld-link${CMAKE_EXECUTABLE_SUFFIX})
-@@ -304,6 +316,7 @@ function(llvm_ExternalProject_Add name source_dir)
+@@ -308,6 +320,7 @@ function(llvm_ExternalProject_Add name source_dir)
      set(compiler_args -DCMAKE_ASM_COMPILER=${CMAKE_ASM_COMPILER}
                        -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
                        -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
@@ -97,7 +97,7 @@ index f7e1165bc4b9..e89f25018c6f 100644
                        -DCMAKE_LINKER=${CMAKE_LINKER}
                        -DCMAKE_AR=${CMAKE_AR}
                        -DCMAKE_RANLIB=${CMAKE_RANLIB}
-@@ -353,6 +366,7 @@ function(llvm_ExternalProject_Add name source_dir)
+@@ -357,6 +370,7 @@ function(llvm_ExternalProject_Add name source_dir)
    if(ARG_TARGET_TRIPLE)
      list(APPEND compiler_args -DCMAKE_C_COMPILER_TARGET=${ARG_TARGET_TRIPLE})
      list(APPEND compiler_args -DCMAKE_CXX_COMPILER_TARGET=${ARG_TARGET_TRIPLE})

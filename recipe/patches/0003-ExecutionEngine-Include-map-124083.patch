@@ -1,0 +1,33 @@
+From 175fd727bf6832a8fd077123e136c2b0b853a5a1 Mon Sep 17 00:00:00 2001
+From: Kazu Hirata <kazu@google.com>
+Date: Thu, 23 Jan 2025 08:46:47 -0800
+Subject: [PATCH 3/3] [ExecutionEngine] Include <map> (#124083)
+
+This patch reinstates an include of <map>, fixing a build failure
+caused by:
+
+  commit 1f4d91ecb8529678a3d3919d7523743bd21942ca
+  Author: Kazu Hirata <kazu@google.com>
+  Date:   Tue Nov 19 19:41:59 2024 -0800
+
+  [ExecutionEngine] Remove unused includes (NFC) (#116749)
+
+---------
+
+Co-authored-by: h-vetinari <h.vetinari@gmx.com>
+---
+ llvm/lib/ExecutionEngine/Orc/TargetProcess/JITLoaderVTune.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/llvm/lib/ExecutionEngine/Orc/TargetProcess/JITLoaderVTune.cpp b/llvm/lib/ExecutionEngine/Orc/TargetProcess/JITLoaderVTune.cpp
+index fb7cf94fa065..5a4698f0fa68 100644
+--- a/llvm/lib/ExecutionEngine/Orc/TargetProcess/JITLoaderVTune.cpp
++++ b/llvm/lib/ExecutionEngine/Orc/TargetProcess/JITLoaderVTune.cpp
+@@ -15,6 +15,7 @@
+ #if LLVM_USE_INTEL_JITEVENTS
+ #include "IntelJITEventsWrapper.h"
+ #include "ittnotify.h"
++#include <map>
+ 
+ using namespace llvm;
+ using namespace llvm::orc;
