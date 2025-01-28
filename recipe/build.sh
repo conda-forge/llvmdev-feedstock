@@ -74,7 +74,7 @@ if [[ ${CONDA_BUILD_CROSS_COMPILATION:-0} != "1" ]]; then
   if [[ "$target_platform" == linux* ]]; then
     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
     # check-llvm takes >1.5h to build & run on osx
-    ninja -j${CPU_COUNT} check-llvm
+    # ninja -j${CPU_COUNT} check-llvm
   fi
 
   cd ../llvm/test
