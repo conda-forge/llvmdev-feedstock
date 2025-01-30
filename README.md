@@ -29,38 +29,73 @@ Current build status
         <table>
           <thead><tr><th>Variant</th><th>Status</th></tr></thead>
           <tbody><tr>
-              <td>linux_64</td>
+              <td>linux_64_variantdefault</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_variantdefault" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>linux_aarch64</td>
+              <td>linux_64_variantroot_63402</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_variantroot_63402" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>linux_ppc64le</td>
+              <td>linux_aarch64_variantdefault</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_ppc64le_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_variantdefault" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>osx_64</td>
+              <td>linux_aarch64_variantroot_63402</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_variantroot_63402" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>osx_arm64</td>
+              <td>linux_ppc64le_variantdefault</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_arm64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_ppc64le_variantdefault" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>linux_ppc64le_variantroot_63402</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_ppc64le_variantroot_63402" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_64_variantdefault</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_variantdefault" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_64_variantroot_63402</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_variantroot_63402" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_arm64_variantdefault</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_arm64_variantdefault" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_arm64_variantroot_63402</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_arm64_variantroot_63402" alt="variant">
                 </a>
               </td>
             </tr><tr>
