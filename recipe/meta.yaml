@@ -1,6 +1,7 @@
 {% set version = "18.1.8" %}
 {% set major_ver = version.split(".")[0] %}
 {% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
+{% set build_number = 4 %}
 
 # as of LLVM 17, we expect an "rc" suffix for the release candidates
 {% set extra = "rc" if version.split(".")[-1] not in "0123456789" else "" %}
@@ -20,9 +21,12 @@ source:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     # backport https://github.com/llvm/llvm-project/pull/90599
     - patches/0002-lljit-respect-codemodel.patch
+{% if variant and variant.startswith("root_") %}
+    - patches/root/0001-UPSTREAM-ORC-Preserve-order-of-constructors-with-sam.patch
+    - patches/root/0002-Do-not-build-mlgo-utils.patch
+{% endif %}
 
 build:
-  number: 3
   merge_build_host: false
 
 requirements:
@@ -48,6 +52,9 @@ outputs:
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
+      track_features:
+        - root         # [variant and variant.startswith("root_")]
+      string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
     requirements:
       build:
         - {{ stdlib('c') }}
@@ -99,6 +106,9 @@ outputs:
     script: install_llvm.sh  # [not win]
     build:
       activate_in_script: true
+      track_features:
+        - root         # [variant and variant.startswith("root_")]
+      string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
       run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
@@ -129,6 +139,9 @@ outputs:
   # for run_exports
   - name: llvm
     build:
+      track_features:
+        - root         # [variant and variant.startswith("root_")]
+      string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
       run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
@@ -155,6 +168,9 @@ outputs:
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
+      track_features:
+        - root         # [variant and variant.startswith("root_")]
+      string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
       # On Windows there are no symlinks and copying will create a new package
       # that is 300MB+
       skip: true  # [win]
@@ -190,6 +206,9 @@ outputs:
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
+      track_features:
+        - root         # [variant and variant.startswith("root_")]
+      string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
     requirements:
       build:
         - {{ stdlib('c') }}
@@ -231,6 +250,9 @@ outputs:
       run_exports:
         - {{ pin_subpackage("libllvm-c" + major_ver, max_pin="x.x") }}
       activate_in_script: true
+      track_features:
+        - root         # [variant and variant.startswith("root_")]
+      string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
       # not supported on linux, see
       # https://github.com/llvm/llvm-project/blob/llvmorg-16.0.6/llvm/tools/llvm-shlib/CMakeLists.txt#L82-L85
       # osx currently fails as well, see https://github.com/llvm/llvm-project/issues/64657
@@ -262,6 +284,9 @@ outputs:
       script: python -m pip install llvm/utils/lit --no-deps -vv
       activate_in_script: true
       skip: true  # [not linux64]
+      track_features:
+        - root         # [variant and variant.startswith("root_")]
+      string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
       entry_points:
         # upstream LLVM is inconsistent; there's one way specified in lit's setup.py...
         - lit = lit.main:main

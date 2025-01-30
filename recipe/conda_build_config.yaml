@@ -2,3 +2,7 @@ c_compiler:            # [osx]
   - clang_bootstrap    # [osx]
 cxx_compiler:          # [osx]
   - clang_bootstrap    # [osx]
+
+variant:
+  - default
+  - root_63402  # [linux or osx]
