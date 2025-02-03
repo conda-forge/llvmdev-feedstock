@@ -75,8 +75,9 @@ if [[ ${CONDA_BUILD_CROSS_COMPILATION:-0} != "1" ]]; then
     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
     # check-llvm takes >1.5h to build & run on osx
     ninja -j${CPU_COUNT} check-llvm
+  else
+    # subset of what runs during check-llvm (~10min)
+    cd ../llvm/test
+    python ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
   fi
-
-  cd ../llvm/test
-  python ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
 fi
