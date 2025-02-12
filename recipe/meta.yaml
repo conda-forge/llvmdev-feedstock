@@ -1,4 +1,4 @@
-{% set version = "20.1.0.rc1" %}
+{% set version = "20.1.0.rc2" %}
 {% set major_ver = version.split(".")[0] %}
 {% set tail_ver = version.split(".")[-1] %}
 {% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
@@ -13,14 +13,12 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-  sha256: 3b0a5a57aad30f714018ecb0adcc2ec82932481ed35c793787efeed12cbf24c0
+  sha256: ae4fa1649bac14bd4241af02fc6558e3b8ecccdf247bc45d9d38b70a86522bc2
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
-    # backport https://github.com/llvm/llvm-project/pull/125431
-    - patches/0002-ORC-LLI-Remove-redundant-eh-frame-registration-plugi.patch
 
 build:
   number: 0
