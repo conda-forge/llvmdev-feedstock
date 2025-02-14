@@ -18,6 +18,8 @@ libxml2:
 - '2'
 macos_machine:
 - arm64-apple-darwin20.0.0
+python_min:
+- '3.9'
 target_platform:
 - osx-arm64
 zlib:
