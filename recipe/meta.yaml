@@ -17,9 +17,10 @@ source:
     # https://reviews.llvm.org/D135457 & https://reviews.llvm.org/D136065
     - patches/0002-CMake-Fix-Findzstd-module-for-shared-DLL-on-Windows.patch
     - patches/no-windows-symlinks.patch
+    - patches/0003-RuntimeDyld-RuntimeDyldELF-Clear-GOTOffsetMap-when-r.patch
 
 build:
-  number: 4
+  number: 5
   merge_build_host: false
 
 requirements:
