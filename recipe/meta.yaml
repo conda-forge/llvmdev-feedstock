@@ -179,7 +179,7 @@ outputs:
         - pip
         - setuptools
       run:
-        - python {{ python_min }}
+        - python >={{ python_min }}
     test:
       requires:
         - python {{ python_min }}
