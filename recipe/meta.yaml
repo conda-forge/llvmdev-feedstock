@@ -29,7 +29,7 @@ requirements:
     - {{ compiler('cxx') }}
     - cmake
     - ninja
-    - python >=3
+    - python {{ python_min }}
     - libcxx {{ cxx_compiler_version }}  # [osx]
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
