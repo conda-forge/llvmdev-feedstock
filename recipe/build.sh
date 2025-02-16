@@ -66,10 +66,9 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
 
   if [[ "$target_platform" == linux* ]]; then
     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
+    ninja -j${CPU_COUNT} check-llvm
   fi
 
-  ninja -j${CPU_COUNT} check-llvm
-
   cd ../llvm/test
-  python ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
+  $BUILD_PREFIX/bin/python ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
 fi
