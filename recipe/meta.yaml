@@ -14,14 +14,16 @@ source:
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
     - patches/0002-Always-copy-on-windows.patch
-    - patches/0003-restore-macos-10.9-support.patch
+    # backport https://github.com/llvm/llvm-project/commit/2e1b838a889f9793d4bcd5dbfe10db9796b77143
+    - patches/0003-RuntimeDyldELF-Clear-GOTOffsetMap-when-resetting-GOT.patch
 
 build:
-  number: 3
+  number: 4
   merge_build_host: false
 
 requirements:
   build:
+    - {{ stdlib('c') }}
     - {{ compiler('cxx') }}
     - cmake
     - ninja
@@ -38,12 +40,13 @@ requirements:
 outputs:
   # Contains everything
   - name: llvmdev
-    script: install_llvm.sh  # [not win]
+    script: install_llvm.sh   # [unix]
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
     requirements:
       build:
+        - {{ stdlib('c') }}
         - {{ compiler('cxx') }}
         - cmake
         - ninja
@@ -87,10 +90,11 @@ outputs:
     script: install_llvm.sh  # [not win]
     build:
       activate_in_script: true
-      run_exports:   # [not win]
+      run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
+        - {{ stdlib('c') }}
         - {{ compiler('cxx') }}
         - ninja                    # [not win]
         - cmake                    # [not win]
@@ -111,7 +115,7 @@ outputs:
   # for run_exports
   - name: llvm
     build:
-      run_exports:   # [not win]
+      run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
@@ -120,7 +124,7 @@ outputs:
         - libxml2
         - zlib
         - zstd
-      run:   # [not win]
+      run:                                                            # [not win]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
       run_constrained:   # [not win]
         - llvmdev   {{ version }}                                     # [not win]
@@ -130,12 +134,13 @@ outputs:
 
   # Contains LLVM tools
   - name: llvm-tools
-    script: install_llvm.sh  # [not win]
+    script: install_llvm.sh   # [unix]
     script: install_llvm.bat  # [win]
     build:
       activate_in_script: true
     requirements:
       build:
+        - {{ stdlib('c') }}
         - {{ compiler('cxx') }}
         - cmake
         - ninja
@@ -171,6 +176,7 @@ outputs:
       skip: true  # [not win]
     requirements:
       build:
+        - {{ stdlib('c') }}
         - {{ compiler('cxx') }}
         - cmake
         - ninja
@@ -202,11 +208,14 @@ outputs:
         - llvm-lit = lit.main:main
     requirements:
       host:
-        - python >=3
+        - python {{ python_min }}
         - pip
+        - setuptools
       run:
-        - python
+        - python >={{ python_min }}
     test:
+      requires:
+        - python {{ python_min }}
       imports:
         - lit
       commands:

@@ -1,3 +1,8 @@
+azure:
+  settings_win:
+    install_atl: true
+    variables:
+      SET_PAGEFILE: 'True'
 bot:
   abi_migration_branches:
   - 15.x
