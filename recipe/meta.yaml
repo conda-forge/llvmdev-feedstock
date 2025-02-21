@@ -204,8 +204,6 @@ outputs:
       script: {{ RECIPE_DIR }}/llvmlite/bld.bat   # [win]
       ignore_run_exports:
         - libllvm{{ major_ver }}  # [unix and not ppc64le]
-      force_ignore_keys:  # [osx and arm64]
-        - llvm-tools      # [osx and arm64]
     requirements:
       build:
         - python                                 # [build_platform != target_platform]
@@ -220,6 +218,7 @@ outputs:
         - setuptools
         - {{ pin_subpackage('llvmdev', exact=True) }}
         - {{ pin_subpackage('llvm', exact=True) }}
+        - {{ pin_subpackage("llvm-tools", exact=True) }}
         - zlib
         - vs2015_runtime  # [win]
       run:
