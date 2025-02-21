@@ -53,7 +53,9 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -GNinja \
       ../llvm
 
-ninja -j${CPU_COUNT}
+# the typical cpu count is 2, but try 8 anyways
+# ninja -j${CPU_COUNT}
+ninja -j8
 
 if [[ "${target_platform}" == "linux-64" || "${target_platform}" == "osx-64" ]]; then
     export TEST_CPU_FLAG="-mcpu=haswell"
