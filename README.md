@@ -3,6 +3,10 @@ About llvmdev-feedstock
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/llvmdev-feedstock/blob/main/LICENSE.txt)
 
+
+About llvmdev
+-------------
+
 Home: http://llvm.org/
 
 Package license: Apache-2.0 WITH LLVM-exception
@@ -10,6 +14,19 @@ Package license: Apache-2.0 WITH LLVM-exception
 Summary: Development headers and libraries for LLVM
 
 Development: https://github.com/llvm/llvm-project
+
+About llvmlite
+--------------
+
+Home: http://llvmlite.pydata.org
+
+Package license: BSD-2-Clause
+
+Summary: A lightweight LLVM python binding for writing JIT compilers.
+
+Development: https://github.com/numba/llvmlite
+
+Documentation: http://llvmlite.pydata.org/
 
 Current build status
 ====================
@@ -88,6 +105,7 @@ Current release info
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvm-green.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvm--tools-green.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvmdev-green.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-llvmlite-green.svg)](https://anaconda.org/conda-forge/llvmlite) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvmlite.svg)](https://anaconda.org/conda-forge/llvmlite) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvmlite.svg)](https://anaconda.org/conda-forge/llvmlite) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvmlite.svg)](https://anaconda.org/conda-forge/llvmlite) |
 
 Installing llvmdev
 ==================
@@ -99,16 +117,16 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libllvm15, lit, llvm, llvm-tools, llvmdev` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `libllvm15, lit, llvm, llvm-tools, llvmdev, llvmlite` can be installed with `conda`:
 
 ```
-conda install libllvm15 lit llvm llvm-tools llvmdev
+conda install libllvm15 lit llvm llvm-tools llvmdev llvmlite
 ```
 
 or with `mamba`:
 
 ```
-mamba install libllvm15 lit llvm llvm-tools llvmdev
+mamba install libllvm15 lit llvm llvm-tools llvmdev llvmlite
 ```
 
 It is possible to list all of the versions of `libllvm15` available on your platform with `conda`:
