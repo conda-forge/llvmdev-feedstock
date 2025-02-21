@@ -42,3 +42,7 @@ zlib:
 - '1'
 zstd:
 - '1.5'
+
+CONDA_BUILD_SYSROOT:
+- /opt/MacOSX11.0.sdk
+
