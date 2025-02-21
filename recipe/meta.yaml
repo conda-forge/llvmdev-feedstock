@@ -216,9 +216,9 @@ outputs:
       host:
         - python
         - setuptools
-        - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - {{ pin_subpackage('llvmdev', exact=True) }}
-        - {{ pin_subpackage('llvm', exact=True) }}
+        - llvm-tools {{ PKG_VERSION }}  *_{{ build }}
+        - llvmdev {{ PKG_VERSION }}  *_{{ build }}
+        - llvm {{ PKG_VERSION }}  *_{{ build }}
         - zlib
         - vs2015_runtime  # [win]
       run:
