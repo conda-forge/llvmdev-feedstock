@@ -1,26 +1,30 @@
 {% set version = "15.0.7" %}
 {% set major_ver = version.split(".")[0] %}
+{% set build = 6 %}
 
 package:
   name: llvm-package
   version: {{ version }}
 
 source:
-  url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
-  sha256: 8b5fcb24b4128cf04df1b0b9410ce8b1a729cb3c544e6da885d234280dedeac6
-  patches:
-    # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
-    # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
-    # - patches/amd-roc-2.7.0.diff
-    - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
-    # backport of zlib patches, can be dropped for v>15.0.3, see
-    # https://reviews.llvm.org/D135457 & https://reviews.llvm.org/D136065
-    - patches/0002-CMake-Fix-Findzstd-module-for-shared-DLL-on-Windows.patch
-    - patches/no-windows-symlinks.patch
-    - patches/0003-RuntimeDyld-RuntimeDyldELF-Clear-GOTOffsetMap-when-r.patch
+  - url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
+    sha256: 8b5fcb24b4128cf04df1b0b9410ce8b1a729cb3c544e6da885d234280dedeac6
+    patches:
+      # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
+      # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
+      # - patches/amd-roc-2.7.0.diff
+      - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
+      # backport of zlib patches, can be dropped for v>15.0.3, see
+      # https://reviews.llvm.org/D135457 & https://reviews.llvm.org/D136065
+      - patches/0002-CMake-Fix-Findzstd-module-for-shared-DLL-on-Windows.patch
+      - patches/no-windows-symlinks.patch
+      - patches/0003-RuntimeDyld-RuntimeDyldELF-Clear-GOTOffsetMap-when-r.patch
+  - url: https://pypi.org/packages/source/l/llvmlite/llvmlite-0.44.0.tar.gz
+    sha256: 07667d66a5d150abed9157ab6c0b9393c9356f229784a4385c02f99e94fc94d4
+    folder: llvmlite
 
 build:
-  number: 5
+  number: {{ build }}
   merge_build_host: false
 
 requirements:
@@ -188,6 +192,51 @@ outputs:
       commands:
         - lit -h
         - llvm-lit -h
+
+  - name: llvmlite
+    build:
+      number: {{ build + 100 }}
+      string: "llvmstatic_h{{ PKG_HASH }}_{{ build + 100 }}"
+      skip: true  # [py<310]
+      script_env:
+        - PY_VCRUNTIME_REDIST
+      script: {{ RECIPE_DIR }}/llvmlite/build.sh  # [unix]
+      script: {{ RECIPE_DIR }}/llvmlite/bld.bat   # [win]
+      ignore_run_exports:
+        - libllvm{{ major_ver }}  # [unix and not ppc64le]
+    requirements:
+      build:
+        - python                                 # [build_platform != target_platform]
+        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+        - {{ stdlib('c') }}
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - cmake
+        - make                                   # [unix]
+      host:
+        - python
+        - setuptools
+        - {{ pin_subpackage('llvmdev', exact=True) }}
+        - {{ pin_subpackage('llvm', exact=True) }}
+        - zlib
+        - vs2015_runtime  # [win]
+      run:
+        - python
+        - vs2015_runtime  # [win]
+    test:
+      imports:
+        - llvmlite
+        - llvmlite.binding
+      commands:
+        - python -m llvmlite.tests
+        - python {{ RECIPE_DIR }}/llvmlite/run_test.py
+    about:
+      home: http://llvmlite.pydata.org
+      license: BSD-2-Clause
+      license_file: {{ SRC_DIR }}/llvmlite/LICENSE
+      summary: A lightweight LLVM python binding for writing JIT compilers.
+      doc_url: http://llvmlite.pydata.org/
+      dev_url: https://github.com/numba/llvmlite
 
 about:
   home: http://llvm.org/
