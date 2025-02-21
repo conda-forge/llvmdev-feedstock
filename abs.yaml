@@ -3,3 +3,14 @@
 # before crashing.
 extra_labels_for_os:
   osx-arm64: [ventura]
+
+# disable tests on initial builds
+build_parameters:
+  - "--suppress-variables"
+  - "--skip-existing"
+  - "--error-overlinking"
+  - "--no-test"
+
+upload_without_merge: True
+upload_to_staging_channel_in_pr: True
+channels: [ llvmdev17 ]

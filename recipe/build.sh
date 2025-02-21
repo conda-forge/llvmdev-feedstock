@@ -1,4 +1,5 @@
-set -x
+#!/bin/bash
+set -exuo pipefail
 
 # Make osx work like linux.
 sed -i.bak "s/NOT APPLE AND ARG_SONAME/ARG_SONAME/g" llvm/cmake/modules/AddLLVM.cmake
@@ -7,15 +8,16 @@ sed -i.bak "s/NOT APPLE AND NOT ARG_SONAME/NOT ARG_SONAME/g" llvm/cmake/modules/
 mkdir build
 cd build
 
-export CPU_COUNT=4
-
 if [[ "$target_platform" == "linux-64" ]]; then
   CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_USE_INTEL_JITEVENTS=ON"
 fi
 
 if [[ "$CC_FOR_BUILD" != "" && "$CC_FOR_BUILD" != "$CC" ]]; then
-  CMAKE_ARGS="${CMAKE_ARGS} -DCROSS_TOOLCHAIN_FLAGS_NATIVE=-DCMAKE_C_COMPILER=$CC_FOR_BUILD;-DCMAKE_CXX_COMPILER=$CXX_FOR_BUILD;-DCMAKE_C_FLAGS=-O2;-DCMAKE_CXX_FLAGS=-O2;-DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath,${BUILD_PREFIX}/lib;-DCMAKE_MODULE_LINKER_FLAGS=;-DCMAKE_SHARED_LINKER_FLAGS=;-DCMAKE_STATIC_LINKER_FLAGS=;-DLLVM_INCLUDE_BENCHMARKS=OFF;"
-  CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_HOST_TRIPLE=$(echo $HOST | sed s/conda/unknown/g) -DLLVM_DEFAULT_TARGET_TRIPLE=$(echo $HOST | sed s/conda/unknown/g)"
+  NATIVE_FLAGS="-DCMAKE_C_COMPILER=$CC_FOR_BUILD;-DCMAKE_CXX_COMPILER=$CXX_FOR_BUILD;-DCMAKE_C_FLAGS=-O2;-DCMAKE_CXX_FLAGS=-O2"
+  NATIVE_FLAGS="${NATIVE_FLAGS};-DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath,${BUILD_PREFIX}/lib;-DCMAKE_MODULE_LINKER_FLAGS=;-DCMAKE_SHARED_LINKER_FLAGS="
+  NATIVE_FLAGS="${NATIVE_FLAGS};-DCMAKE_STATIC_LINKER_FLAGS=;-DLLVM_INCLUDE_BENCHMARKS=OFF"
+  NATIVE_FLAGS="${NATIVE_FLAGS};-DLLVM_ENABLE_ZSTD=OFF;-DLLVM_ENABLE_LIBXML2=OFF;-DLLVM_ENABLE_ZLIB=OFF;"
+  CMAKE_ARGS="${CMAKE_ARGS} -DCROSS_TOOLCHAIN_FLAGS_NATIVE=${NATIVE_FLAGS}"
 fi
 
 # disable -fno-plt due to https://bugs.llvm.org/show_bug.cgi?id=51863 due to some GCC bug
@@ -23,7 +25,7 @@ if [[ "$target_platform" == "linux-ppc64le" ]]; then
   CFLAGS="$(echo $CFLAGS | sed 's/-fno-plt //g')"
   CXXFLAGS="$(echo $CXXFLAGS | sed 's/-fno-plt //g')"
   CMAKE_ARGS="${CMAKE_ARGS} -DFFI_INCLUDE_DIR=$PREFIX/include"
-  CMAKE_ARGS="${CMAKE_ARGS} -DFFI_LIBRARY_DIR=$PREFIX/lib"
+  CMAKE_ARGS="${CMAKE_ARGS} -DFFI_LIBRARY_DIR=$PREFIX/lib"  
 fi
 
 if [[ $target_platform == osx-* ]]; then
@@ -42,8 +44,10 @@ fi
 cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_LIBRARY_PATH="${PREFIX}" \
+      -DLLVM_ENABLE_BACKTRACES=ON \
+      -DLLVM_ENABLE_DUMP=ON \
       -DLLVM_ENABLE_LIBEDIT=OFF \
-      -DLLVM_ENABLE_LIBXML2=OFF \
+      -DLLVM_ENABLE_LIBXML2=FORCE_ON \
       -DLLVM_ENABLE_RTTI=ON \
       -DLLVM_ENABLE_TERMINFO=OFF \
       -DLLVM_ENABLE_ZLIB=FORCE_ON \
@@ -56,16 +60,16 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DLLVM_INCLUDE_UTILS=ON \
       -DLLVM_INSTALL_UTILS=ON \
       -DLLVM_UTILS_INSTALL_DIR=libexec/llvm \
-      -DLLVM_BUILD_LLVM_DYLIB=ON \
-      -DLLVM_LINK_LLVM_DYLIB=ON \
+      -DLLVM_BUILD_LLVM_DYLIB=yes \
+      -DLLVM_LINK_LLVM_DYLIB=yes \
       -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly \
       -DLLVM_ENABLE_FFI=ON \
-      -DLLVM_ENABLE_Z3_SOLVER=OFF \
       -DLLVM_OPTIMIZED_TABLEGEN=ON \
       -DCMAKE_POLICY_DEFAULT_CMP0111=NEW \
       ${CMAKE_ARGS} \
       -GNinja \
       ../llvm
+
 
 ninja -j${CPU_COUNT}
 
@@ -75,29 +79,15 @@ else
     export TEST_CPU_FLAG=""
 fi
 
-if [[ "$CONDA_BUILD_CROSS_COMPILATION" != "1" ]]; then
+if [[ ${CONDA_BUILD_CROSS_COMPILATION:-0} != "1" ]]; then
   # bin/opt -S -vector-library=SVML $TEST_CPU_FLAG -O3 $RECIPE_DIR/numba-3016.ll | bin/FileCheck $RECIPE_DIR/numba-3016.ll || exit $?
 
   if [[ "$target_platform" == linux* ]]; then
     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
-
-    # These tests tests permission-based behaviour and probably fail because of some
-    # filesystem-related reason. They are sporadic failures and don't seem serious so they're excluded.
-    # Note that indents would introduce spaces into the environment variable
-    export LIT_FILTER_OUT='tools/llvm-ar/error-opening-permission.test|'\
-'tools/llvm-dwarfdump/X86/output.s|'\
-'tools/llvm-ifs/fail-file-write.test|'\
-'tools/llvm-ranlib/error-opening-permission.test'
+    # check-llvm takes >1.5h to build & run on osx
+    ninja -j${CPU_COUNT} check-llvm
   fi
-
-  if [[ "$target_platform" == osx-* ]]; then
-    # This failure seems like something to do with the output format of ls -lu
-    # and looks harmless
-    export LIT_FILTER_OUT='tools/llvm-objcopy/ELF/strip-preserve-atime.test'
-  fi
-
-  ninja -j${CPU_COUNT} check-llvm
 
   cd ../llvm/test
-  ${PYTHON} ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
+  python ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
 fi
