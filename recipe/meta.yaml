@@ -202,7 +202,7 @@ outputs:
         - PY_VCRUNTIME_REDIST
       script: {{ RECIPE_DIR }}/llvmlite/build.sh  # [unix]
       script: {{ RECIPE_DIR }}/llvmlite/bld.bat   # [win]
-      ignore_run_exports:
+      ignore_run_exports:         # [unix and not ppc64le]
         - libllvm{{ major_ver }}  # [unix and not ppc64le]
     requirements:
       build:
