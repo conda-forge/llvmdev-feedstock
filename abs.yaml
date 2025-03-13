@@ -4,12 +4,7 @@
 extra_labels_for_os:
   osx-arm64: [ventura]
 
-# disable tests on initial builds
-build_parameters:
-  - "--suppress-variables"
-  - "--skip-existing"
-  - "--error-overlinking"
-  - "--no-test"
+aggregate_check: false
 
 upload_without_merge: True
 upload_to_staging_channel_in_pr: True
