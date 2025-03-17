@@ -4,6 +4,11 @@
 extra_labels_for_os:
   osx-arm64: [ventura]
 
+# the conda build parameters to use
+build_parameters:
+  - "--suppress-variables"
+  - "--error-overlinking"
+
 aggregate_check: false
 
 upload_without_merge: True
