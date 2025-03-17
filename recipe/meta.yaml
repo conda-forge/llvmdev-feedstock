@@ -36,7 +36,7 @@ requirements:
     - libcxx {{ cxx_compiler_version }}  # [osx]
     - patch       # [not win]
     - m2-patch    # [win]
-    - git
+    - git         # [not win]
   host:
     - libcxx {{ cxx_compiler_version }}  # [osx]
     - backtrace                          # [unix]
@@ -252,8 +252,6 @@ outputs:
       run:
         - python
     test:
-      requires:
-        - python
       imports:
         - lit
       commands:
