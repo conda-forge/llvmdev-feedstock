@@ -89,9 +89,9 @@ if [[ ${CONDA_BUILD_CROSS_COMPILATION:-0} != "1" ]]; then
     # filesystem-related reason. They are sporadic failures and don't seem serious so they're excluded.
     # Note that indents would introduce spaces into the environment variable
     export LIT_FILTER_OUT='tools/llvm-ar/error-opening-permission.test|'\
-                          'tools/llvm-dwarfdump/X86/output.s|'\
-                          'tools/llvm-ifs/fail-file-write.test|'\
-                          'tools/llvm-ranlib/error-opening-permission.test'
+'tools/llvm-dwarfdump/X86/output.s|'\
+'tools/llvm-ifs/fail-file-write.test|'\
+'tools/llvm-ranlib/error-opening-permission.test'
 
     # check-llvm takes >1.5h to build & run on osx
     ninja -j${CPU_COUNT} check-llvm
