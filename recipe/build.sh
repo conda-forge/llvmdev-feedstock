@@ -25,7 +25,7 @@ if [[ "$target_platform" == "linux-ppc64le" ]]; then
   CFLAGS="$(echo $CFLAGS | sed 's/-fno-plt //g')"
   CXXFLAGS="$(echo $CXXFLAGS | sed 's/-fno-plt //g')"
   CMAKE_ARGS="${CMAKE_ARGS} -DFFI_INCLUDE_DIR=$PREFIX/include"
-  CMAKE_ARGS="${CMAKE_ARGS} -DFFI_LIBRARY_DIR=$PREFIX/lib"  
+  CMAKE_ARGS="${CMAKE_ARGS} -DFFI_LIBRARY_DIR=$PREFIX/lib"
 fi
 
 if [[ $target_platform == osx-* ]]; then
