@@ -201,39 +201,9 @@ outputs:
         - test ! -f $PREFIX/bin/llvm-config                      # [not win]
         - if exist "%LIBRARY_BIN%"\\llvm-config.exe exit 1       # [win]
 
-  # Contains LLVM-C shared library
-  - name: libllvm-c{{ major_ver }}
-    script: install_llvm.sh   # [unix]
-    script: install_llvm.bat  # [win]
-    build:
-      run_exports:
-        - {{ pin_subpackage("libllvm-c" + major_ver, max_pin="x.x") }}
-      activate_in_script: true
-      # not supported on linux, see
-      # https://github.com/llvm/llvm-project/blob/llvmorg-16.0.6/llvm/tools/llvm-shlib/CMakeLists.txt#L82-L85
-      # osx currently fails as well, see https://github.com/llvm/llvm-project/issues/64657
-      skip: true  # [not win]
-    requirements:
-      build:
-        - {{ compiler('cxx') }}
-        - cmake
-        - ninja
-        - libcxx {{ cxx_compiler_version }}  # [osx]
-      host:
-        - libcxx {{ cxx_compiler_version }}  # [osx]
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libffi {{ libffi }}
-        - libxml2 {{ libxml2 }}
-        - zlib {{ zlib }}
-        - zstd {{ zstd }}
-      run_constrained:
-        - llvmdev {{ version }}
-    test:
-      commands:
-        - test -f $PREFIX/lib/libLLVM-C{{ major_ver }}{{ extra }}.so # [linux]
-        - test -f $PREFIX/lib/libLLVM-C.{{ major_ver }}.dylib       # [osx]
-        - if not exist %LIBRARY_BIN%\LLVM-C.dll exit 1              # [win]
-        - if not exist %LIBRARY_LIB%\LLVM-C.lib exit 1              # [win]
+  ########
+  # TODO - enable and include libllvm-c
+  ########
 
   - name: lit
     build:
