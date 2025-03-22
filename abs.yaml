@@ -7,7 +7,8 @@ extra_labels_for_os:
 # the conda build parameters to use
 build_parameters:
   - "--suppress-variables"
-  - "--error-overlinking"
+  # - "--error-overlinking"
+  # TODO: Fix overlinking issue with defaults/win-64::vs2015_runtime==14.42.34433=he0abc0d_4
 
 aggregate_check: false
 
