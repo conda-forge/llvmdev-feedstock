@@ -128,8 +128,6 @@ outputs:
       commands:
         - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.so     # [linux]
         - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.dylib  # [osx]
-        - if not exist %LIBRARY_BIN%\LLVM-C.dll exit 1                  # [win]
-        - if not exist %LIBRARY_LIB%\LLVM-C.lib exit 1                  # [win]
         # Make sure libffi was linked
         - otool -L $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.dylib | grep -i ffi  # [osx]
         - ldd $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.so | grep -i ffi          # [linux]

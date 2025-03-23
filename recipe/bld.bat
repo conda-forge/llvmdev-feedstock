@@ -57,9 +57,7 @@ set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/type-qualifiers.test"
 set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/usingnamespace.test"
 set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-symbolizer/pdb/pdb.test"
 
+cmake --build . --target check-llvm
 
-REM TODO - REMOVED THESE TEMPORARILY, CANNOT MAKE IT FAIL LOCALLY
-REM cmake --build . --target check-llvm
-
-REM cd ..\llvm\test
-REM %BUILD_PREFIX%\python.exe ..\..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
+cd ..\llvm\test
+%BUILD_PREFIX%\python.exe ..\..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
