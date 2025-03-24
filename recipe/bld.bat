@@ -58,10 +58,8 @@ set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/type-qualifiers.test"
 set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/usingnamespace.test"
 set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-symbolizer/pdb/pdb.test" 
 
-echo "THIS IS TO SEE WHERE IT FAILED"
 cmake --build . --target check-llvm
-echo "AFTER CMAKE BUILD"
+
 cd ..\llvm\test
-echo "BEFORE PYTHON LIT TESTS"
+
 %BUILD_PREFIX%\python.exe ..\..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
-echo "AFTER PYTHON LIT TESTS"
