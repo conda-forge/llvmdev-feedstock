@@ -36,6 +36,7 @@ if %ERRORLEVEL% neq 0 exit 1
 cmake --build .
 if %ERRORLEVEL% neq 0 exit 1
 
+
 REM These tests fail because msdia140.dll isn't registered.
 REM The build stalls if registering is attempted in this file, probably because it needs elevated privileges.
 REM See https://llvm.org/docs/GettingStartedVS.html#getting-started
@@ -55,9 +56,12 @@ set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/simple-padding-graphical
 set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/symbol-filters.test"
 set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/type-qualifiers.test"
 set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/usingnamespace.test"
-set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-symbolizer/pdb/pdb.test"
+set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-symbolizer/pdb/pdb.test" 
 
+echo "THIS IS TO SEE WHERE IT FAILED"
 cmake --build . --target check-llvm
-
+echo "AFTER CMAKE BUILD"
 cd ..\llvm\test
+echo "BEFORE PYTHON LIT TESTS"
 %BUILD_PREFIX%\python.exe ..\..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
+echo "AFTER PYTHON LIT TESTS"
