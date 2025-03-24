@@ -90,7 +90,7 @@ outputs:
         - if not exist %LIBRARY_INC%\\llvm\\Pass.h exit 1               # [win]
         - if not exist "%LIBRARY_PREFIX%"\\libexec\llvm\not.exe exit 1  # [win]
         - if not exist "%LIBRARY_BIN%"\\llvm-nm.exe exit 1              # [win]
-        - "%LIBRARY_BIN%"\\llvm-nm.exe --help                           # [win]
+        - cd "%LIBRARY_BIN%" && llvm-nm.exe --help                     # [win]
         # ensure we've correctly inserted %VSINSTALLDIR% into the CMake metadata for LLVM;
         # we're looking for: `INTERFACE_LINK_LIBRARIES "$ENV{VSINSTALLDIR}/DIA SDK/lib/amd64/diaguids.lib;[...]`instead
         - rg -e "INTERFACE_LINK_LIBRARIES\s\"\$ENV\{VSINSTALLDIR\}[/\w\s]+/diaguids\.lib" %LIBRARY_LIB%\cmake\llvm\LLVMExports.cmake  # [win]
@@ -195,7 +195,7 @@ outputs:
         # The test for windows is split into two lines instead of having it in one line
         # like its unix variant because of a YAML parsing issue.
         - if not exist "%LIBRARY_BIN%"\\llc.exe exit 1           # [win]
-        - "%LIBRARY_BIN%"\\llc -version                          # [win]
+        - cd "%LIBRARY_BIN%" && llc -version                     # [win]
         - test ! -f $PREFIX/bin/llvm-config                      # [not win]
         - if exist "%LIBRARY_BIN%"\\llvm-config.exe exit 1       # [win]
 
