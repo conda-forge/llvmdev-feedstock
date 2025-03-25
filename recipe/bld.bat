@@ -58,8 +58,9 @@ set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/type-qualifiers.test"
 set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/usingnamespace.test"
 set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-symbolizer/pdb/pdb.test" 
 
-cmake --build . --target check-llvm
+cmake --build .
+if %ERRORLEVEL% neq 0 exit 1
 
 cd ..\llvm\test
-
 %BUILD_PREFIX%\python.exe ..\..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
+if %ERRORLEVEL% neq 0 exit 1
