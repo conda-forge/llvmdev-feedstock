@@ -1,4 +1,4 @@
-{% set version = "20.0.0.dev6" %}
+{% set version = "21.0.0.dev1" %}
 {% set major_ver = version.split(".")[0] %}
 {% set tail_ver = version.split(".")[-1] %}
 {% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
@@ -13,18 +13,16 @@ package:
 
 source:
   # url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-  url: https://github.com/llvm/llvm-project/archive/3b5e9eed2f67c1fb6dcf7033e92509ba2b0381e9.tar.gz
-  sha256: 29c26ef6c079376cf4dfdbca1cd2e6c53bb2e47eaafc66e13d396bdacdde1336
+  url: https://github.com/llvm/llvm-project/archive/e5129b7e2092c54e503f60cc0ac552c765d5a144.tar.gz
+  sha256: f8506cf5d53a5d555384a8917432db40ef8a2b89a5172d64f8a753b649f0274b
   patches:
     # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
-    # backport llvm-bits of https://github.com/llvm/llvm-project/pull/110217
-    - patches/0002-llvm-LLVM_ENABLE_RUNTIMES-flang-rt.patch
 
 build:
-  number: 1
+  number: 0
   merge_build_host: false
 
 requirements:
