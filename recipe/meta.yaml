@@ -22,7 +22,7 @@ source:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
