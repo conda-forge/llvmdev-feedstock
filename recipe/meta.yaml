@@ -10,18 +10,19 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-  sha256: 81494d32e6f12ea6f73d6d25424dbd2364646011bb8f7e345ca870750aa27de1
+  url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
+      #  https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
+  sha256: 58a8818c60e6627064f312dbf46c02d9949956558340938b71cf731ad8bc0813
   patches:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
-    - patches/0002-restore-macos-10.9-support.patch
-    # this patch adds the needed version numbers to 
-    - patches/0003-change-osx-version-for-libllvm-c.patch
-    # These two patches remove expected test failures.
-    - patches/0004-remove-unsupported-intrinsic-test.patch
-    - patches/0005-remove-permission-based-unit-tests.patch
-    # A different approach to this fix: https://github.com/conda-forge/llvmdev-feedstock/commit/1da42e54b055d26bc58da77bd1f88ad460ac90f4
-    # - patches/MSVC_DIA_SDK_path_fix.diff  # [win]
+    # - patches/0002-restore-macos-10.9-support.patch
+    # # this patch adds the needed version numbers to 
+    # - patches/0003-change-osx-version-for-libllvm-c.patch
+    # # These two patches remove expected test failures.
+    # - patches/0004-remove-unsupported-intrinsic-test.patch
+    # - patches/0005-remove-permission-based-unit-tests.patch
+    # # A different approach to this fix: https://github.com/conda-forge/llvmdev-feedstock/commit/1da42e54b055d26bc58da77bd1f88ad460ac90f4
+    # # - patches/MSVC_DIA_SDK_path_fix.diff  # [win]
 
 build:
   number: 3
@@ -33,13 +34,13 @@ requirements:
     - cmake
     - ninja
     - python
-    - libcxx {{ cxx_compiler_version }}  # [osx]
-    - patch       # [not win]
-    - m2-patch    # [win]
-    - git         # [not win]
+    - libcxx {{ major_ver }}    # [osx]
+    - patch                     # [not win]
+    - m2-patch                  # [win]
+    - git                       # [not win]
   host:
-    - libcxx {{ cxx_compiler_version }}  # [osx]
-    - backtrace                          # [unix]
+    - libcxx {{ major_ver }}    # [osx]
+    - backtrace                 # [unix]
     - libffi {{ libffi }}
     - libxml2 {{ libxml2 }}
     - zlib {{ zlib }}
@@ -60,9 +61,9 @@ outputs:
         - cmake
         - ninja
         - python
-        - libcxx {{ cxx_compiler_version }}  # [osx]
+        - libcxx {{ major_ver }}  # [osx]
       host:
-        - libcxx {{ cxx_compiler_version }}  # [osx]
+        - libcxx {{ major_ver }}  # [osx]
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - libffi {{ libffi }}
@@ -72,7 +73,7 @@ outputs:
       run:
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - libcxx >={{ cxx_compiler_version }}                           # [osx]
+        - libcxx >={{ major_ver }}                           # [osx]
       run_constrained:
         - llvm        {{ version }}
         - llvm-tools  {{ version }}
@@ -113,7 +114,7 @@ outputs:
         - cmake                    # [not win]
         - python                   # [not win]
       host:
-        - libcxx {{ cxx_compiler_version }}  # [osx]
+        - libcxx {{ major_ver }}  # [osx]
         - libxml2                 # [unix or win]
         - libffi {{ libffi }}
         - libxml2 {{ libxml2 }}
@@ -121,7 +122,7 @@ outputs:
         - zstd {{ zstd }}
       run:
         # we need to do this manually because clang_bootstrap has no run-export
-        - libcxx >={{ cxx_compiler_version }}  # [osx]
+        - libcxx >={{ major_ver }}  # [osx]
         - {{ pin_compatible('libffi', max_pin='x.x') }}  # [unix]
         - zlib {{ zlib }}    # [osx]
     test:
@@ -172,18 +173,18 @@ outputs:
         - cmake
         - ninja
         - python
-        - libcxx {{ cxx_compiler_version }}  # [osx]
+        - libcxx {{ major_ver }}  # [osx]
       host:
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - libffi {{ libffi }}
         - libxml2 {{ libxml2 }}
         - zlib {{ zlib }}
         - zstd {{ zstd }}
-        - libcxx {{ cxx_compiler_version }}  # [osx]
+        - libcxx {{ major_ver }}  # [osx]
       run:
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libcxx >={{ cxx_compiler_version }}  # [osx]
+        - libcxx >={{ major_ver }}  # [osx]
       run_constrained:
         - llvm        {{ version }}
         - llvmdev     {{ version }}
