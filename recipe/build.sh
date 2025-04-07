@@ -100,5 +100,5 @@ if [[ ${CONDA_BUILD_CROSS_COMPILATION:-0} != "1" ]]; then
   fi
 
   cd ../llvm/test
-  python ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
+  ${PYTHON} ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
 fi

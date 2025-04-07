@@ -22,12 +22,11 @@ cmake -G "Ninja" ^
     -DLLVM_INCLUDE_BENCHMARKS=OFF ^
     -DLLVM_INCLUDE_DOCS=OFF ^
     -DLLVM_INCLUDE_EXAMPLES=OFF ^
-    -DLLVM_INCLUDE_TESTS=OFF ^
+    -DLLVM_INCLUDE_TESTS=ON ^
     -DLLVM_INCLUDE_UTILS=ON ^
     -DLLVM_INSTALL_UTILS=ON ^
     -DLLVM_USE_SYMLINKS=OFF ^
     -DLLVM_UTILS_INSTALL_DIR=libexec\llvm ^
-    -DLLVM_BUILD_LLVM_C_DYLIB=NO ^
     -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly ^
     -DCMAKE_POLICY_DEFAULT_CMP0111=NEW ^
     %SRC_DIR%/llvm
@@ -35,7 +34,6 @@ if %ERRORLEVEL% neq 0 exit 1
 
 cmake --build .
 if %ERRORLEVEL% neq 0 exit 1
-
 
 REM These tests fail because msdia140.dll isn't registered.
 REM The build stalls if registering is attempted in this file, probably because it needs elevated privileges.
@@ -56,9 +54,9 @@ set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/simple-padding-graphical
 set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/symbol-filters.test"
 set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/type-qualifiers.test"
 set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/usingnamespace.test"
-set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-symbolizer/pdb/pdb.test" 
+set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-symbolizer/pdb/pdb.test"
 
-cmake --build .
+cmake --build . --target check-llvm
 if %ERRORLEVEL% neq 0 exit 1
 
 cd ..\llvm\test
