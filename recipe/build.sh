@@ -1,5 +1,5 @@
 #!/bin/bash
-set -exuo pipefail
+set -exo pipefail
 
 # Make osx work like linux.
 sed -i.bak "s/NOT APPLE AND ARG_SONAME/ARG_SONAME/g" llvm/cmake/modules/AddLLVM.cmake
