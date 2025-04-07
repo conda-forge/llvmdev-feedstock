@@ -18,9 +18,9 @@ source:
     # - patches/0002-restore-macos-10.9-support.patch
     # # this patch adds the needed version numbers to 
     # - patches/0003-change-osx-version-for-libllvm-c.patch
-    # # These two patches remove expected test failures.
-    # - patches/0004-remove-unsupported-intrinsic-test.patch
-    # - patches/0005-remove-permission-based-unit-tests.patch
+    # These two patches remove expected test failures.
+    - patches/0004-remove-unsupported-intrinsic-test.patch
+    - patches/0005-remove-permission-based-unit-tests.patch
     # # A different approach to this fix: https://github.com/conda-forge/llvmdev-feedstock/commit/1da42e54b055d26bc58da77bd1f88ad460ac90f4
     # # - patches/MSVC_DIA_SDK_path_fix.diff  # [win]
 
