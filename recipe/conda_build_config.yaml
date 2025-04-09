@@ -12,3 +12,12 @@ cxx_compiler_version:
   
 CONDA_BUILD_SYSROOT:
   - /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
+
+# Bump up the version of build tools and runtime
+cl_version:
+  - 19.42.34440
+tools_version:
+  - 14.44
+# MSVC v143 - VS 2022 C++ x64/x86 build tools
+msvc_version:
+  - 143

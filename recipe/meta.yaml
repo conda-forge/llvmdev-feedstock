@@ -105,8 +105,6 @@ outputs:
       skip: true  # [win and vc<14]
       run_exports:                                                    # [not win]
         - {{ pin_subpackage("libllvm" ~ major_ver, max_pin="x.x") }}  # [not win]
-      missing_dso_whitelist:  # [s390x]
-        - $RPATH/ld64.so.1    # [s390x]
     requirements:
       build:
         - {{ compiler('cxx') }}
