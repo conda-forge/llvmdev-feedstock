@@ -9,9 +9,10 @@ c_compiler_version:
 cxx_compiler_version:
   - 11.2.0            # [linux]
   - 17.0.6            # [osx]
-  
+
 CONDA_BUILD_SYSROOT:
-  - /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
+   - /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
+#   - /Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk
 
 # Bump up the version of build tools and runtime
 cl_version:
