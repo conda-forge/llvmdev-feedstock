@@ -40,8 +40,7 @@ requirements:
   host:
     - libcxx {{ major_ver }}    # [osx]
     - backtrace                 # [unix]
-    # conda-forge seems to be removing all of the explicit references to FFI
-    # - libffi {{ libffi }}
+    - libffi {{ libffi }}
     - libxml2 {{ libxml2 }}
     - zlib {{ zlib }}
     - zstd {{ zstd }}
@@ -118,7 +117,7 @@ outputs:
         - libcxx {{ major_ver }}  # [osx]
       host:
         - libcxx {{ major_ver }}  # [osx]
-        # - libffi {{ libffi }}
+        - libffi {{ libffi }}
         - libxml2 {{ libxml2 }} # [unix]
         - zlib {{ zlib }}
         - zstd {{ zstd }}
@@ -147,7 +146,7 @@ outputs:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
         - libxml2 {{ libxml2 }}
-        # - libffi {{ libffi }}
+        - libffi {{ libffi }}
         - zlib {{ zlib }}
         - zstd {{ zstd }}
       run:                                                            # [not win]
@@ -179,7 +178,7 @@ outputs:
         - libcxx {{ major_ver }}  # [osx]
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        # - libffi {{ libffi }}
+        - libffi {{ libffi }}
         - libxml2 {{ libxml2 }}
         - zlib {{ zlib }}
         - zstd {{ zstd }}
