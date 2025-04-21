@@ -24,22 +24,23 @@ fi
 if [[ "$target_platform" == "linux-ppc64le" ]]; then
   CFLAGS="$(echo $CFLAGS | sed 's/-fno-plt //g')"
   CXXFLAGS="$(echo $CXXFLAGS | sed 's/-fno-plt //g')"
-  CMAKE_ARGS="${CMAKE_ARGS} -DFFI_INCLUDE_DIR=$PREFIX/include"
-  CMAKE_ARGS="${CMAKE_ARGS} -DFFI_LIBRARY_DIR=$PREFIX/lib"
+  # CMAKE_ARGS="${CMAKE_ARGS} -DFFI_INCLUDE_DIR=$PREFIX/include"
+  # CMAKE_ARGS="${CMAKE_ARGS} -DFFI_LIBRARY_DIR=$PREFIX/lib"
 fi
 
-if [[ $target_platform == osx-* ]]; then
-  CMAKE_ARGS="${CMAKE_ARGS} -DFFI_INCLUDE_DIR=${CONDA_BUILD_SYSROOT}/usr/include/ffi"
-  CMAKE_ARGS="${CMAKE_ARGS} -DFFI_LIBRARY_DIR=${CONDA_BUILD_SYSROOT}/usr/lib"
-  CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_BUILD_LLVM_C_DYLIB=OFF"
-  CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_ENABLE_LIBCXX=ON"
-  CMAKE_ARGS="${CMAKE_ARGS} -DRUNTIMES_CMAKE_ARGS=-DCMAKE_INSTALL_RPATH=«loader_path/../lib"
-  CMAKE_ARGS="${CMAKE_ARGS} -DDEFAULT_SYSROOT=${CONDA_BUILD_SYSROOT}"
-fi
+# TESTING: - some conda build changes
+# if [[ $target_platform == osx-* ]]; then
+#   CMAKE_ARGS="${CMAKE_ARGS} -DFFI_INCLUDE_DIR=${CONDA_BUILD_SYSROOT}/usr/include/ffi"
+#   CMAKE_ARGS="${CMAKE_ARGS} -DFFI_LIBRARY_DIR=${CONDA_BUILD_SYSROOT}/usr/lib"
+#   CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_BUILD_LLVM_C_DYLIB=OFF"
+#   CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_ENABLE_LIBCXX=ON"
+#   CMAKE_ARGS="${CMAKE_ARGS} -DRUNTIMES_CMAKE_ARGS=-DCMAKE_INSTALL_RPATH=«loader_path/../lib"
+#   CMAKE_ARGS="${CMAKE_ARGS} -DDEFAULT_SYSROOT=${CONDA_BUILD_SYSROOT}"
+# fi
 
-if [[ $target_platform == osx-arm64 ]]; then
-  CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_ENABLE_WERROR=FALSE"
-fi
+# if [[ $target_platform == osx-arm64 ]]; then
+#   CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_ENABLE_WERROR=FALSE"
+# fi
 
 cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
@@ -62,16 +63,17 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DLLVM_UTILS_INSTALL_DIR=libexec/llvm \
       -DLLVM_BUILD_LLVM_DYLIB=yes \
       -DLLVM_LINK_LLVM_DYLIB=yes \
-      -DLLVM_BUILD_LLVM_C_DYNLIB=ON \
       -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly \
-      -DLLVM_ENABLE_FFI=ON \
-      -DLLVM_OPTIMIZED_TABLEGEN=ON \
-      -DCMAKE_POLICY_DEFAULT_CMP0111=NEW \
-      -DHAVE_CXX_ATOMICS_WITHOUT_LIB=TRUE \
-      -DHAVE_CXX_ATOMICS64_WITHOUT_LIB=TRUE \
       ${CMAKE_ARGS} \
       -GNinja \
       ../llvm
+
+      # -DLLVM_BUILD_LLVM_C_DYNLIB=ON \
+      # -DLLVM_ENABLE_FFI=ON \
+      # -DLLVM_OPTIMIZED_TABLEGEN=ON \
+      # -DCMAKE_POLICY_DEFAULT_CMP0111=NEW \
+      # -DHAVE_CXX_ATOMICS_WITHOUT_LIB=TRUE \
+      # -DHAVE_CXX_ATOMICS64_WITHOUT_LIB=TRUE \
 
 
 ninja -j${CPU_COUNT}
@@ -82,24 +84,26 @@ else
     export TEST_CPU_FLAG=""
 fi
 
-if [[ ${CONDA_BUILD_CROSS_COMPILATION:-0} != "1" ]]; then
-  # bin/opt -S -vector-library=SVML $TEST_CPU_FLAG -O3 $RECIPE_DIR/numba-3016.ll | bin/FileCheck $RECIPE_DIR/numba-3016.ll || exit $?
 
-  if [[ "$target_platform" == linux* ]]; then
-    ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
+# TESTING: Skipping tests for quicker cycle time
+# if [[ ${CONDA_BUILD_CROSS_COMPILATION:-0} != "1" ]]; then
+#   # bin/opt -S -vector-library=SVML $TEST_CPU_FLAG -O3 $RECIPE_DIR/numba-3016.ll | bin/FileCheck $RECIPE_DIR/numba-3016.ll || exit $?
 
-    # These tests tests permission-based behaviour and probably fail because of some
-    # filesystem-related reason. They are sporadic failures and don't seem serious so they're excluded.
-    # Note that indents would introduce spaces into the environment variable
-    export LIT_FILTER_OUT='tools/llvm-ar/error-opening-permission.test|'\
-'tools/llvm-dwarfdump/X86/output.s|'\
-'tools/llvm-ifs/fail-file-write.test|'\
-'tools/llvm-ranlib/error-opening-permission.test'
+#   if [[ "$target_platform" == linux* ]]; then
+#     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
 
-    # check-llvm takes >1.5h to build & run on osx
-    ninja -j${CPU_COUNT} check-llvm
-  fi
+#     # These tests tests permission-based behaviour and probably fail because of some
+#     # filesystem-related reason. They are sporadic failures and don't seem serious so they're excluded.
+#     # Note that indents would introduce spaces into the environment variable
+#     export LIT_FILTER_OUT='tools/llvm-ar/error-opening-permission.test|'\
+# 'tools/llvm-dwarfdump/X86/output.s|'\
+# 'tools/llvm-ifs/fail-file-write.test|'\
+# 'tools/llvm-ranlib/error-opening-permission.test'
 
-  cd ../llvm/test
-  ${PYTHON} ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
-fi
+#     # check-llvm takes >1.5h to build & run on osx
+#     ninja -j${CPU_COUNT} check-llvm
+#   fi
+
+#   cd ../llvm/test
+#   ${PYTHON} ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
+# fi

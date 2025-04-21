@@ -2,7 +2,7 @@
 {% set major_ver = version.split(".")[0] %}
 
 # as of LLVM 17, we expect an "rc" suffix for the release candidates
-{% set extra = "rc" if version.split(".")[-1] not in "01234567" else "" %}
+{% set extra = "rc" if version.split(".")[-1] not in "0123456789" else "" %}
 {% set extra = "git" if version.split(".")[-1] == "dev0" else extra %}
 
 package:
@@ -11,7 +11,6 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
-      #  https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ version.replace(".rc", "-rc") }}/llvm-project-{{ version.replace(".rc", "rc") }}.src.tar.xz
   sha256: 58a8818c60e6627064f312dbf46c02d9949956558340938b71cf731ad8bc0813
   patches:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
@@ -41,7 +40,8 @@ requirements:
   host:
     - libcxx {{ major_ver }}    # [osx]
     - backtrace                 # [unix]
-    - libffi {{ libffi }}
+    # conda-forge seems to be removing all of the explicit references to FFI
+    # - libffi {{ libffi }}
     - libxml2 {{ libxml2 }}
     - zlib {{ zlib }}
     - zstd {{ zstd }}
@@ -52,26 +52,30 @@ outputs:
     script: install_llvm.sh   # [unix]
     script: install_llvm.bat  # [win]
     build:
-      skip: true  # [(win and vc<14)]
-      missing_dso_whitelist:  # [s390x]
-        - $RPATH/ld64.so.1    # [s390x]
+      activate_in_script: true
+      # skip: true  # [(win and vc<14)]
+      # missing_dso_whitelist:  # [s390x]
+      #   - $RPATH/ld64.so.1    # [s390x]
     requirements:
       build:
         - {{ compiler('cxx') }}
         - cmake
         - ninja
         - python
+        - m2-sed                  # [win]
         - libcxx {{ major_ver }}  # [osx]
       host:
         - libcxx {{ major_ver }}  # [osx]
-        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - libffi {{ libffi }}
         - libxml2 {{ libxml2 }}
         - zlib {{ zlib }}
         - zstd {{ zstd }}
       run:
-        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - libcxx >={{ major_ver }}                           # [osx]
       run_constrained:
@@ -102,26 +106,27 @@ outputs:
     script: install_llvm.sh  # [not win]
     build:
       activate_in_script: true
-      skip: true  # [win and vc<14]
+      # skip: true  # [win and vc<14]
       run_exports:                                                    # [not win]
-        - {{ pin_subpackage("libllvm" ~ major_ver, max_pin="x.x") }}  # [not win]
+        - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
         - {{ compiler('cxx') }}
         - ninja                    # [not win]
         - cmake                    # [not win]
         - python                   # [not win]
+        - libcxx {{ major_ver }}  # [osx]
       host:
         - libcxx {{ major_ver }}  # [osx]
-        - libffi {{ libffi }}
-        - libxml2 {{ libxml2 }}
+        # - libffi {{ libffi }}
+        - libxml2 {{ libxml2 }} # [unix]
         - zlib {{ zlib }}
         - zstd {{ zstd }}
       run:
         # we need to do this manually because clang_bootstrap has no run-export
         - libcxx >={{ major_ver }}  # [osx]
-        - {{ pin_compatible('libffi', max_pin='x.x') }}  # [unix]
-        - zlib {{ zlib }}    # [osx]
+        # - {{ pin_compatible('libffi', max_pin='x.x') }}  # [unix]
+        # - zlib {{ zlib }}    # [osx]
     test:
       commands:
         - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.so     # [linux]
@@ -134,19 +139,19 @@ outputs:
   # for run_exports
   - name: llvm
     build:
-      skip: true  # [(win and vc<14)]
+      # skip: true  # [(win and vc<14)]
       run_exports:                                                    # [not win]
-        - {{ pin_subpackage("libllvm" ~ major_ver, max_pin="x.x") }}  # [not win]
+        - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
     requirements:
       build:
       host:
-        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}     # [not win]
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
         - libxml2 {{ libxml2 }}
-        - libffi {{ libffi }}
+        # - libffi {{ libffi }}
         - zlib {{ zlib }}
         - zstd {{ zstd }}
       run:                                                            # [not win]
-        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}     # [not win]
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
       run_constrained:
         - llvmdev     {{ version }}
         - llvm-tools  {{ version }}
@@ -161,9 +166,10 @@ outputs:
     script: install_llvm.sh   # [unix]
     script: install_llvm.bat  # [win]
     build:
-      skip: true  # [(win and vc<14)]
-      missing_dso_whitelist:  # [s390x]
-        - $RPATH/ld64.so.1    # [s390x]
+      activate_in_script: true
+      # skip: true  # [(win and vc<14)]
+      # missing_dso_whitelist:  # [s390x]
+      #   - $RPATH/ld64.so.1    # [s390x]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -172,21 +178,20 @@ outputs:
         - python
         - libcxx {{ major_ver }}  # [osx]
       host:
-        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
-        - libffi {{ libffi }}
+        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        # - libffi {{ libffi }}
         - libxml2 {{ libxml2 }}
         - zlib {{ zlib }}
         - zstd {{ zstd }}
         - libcxx {{ major_ver }}  # [osx]
       run:
-        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - libcxx >={{ major_ver }}  # [osx]
       run_constrained:
         - llvm        {{ version }}
         - llvmdev     {{ version }}
-        - clang       {{ version }}
-        - clang-tools {{ version }}
+        # - clang       {{ version }}
+        # - clang-tools {{ version }}
     test:
       commands:
         - $PREFIX/bin/llc -version                               # [not win]
