@@ -36,6 +36,7 @@ requirements:
     - libcxx {{ major_ver }}    # [osx]
     - patch                     # [not win]
     - m2-patch                  # [win]
+    - m2-sed                    # [win]
     - git                       # [not win]
   host:
     - libcxx {{ major_ver }}    # [osx]

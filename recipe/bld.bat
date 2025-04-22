@@ -26,6 +26,8 @@ cmake -G "Ninja" ^
     -DLLVM_INCLUDE_UTILS=ON ^
     -DLLVM_INSTALL_UTILS=ON ^
     -DLLVM_USE_SYMLINKS=OFF ^
+    -DLLVM_ENABLE_DIA_SDK=ON ^
+    -DLLVM_USE_DIA_SDK=ON ^
     -DLLVM_UTILS_INSTALL_DIR=libexec\llvm ^
     -DLLVM_BUILD_LLVM_C_DYLIB=ON ^
     -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly ^
@@ -33,34 +35,31 @@ cmake -G "Ninja" ^
     %SRC_DIR%/llvm
 if %ERRORLEVEL% neq 0 exit 1
 
-cmake --build .
-if %ERRORLEVEL% neq 0 exit 1
-
 REM These tests fail because msdia140.dll isn't registered.
 REM The build stalls if registering is attempted in this file, probably because it needs elevated privileges.
 REM See https://llvm.org/docs/GettingStartedVS.html#getting-started
 REM TODO: check that these tests run successfully when msdia140.dll is registered manually on a test machine.
-REM set "LIT_FILTER_OUT=DebugInfo/PDB/DIA/pdbdump-flags.test"
-REM set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|DebugInfo/PDB/DIA/pdbdump-linenumbers.test"
-REM set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|DebugInfo/PDB/DIA/pdbdump-symbol-format.test"
-REM set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/checksum-string.test"
-REM set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/class-layout.test"
-REM set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/complex-padding-graphical.test"
-REM set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/enum-layout.test"
-REM set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/injected-sources.test"
-REM set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/load-address.test"
-REM set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/pretty-func-dumper.test"
-REM set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/regex-filter.test"
-REM set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/simple-padding-graphical.test"
-REM set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/symbol-filters.test"
-REM set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/type-qualifiers.test"
-REM set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/usingnamespace.test"
-REM set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-symbolizer/pdb/pdb.test"
+set "LIT_FILTER_OUT=DebugInfo/PDB/DIA/pdbdump-flags.test"
+set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|DebugInfo/PDB/DIA/pdbdump-linenumbers.test"
+set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|DebugInfo/PDB/DIA/pdbdump-symbol-format.test"
+set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/checksum-string.test"
+set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/class-layout.test"
+set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/complex-padding-graphical.test"
+set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/enum-layout.test"
+set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/injected-sources.test"
+set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/load-address.test"
+set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/pretty-func-dumper.test"
+set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/regex-filter.test"
+set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/simple-padding-graphical.test"
+set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/symbol-filters.test"
+set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/type-qualifiers.test"
+set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-pdbutil/usingnamespace.test"
+set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-symbolizer/pdb/pdb.test"
 
-REM cmake --build . --target check-llvm
-REM if %ERRORLEVEL% neq 0 exit 1
-
-REM Try testing like conda-forge does
-cd ..\llvm\test
-%BUILD_PREFIX%\python.exe ..\..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
+cmake --build . --target check-llvm
 if %ERRORLEVEL% neq 0 exit 1
+
+@REM REM Try testing like conda-forge does
+@REM cd ..\llvm\test
+@REM %BUILD_PREFIX%\python.exe ..\..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
+@REM if %ERRORLEVEL% neq 0 exit 1
