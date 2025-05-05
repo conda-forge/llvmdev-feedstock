@@ -24,11 +24,8 @@ elif [[ "${PKG_NAME}" == libllvm* ]]; then
     cmake --install ./build --prefix=./temp_prefix
     # all other libraries
     mv ./temp_prefix/lib/libLLVM-${SOVER_EXT}${SHLIB_EXT} $PREFIX/lib
-    if [[ "$target_platform" == linux-* ]]; then
-        mv ./temp_prefix/lib/lib*.so.${SOVER_EXT} $PREFIX/lib
-    elif [[ "$target_platform" == osx-* ]]; then
-        mv ./temp_prefix/lib/lib*.${SOVER_EXT}.dylib $PREFIX/lib
-    fi
+    mv ./temp_prefix/lib/lib*.so.${SOVER_EXT} $PREFIX/lib || true
+    mv ./temp_prefix/lib/lib*.${SOVER_EXT}.dylib $PREFIX/lib || true
 elif [[ "${PKG_NAME}" == "llvm-tools" ]]; then
     cmake --install ./build --prefix=./temp_prefix
     # everything in /bin & /share

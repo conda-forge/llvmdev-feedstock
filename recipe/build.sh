@@ -83,26 +83,24 @@ else
     export TEST_CPU_FLAG=""
 fi
 
+if [[ ${CONDA_BUILD_CROSS_COMPILATION:-0} != "1" ]]; then
+  # bin/opt -S -vector-library=SVML $TEST_CPU_FLAG -O3 $RECIPE_DIR/numba-3016.ll | bin/FileCheck $RECIPE_DIR/numba-3016.ll || exit $?
 
-# TESTING: Skipping tests for quicker cycle time
-# if [[ ${CONDA_BUILD_CROSS_COMPILATION:-0} != "1" ]]; then
-#   # bin/opt -S -vector-library=SVML $TEST_CPU_FLAG -O3 $RECIPE_DIR/numba-3016.ll | bin/FileCheck $RECIPE_DIR/numba-3016.ll || exit $?
+  if [[ "$target_platform" == linux* ]]; then
+    ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
 
-#   if [[ "$target_platform" == linux* ]]; then
-#     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
+    # These tests tests permission-based behaviour and probably fail because of some
+    # filesystem-related reason. They are sporadic failures and don't seem serious so they're excluded.
+    # Note that indents would introduce spaces into the environment variable
+    export LIT_FILTER_OUT='tools/llvm-ar/error-opening-permission.test|'\
+'tools/llvm-dwarfdump/X86/output.s|'\
+'tools/llvm-ifs/fail-file-write.test|'\
+'tools/llvm-ranlib/error-opening-permission.test'
 
-#     # These tests tests permission-based behaviour and probably fail because of some
-#     # filesystem-related reason. They are sporadic failures and don't seem serious so they're excluded.
-#     # Note that indents would introduce spaces into the environment variable
-#     export LIT_FILTER_OUT='tools/llvm-ar/error-opening-permission.test|'\
-# 'tools/llvm-dwarfdump/X86/output.s|'\
-# 'tools/llvm-ifs/fail-file-write.test|'\
-# 'tools/llvm-ranlib/error-opening-permission.test'
+    # check-llvm takes >1.5h to build & run on osx
+    ninja -j${CPU_COUNT} check-llvm
+  fi
 
-#     # check-llvm takes >1.5h to build & run on osx
-#     ninja -j${CPU_COUNT} check-llvm
-#   fi
-
-#   cd ../llvm/test
-#   ${PYTHON} ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
-# fi
+  cd ../llvm/test
+  ${PYTHON} ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86
+fi
