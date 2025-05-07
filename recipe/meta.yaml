@@ -203,7 +203,7 @@ outputs:
         - if not exist "%LIBRARY_BIN%"\\llc.exe exit 1           # [win]
         - cd "%LIBRARY_BIN%" && llc -version                     # [win]
         - test ! -f $PREFIX/bin/llvm-config                      # [not win]
-        - if not exist "%LIBRARY_BIN%"\\llvm-config.exe exit 1       # [win]
+        - if exist "%LIBRARY_BIN%"\\llvm-config.exe exit 1       # [win]
 
   ########
   # TODO - enable and include libllvm-c
