@@ -33,6 +33,8 @@ cmake -G "Ninja" ^
     -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly ^
     -DCMAKE_POLICY_DEFAULT_CMP0111=NEW ^
     %SRC_DIR%/llvm
+
+ninja -j%CPU_COUNT%
 if %ERRORLEVEL% neq 0 exit 1
 
 REM These tests fail because msdia140.dll isn't registered.
