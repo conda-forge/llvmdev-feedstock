@@ -40,6 +40,7 @@ requirements:
     - m2-patch                  # [win]
     - m2-sed                    # [win]
     - git                       # [not win]
+    - tapi                      # [osx]
   host:
     - libcxx {{ bootstrap_version }}    # [osx]
     - backtrace                 # [unix]
