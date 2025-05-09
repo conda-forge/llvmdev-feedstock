@@ -13,5 +13,9 @@ build_parameters:
 aggregate_check: false
 
 upload_without_merge: True
-upload_to_staging_channel_in_pr: True
-channels: [ llvmdev17-boot ]
+
+upload_channels:
+  - llvm-17.0.6-stage0
+
+channels:
+  - llvm-17.0.6-stage0
