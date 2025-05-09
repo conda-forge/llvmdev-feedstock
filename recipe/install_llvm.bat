@@ -18,6 +18,9 @@ if "%PKG_NAME%" == "libllvm-c%PKG_VERSION:~0,2%" (
     REM all the executables (not .dll's) in \bin & everything in \share
     move .\temp_prefix\bin\*.exe %LIBRARY_BIN%
     move .\temp_prefix\share\* %LIBRARY_PREFIX%\share
+
+    REM except one binary that belongs to llvmdev
+    del %LIBRARY_BIN%\llvm-config.exe
 ) else (
     REM llvmdev: everything else
     cmake --install .\build --prefix=%LIBRARY_PREFIX%
