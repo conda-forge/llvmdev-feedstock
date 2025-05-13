@@ -42,7 +42,7 @@ requirements:
     - git                       # [not win]
   host:
     - libcxx {{ bootstrap_version }}    # [osx]
-    - backtrace                 # [unix]
+    - backtrace {{ backtrace }}         # [unix]
     - libffi {{ libffi }}
     - libxml2 {{ libxml2 }}
     - zlib {{ zlib }}
