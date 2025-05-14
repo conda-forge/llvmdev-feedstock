@@ -7,7 +7,7 @@ extra_labels_for_os:
 # the conda build parameters to use
 build_parameters:
   - "--suppress-variables"
-  # - "--error-overlinking"
+  - "--error-overlinking"
   # TODO: Fix overlinking issue with defaults/win-64::vs2015_runtime==14.42.34433=he0abc0d_4
 
 aggregate_check: false
@@ -15,5 +15,5 @@ aggregate_check: false
 staging_channel_upload_target: llvm-17.0.6-stage1
 
 channels:
-  - llvm-17.0.6-stage0
   - https://staging.continuum.io/prefect/llvm-17.0.6-stage1
+  - llvm-17.0.6-stage0
