@@ -5,7 +5,7 @@
 {% set extra = "rc" if version.split(".")[-1] not in "0123456789" else "" %}
 {% set extra = "git" if version.split(".")[-1] == "dev0" else extra %}
 
-{% set bootstrap_version = "14" %}
+{% set bootstrap_version = "17.0.6" %}
 
 package:
   name: llvm-package
@@ -26,7 +26,7 @@ source:
     # # - patches/MSVC_DIA_SDK_path_fix.diff  # [win]
 
 build:
-  number: 2
+  number: 3
   merge_build_host: false
 
 requirements:

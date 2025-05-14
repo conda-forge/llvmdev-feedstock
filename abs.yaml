@@ -12,10 +12,8 @@ build_parameters:
 
 aggregate_check: false
 
-upload_without_merge: True
-
-upload_channels:
-  - llvm-17.0.6-stage0
+staging_channel_upload_target: llvm-17.0.6-stage1
 
 channels:
   - llvm-17.0.6-stage0
+  - https://staging.continuum.io/prefect/llvm-17.0.6-stage1
