@@ -8,7 +8,6 @@ extra_labels_for_os:
 build_parameters:
   - "--suppress-variables"
   - "--error-overlinking"
-  # TODO: Fix overlinking issue with defaults/win-64::vs2015_runtime==14.42.34433=he0abc0d_4
 
 aggregate_check: false
 
