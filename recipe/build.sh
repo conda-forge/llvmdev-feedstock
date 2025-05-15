@@ -97,9 +97,10 @@ if [[ ${CONDA_BUILD_CROSS_COMPILATION:-0} != "1" ]]; then
 'tools/llvm-ifs/fail-file-write.test|'\
 'tools/llvm-ranlib/error-opening-permission.test'
 
-    # check-llvm takes >1.5h to build & run on osx
-    ninja -j${CPU_COUNT} check-llvm
   fi
+
+  # check-llvm takes >1.5h to build & run on osx
+  ninja -j${CPU_COUNT} check-llvm
 
   cd ../llvm/test
   ${PYTHON} ../../build/bin/llvm-lit -vv Transforms ExecutionEngine Analysis CodeGen/X86

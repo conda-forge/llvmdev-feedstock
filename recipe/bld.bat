@@ -30,7 +30,6 @@ cmake -G "Ninja" ^
     -DLLVM_USE_DIA_SDK=ON ^
     -DLLVM_UTILS_INSTALL_DIR=libexec\llvm ^
     -DLLVM_BUILD_LLVM_C_DYLIB=ON ^
-    -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly ^
     -DCMAKE_POLICY_DEFAULT_CMP0111=NEW ^
     %SRC_DIR%/llvm
 
@@ -61,7 +60,6 @@ set "LIT_FILTER_OUT=%LIT_FILTER_OUT%|tools/llvm-symbolizer/pdb/pdb.test"
 cmake --build . --target check-llvm
 if %ERRORLEVEL% neq 0 exit 1
 
-@REM REM Try testing like conda-forge does
-@REM cd ..\llvm\test
-@REM %BUILD_PREFIX%\python.exe ..\..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
-@REM if %ERRORLEVEL% neq 0 exit 1
+cd ..\llvm\test
+%BUILD_PREFIX%\python.exe ..\..\build\bin\llvm-lit.py -vv Transforms ExecutionEngine Analysis CodeGen/X86
+if %ERRORLEVEL% neq 0 exit 1
