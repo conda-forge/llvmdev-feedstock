@@ -70,12 +70,9 @@ outputs:
         - libcxx-devel {{ bootstrap_version }}  # [osx]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - libffi {{ libffi }}
-        - libxml2 {{ libxml2 }}
         - zlib {{ zlib }}
         - zstd {{ zstd }}
       run:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - {{ pin_compatible("libcxx-devel", max_pin=None) }}  # [osx]
         - libcxx {{ bootstrap_version }}  # [osx]
@@ -180,8 +177,6 @@ outputs:
         - libcxx-devel {{ bootstrap_version }}  # [osx]
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libffi {{ libffi }}
-        - libxml2 {{ libxml2 }}
         - zlib {{ zlib }}
         - zstd {{ zstd }}
         - libcxx-devel {{ bootstrap_version }}  # [osx]
