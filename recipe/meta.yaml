@@ -70,6 +70,7 @@ outputs:
         - libcxx-devel {{ bootstrap_version }}  # [osx]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools", exact=True) }}
+        - libxml2 {{ libxml2 }}  # [win]
         - zlib {{ zlib }}
         - zstd {{ zstd }}
       run:
@@ -177,6 +178,7 @@ outputs:
         - libcxx-devel {{ bootstrap_version }}  # [osx]
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - libxml2 {{ libxml2 }}  # [win]
         - zlib {{ zlib }}
         - zstd {{ zstd }}
         - libcxx-devel {{ bootstrap_version }}  # [osx]
