@@ -19,6 +19,9 @@ source:
     # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
     # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
+    # backport https://github.com/llvm/llvm-project/commit/194a4a333a95f9e001d2c8abe82c3d4cf8894acf
+    # for issues stemming from https://github.com/llvm/llvm-project/pull/138712
+    - patches/0002-Fix-test-pfalse-v4i1.ll-added-in-138712-to-require-a.patch
 
 build:
   number: 0
