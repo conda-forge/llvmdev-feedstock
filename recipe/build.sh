@@ -97,6 +97,8 @@ if [[ ${CONDA_BUILD_CROSS_COMPILATION:-0} != "1" ]]; then
 'tools/llvm-ifs/fail-file-write.test|'\
 'tools/llvm-ranlib/error-opening-permission.test'
 
+  elif [[ "$target_platform" == osx* ]]; then
+    export LIT_FILTER_OUT='tools/llvm-objcopy/ELF/strip-preserve-atime.test'
   fi
 
   # check-llvm takes >1.5h to build & run on osx
