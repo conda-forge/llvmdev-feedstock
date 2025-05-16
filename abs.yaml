@@ -11,8 +11,8 @@ build_parameters:
 
 aggregate_check: false
 
-staging_channel_upload_target: llvm-17.0.6-stage1-attempt-3
+staging_channel_upload_target: llvm-17.0.6-stage1-attempt-5
 
 channels:
-  - https://staging.continuum.io/prefect/llvm-17.0.6-stage1-attempt-3
+  - https://staging.continuum.io/prefect/llvm-17.0.6-stage1-attempt-5
   - llvm-17.0.6-stage0
