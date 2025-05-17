@@ -26,7 +26,7 @@ source:
     # # - patches/MSVC_DIA_SDK_path_fix.diff  # [win]
 
 build:
-  number: 3
+  number: 4
   merge_build_host: false
 
 requirements:
