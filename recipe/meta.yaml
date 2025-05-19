@@ -24,7 +24,7 @@ source:
     - patches/0002-Fix-test-pfalse-v4i1.ll-added-in-138712-to-require-a.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
