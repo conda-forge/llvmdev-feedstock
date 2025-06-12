@@ -215,7 +215,6 @@ outputs:
       skip: true  # [not win]
     requirements:
       build:
-        - {{ stdlib('c') }}
         - {{ compiler('cxx') }}
         - cmake
         - ninja
