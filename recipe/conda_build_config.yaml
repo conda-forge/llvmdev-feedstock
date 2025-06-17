@@ -1,18 +1,30 @@
-c_compiler:            # [win]
-- vs2019               # [win]
-cxx_compiler:          # [win]
-- vs2019               # [win]
-MACOSX_SDK_VERSION:    # [osx and x86_64]
-  - 10.12              # [osx and x86_64]
-CONDA_BUILD_SYSROOT:   # [osx and x86_64]
-  - /opt/MacOSX10.12.sdk  # [osx and x86_64]
+c_compiler:
+  - gcc                        # [linux]
+  - clang_bootstrap            # [osx]
+  - vs2022                     # [win]
+cxx_compiler:
+  - gxx                        # [linux]
+  - clang_bootstrap            # [osx]
+  - vs2022                     # [win]
 
-c_compiler:         # [osx]
-  - clang_bootstrap # [osx]
-cxx_compiler:       # [osx]
-  - clang_bootstrap # [osx]
+c_compiler_version:
+  - 11.2.0            # [linux]
+  - 17.0.6            # [osx]
+cxx_compiler_version:
+  - 11.2.0            # [linux]
+  - 17.0.6            # [osx]
 
-cxx_compiler_version:  # [linux and ppc64le]
-  # linking error with gcc 9
-  - 8                  # [linux and ppc64le]
 
+# CONDA_BUILD_SYSROOT:
+#   - /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
+  # - /Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk
+
+# Bump up the version of build tools and runtime
+cl_version:
+  - 19.42.34440
+tools_version:
+  #TODO CHANGE BACK TO LESS RECENT VERSION
+  - 17.13
+# MSVC v143 - VS 2022 C++ x64/x86 build tools
+msvc_version:
+  - 143

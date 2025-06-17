@@ -1,15 +1,16 @@
 @echo on
 
-REM Note that we don't build a dll for windows at the moment, meaning the libllvm package is an empty package. It was
-REM done like this to avoid having to have `- libllvm # [not win]` everywhere. There's an LLVM-c.dll, which implements
-REM the C (but not C++) API, which can be built if we have -DLLVM_BUILD_LLVM_C_DYLIB=ON at the build stage. LLVM .dlls
-REM are used for e.g. JIT compilation, which we don't need at the moment on Windows. See the conda-forge recipe for an
-REM example of building and packaging this dll if we do need it.
-
 :: temporary prefix to be able to install files more granularly
 mkdir temp_prefix
 
-if "%PKG_NAME%" == "llvm-tools" (
+
+if "%PKG_NAME%" == "libllvm-c%PKG_VERSION:~0,2%" (
+    cmake --install .\build --prefix=.\temp_prefix
+    if %ERRORLEVEL% neq 0 exit 1
+    REM only libLLVM-C
+    move .\temp_prefix\bin\LLVM-C.dll %LIBRARY_BIN%
+    move .\temp_prefix\lib\LLVM-C.lib %LIBRARY_LIB%
+) else if "%PKG_NAME%" == "llvm-tools" (
     cmake --install ./build --prefix=./temp_prefix
     if %ERRORLEVEL% neq 0 exit 1
 
@@ -17,10 +18,23 @@ if "%PKG_NAME%" == "llvm-tools" (
     REM all the executables (not .dll's) in \bin & everything in \share
     move .\temp_prefix\bin\*.exe %LIBRARY_BIN%
     move .\temp_prefix\share\* %LIBRARY_PREFIX%\share
+
+    REM except one binary that belongs to llvmdev
+    del %LIBRARY_BIN%\llvm-config.exe
 ) else (
     REM llvmdev: everything else
     cmake --install .\build --prefix=%LIBRARY_PREFIX%
     if %ERRORLEVEL% neq 0 exit 1
+
+    REM upstream picks up diaguids.lib from the windows image, see
+    REM https://github.com/llvm/llvm-project/blob/llvmorg-14.0.6/llvm/lib/DebugInfo/PDB/CMakeLists.txt#L17
+    REM which ultimately derives from VSINSTALLDIR, see
+    REM https://github.com/llvm/llvm-project/blob/llvmorg-14.0.6/llvm/cmake/config-ix.cmake#L516
+    REM and gets hardcoded by CMake to point to the path in our windows image.
+    REM This makes it non-portable between image versions (e.g. 2019 vs 2022), so replace
+    REM the hardcoded path with a variable again
+    REM Updated to remove any assumptions about the edition or version of Visual Studio
+    sed -i "s,[^\";]*DIA SDK/lib/amd64/diaguids\.lib,^$ENV{VSINSTALLDIR}/DIA SDK/lib/amd64/diaguids\.lib,g" %LIBRARY_LIB%\cmake\llvm\LLVMExports.cmake
 )
 
 rmdir /s /q temp_prefix

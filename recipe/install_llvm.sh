@@ -8,7 +8,19 @@ mkdir temp_prefix
 
 # default SOVER for tagged releases is just the major version
 SOVER_EXT=${VER_ARR[0]}
-if [[ "${PKG_NAME}" == libllvm* ]]; then
+if [[ "${PKG_VERSION}" == *rc* ]]; then
+    # rc's get "rc" without the number
+    SOVER_EXT="${SOVER_EXT}rc"
+elif [[ "${PKG_VERSION}" == *dev0 ]]; then
+    # otherwise with git suffix
+    SOVER_EXT="${SOVER_EXT}git"
+fi
+
+if [[ "${PKG_NAME}" == libllvm-c* ]]; then
+    cmake --install ./build --prefix=./temp_prefix
+    # only libLLVM-C
+    mv ./temp_prefix/lib/libLLVM-C${SOVER_EXT}${SHLIB_EXT} $PREFIX/lib
+elif [[ "${PKG_NAME}" == libllvm* ]]; then
     cmake --install ./build --prefix=./temp_prefix
     # all other libraries
     mv ./temp_prefix/lib/libLLVM-${SOVER_EXT}${SHLIB_EXT} $PREFIX/lib

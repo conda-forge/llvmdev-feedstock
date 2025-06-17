@@ -3,3 +3,11 @@
 # before crashing.
 extra_labels_for_os:
   osx-arm64: [ventura]
+
+# the conda build parameters to use
+build_parameters:
+  - "--suppress-variables"
+  - "--error-overlinking"
+  - "-c https://staging.continuum.io/prefect/llvm-17.0.6-stage2-attempt-4"
+
+aggregate_check: false
