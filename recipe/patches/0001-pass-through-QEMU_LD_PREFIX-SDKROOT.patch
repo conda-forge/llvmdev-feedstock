@@ -1,4 +1,4 @@
-From a26faed9f7bc855a29f763f9c02eace64c079f99 Mon Sep 17 00:00:00 2001
+From b04c193c719e3afe5e5da23633a5191d7b21787c Mon Sep 17 00:00:00 2001
 From: Isuru Fernando <isuruf@gmail.com>
 Date: Tue, 4 Aug 2020 21:06:30 -0500
 Subject: [PATCH] pass through QEMU_LD_PREFIX & SDKROOT
@@ -8,7 +8,7 @@ Subject: [PATCH] pass through QEMU_LD_PREFIX & SDKROOT
  1 file changed, 2 insertions(+)
 
 diff --git a/llvm/utils/lit/lit/TestingConfig.py b/llvm/utils/lit/lit/TestingConfig.py
-index b0d8e7149e55..966aca7cd90c 100644
+index c25083825054..30652d310ddf 100644
 --- a/llvm/utils/lit/lit/TestingConfig.py
 +++ b/llvm/utils/lit/lit/TestingConfig.py
 @@ -25,6 +25,8 @@ class TestingConfig(object):
