@@ -5,7 +5,7 @@ channel_sources:
 channel_targets:
 - conda-forge llvm_dev
 cxx_compiler:
-- vs2019
+- vs2022
 libxml2:
 - '2.13'
 python_min:
