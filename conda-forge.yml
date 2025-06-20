@@ -1,6 +1,5 @@
 azure:
   settings_win:
-    install_atl: true
     variables:
       SET_PAGEFILE: 'True'
 bot:
