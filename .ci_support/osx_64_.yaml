@@ -9,13 +9,13 @@ c_stdlib_version:
 channel_sources:
 - conda-forge
 channel_targets:
-- conda-forge llvm_rc
+- conda-forge main
 cxx_compiler:
 - clang_bootstrap
 cxx_compiler_version:
-- '18'
+- '19'
 libxml2:
-- '2'
+- '2.13'
 macos_machine:
 - x86_64-apple-darwin13.4.0
 python_min:
