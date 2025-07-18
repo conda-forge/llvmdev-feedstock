@@ -1,4 +1,4 @@
-From bb5851df7e0a78e5569b29a59cabc04e1af15ebd Mon Sep 17 00:00:00 2001
+From f5c36c601738305cac73da14de1b36ce88886a00 Mon Sep 17 00:00:00 2001
 From: Isuru Fernando <isuruf@gmail.com>
 Date: Tue, 4 Aug 2020 21:06:30 -0500
 Subject: [PATCH] pass through QEMU_LD_PREFIX & SDKROOT
