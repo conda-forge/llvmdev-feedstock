@@ -1,7 +1,7 @@
 {% set version = "18.1.8" %}
 {% set major_ver = version.split(".")[0] %}
 {% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
-{% set build_number = 5 %}
+{% set build_number = 6 %}
 
 # as of LLVM 17, we expect an "rc" suffix for the release candidates
 {% set extra = "rc" if version.split(".")[-1] not in "0123456789" else "" %}
