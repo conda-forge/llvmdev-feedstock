@@ -1,11 +1,11 @@
 MACOSX_DEPLOYMENT_TARGET:
-- '11.0'
+- '10.13'
 MACOSX_SDK_VERSION:
-- '11.0'
+- '10.13'
 c_stdlib:
 - macosx_deployment_target
 c_stdlib_version:
-- '11.0'
+- '10.13'
 channel_sources:
 - conda-forge
 channel_targets:
@@ -17,13 +17,13 @@ cxx_compiler_version:
 libxml2:
 - '2.13'
 macos_machine:
-- arm64-apple-darwin20.0.0
+- x86_64-apple-darwin13.4.0
 python_min:
 - '3.9'
 target_platform:
-- osx-arm64
+- osx-64
 variant:
-- root_63406
+- root_63602
 zlib:
 - '1'
 zstd:
