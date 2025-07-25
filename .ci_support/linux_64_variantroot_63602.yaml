@@ -19,9 +19,9 @@ libxml2:
 python_min:
 - '3.9'
 target_platform:
-- linux-aarch64
+- linux-64
 variant:
-- root_63406
+- root_63602
 zlib:
 - '1'
 zstd:
