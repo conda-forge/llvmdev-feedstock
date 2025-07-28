@@ -1,7 +1,7 @@
 {% set version = "18.1.8" %}
 {% set major_ver = version.split(".")[0] %}
 {% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
-{% set build_number = 7 %}
+{% set build_number = 8 %}
 
 # as of LLVM 17, we expect an "rc" suffix for the release candidates
 {% set extra = "rc" if version.split(".")[-1] not in "0123456789" else "" %}
@@ -23,10 +23,9 @@ source:
     - patches/0002-lljit-respect-codemodel.patch
 {% if variant and variant.startswith("root_") %}
     - patches/root/0001-UPSTREAM-ORC-Preserve-order-of-constructors-with-sam.patch
-    - patches/root/0002-UPSTREAM-MLGO-Only-configure-tests-with-LLVM_INCLUDE.patch
-    - patches/root/0003-UPSTREAM-ADT-Add-cstdint-to-SmallVector.patch
-    - patches/root/0004-UPSTREAM-Add-missing-include-to-X86MCTargetDesc.h.patch
-    - patches/root/0005-UPSTREAM-Support-Ensure-complete-type-DelimitedScope.patch
+    - patches/root/0002-Do-not-build-mlgo-utils.patch
+    - patches/root/0003-UPSTREAM-ADT-Add-cstdint-to-SmallVector-101761.patch
+    - patches/root/0004-UPSTREAM-Add-missing-include-to-X86MCTargetDesc.h-12.patch
 {% endif %}
 
 build:
