@@ -11,14 +11,14 @@ jobs:
       osx_64_variantdefault:
         CONFIG: osx_64_variantdefault
         UPLOAD_PACKAGES: 'True'
-      osx_64_variantroot_63602:
-        CONFIG: osx_64_variantroot_63602
+      osx_64_variantroot_63410:
+        CONFIG: osx_64_variantroot_63410
         UPLOAD_PACKAGES: 'True'
       osx_arm64_variantdefault:
         CONFIG: osx_arm64_variantdefault
         UPLOAD_PACKAGES: 'True'
-      osx_arm64_variantroot_63602:
-        CONFIG: osx_arm64_variantroot_63602
+      osx_arm64_variantroot_63410:
+        CONFIG: osx_arm64_variantroot_63410
         UPLOAD_PACKAGES: 'True'
   timeoutInMinutes: 360
   variables: {}
