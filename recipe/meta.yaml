@@ -1,4 +1,4 @@
-{% set version = "21.1.0.rc1" %}
+{% set version = "21.1.0.rc2" %}
 {% set major_ver = version.split(".")[0] %}
 {% set tail_ver = version.split(".")[-1] %}
 {% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
