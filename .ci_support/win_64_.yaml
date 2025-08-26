@@ -3,13 +3,13 @@ c_stdlib:
 channel_sources:
 - conda-forge
 channel_targets:
-- conda-forge llvm_rc
+- conda-forge main
 cxx_compiler:
 - vs2022
 libxml2:
 - '2.13'
 python_min:
-- '3.9'
+- '3.10'
 target_platform:
 - win-64
 zlib:

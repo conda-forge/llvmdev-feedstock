@@ -7,7 +7,7 @@ cdt_name:
 channel_sources:
 - conda-forge
 channel_targets:
-- conda-forge llvm_rc
+- conda-forge main
 cxx_compiler:
 - gxx
 cxx_compiler_version:
@@ -17,7 +17,7 @@ docker_image:
 libxml2:
 - '2.13'
 python_min:
-- '3.9'
+- '3.10'
 target_platform:
 - linux-ppc64le
 zlib:
