@@ -9,7 +9,7 @@ cxx_compiler:
 libxml2:
 - '2.13'
 python_min:
-- '3.9'
+- '3.10'
 target_platform:
 - win-64
 zlib:
