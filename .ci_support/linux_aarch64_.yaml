@@ -17,7 +17,7 @@ docker_image:
 libxml2:
 - '2.13'
 python_min:
-- '3.9'
+- '3.10'
 target_platform:
 - linux-aarch64
 zlib:
