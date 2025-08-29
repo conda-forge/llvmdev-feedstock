@@ -1,0 +1,41 @@
+From dee6af46cb803528d308273fb121d75fd84d915e Mon Sep 17 00:00:00 2001
+From: Jonas Hahnfeld <jonas.hahnfeld@cern.ch>
+Date: Mon, 30 Dec 2024 10:32:54 +0100
+Subject: [PATCH 2/5] UPSTREAM: [MLGO] Only configure tests with
+ LLVM_INCLUDE_TESTS
+
+This allows downstream customers to remove all test directories and save
+quite some space when only building with LLVM_INCLUDE_TESTS=OFF.
+
+(cherry picked from commit 998bdae7f5ce8c5aa31b376592c9693fc95f02e3)
+---
+ llvm/utils/mlgo-utils/CMakeLists.txt | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
+
+diff --git a/llvm/utils/mlgo-utils/CMakeLists.txt b/llvm/utils/mlgo-utils/CMakeLists.txt
+index 3129331d5..18f0c1541 100644
+--- a/llvm/utils/mlgo-utils/CMakeLists.txt
++++ b/llvm/utils/mlgo-utils/CMakeLists.txt
+@@ -1,11 +1,13 @@
+-configure_lit_site_cfg(
+-  "${CMAKE_CURRENT_SOURCE_DIR}/tests/lit.site.cfg.in"
+-  "${CMAKE_CURRENT_BINARY_DIR}/lit.site.cfg"
+-)
++if(LLVM_INCLUDE_TESTS)
++  configure_lit_site_cfg(
++    "${CMAKE_CURRENT_SOURCE_DIR}/tests/lit.site.cfg.in"
++    "${CMAKE_CURRENT_BINARY_DIR}/lit.site.cfg"
++  )
+ 
+-add_lit_testsuite(check-mlgo-utils "Running mlgo-utils tests"
+-  ${CMAKE_CURRENT_BINARY_DIR}
+-  DEPENDS "FileCheck" "not" "count" "split-file" "yaml2obj" "llvm-objcopy"
+-)
++  add_lit_testsuite(check-mlgo-utils "Running mlgo-utils tests"
++    ${CMAKE_CURRENT_BINARY_DIR}
++    DEPENDS "FileCheck" "not" "count" "split-file" "yaml2obj" "llvm-objcopy"
++  )
+ 
+-set_target_properties(check-mlgo-utils PROPERTIES FOLDER "Tests")
++  set_target_properties(check-mlgo-utils PROPERTIES FOLDER "Tests")
++endif()
