@@ -1,7 +1,7 @@
 {% set version = "18.1.8" %}
 {% set major_ver = version.split(".")[0] %}
 {% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
-{% set build_number = 9 %}
+{% set build_number = 10 %}
 
 # as of LLVM 17, we expect an "rc" suffix for the release candidates
 {% set extra = "rc" if version.split(".")[-1] not in "0123456789" else "" %}
@@ -45,7 +45,7 @@ requirements:
     - libcxx {{ cxx_compiler_version }}  # [osx]
     # needs aarch/ppc/arm (re)build of conda-forge/backtrace-feedstock
     - backtrace                          # [unix and x86]
-    - libxml2
+    - libxml2-devel
     - zlib
     - zstd
 
@@ -70,15 +70,15 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [win]
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm-c" ~ major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - libxml2
+        - libxml2-devel
         - zlib
         - zstd
       run:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [win]
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm-c" ~ major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
         - libcxx >={{ cxx_compiler_version }}                           # [osx]
       run_constrained:
@@ -113,8 +113,8 @@ outputs:
       track_features:
         - root         # [variant and variant.startswith("root_")]
       string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
-      run_exports:                                                    # [not win]
-        - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
+      run_exports:                                                    # [unix]
+        - {{ pin_subpackage("libllvm" ~ major_ver, max_pin="x.x") }}  # [unix]
     requirements:
       build:
         - {{ stdlib('c') }}
@@ -125,7 +125,7 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
-        - libxml2
+        - libxml2-devel
         - zlib
         - zstd
       run:
@@ -146,17 +146,17 @@ outputs:
       track_features:
         - root         # [variant and variant.startswith("root_")]
       string: {{ variant }}_h{{ PKG_HASH }}_{{ build_number }}
-      run_exports:                                                    # [not win]
-        - {{ pin_subpackage("libllvm" + major_ver, max_pin="x.x") }}  # [not win]
+      run_exports:                                                    # [unix]
+        - {{ pin_subpackage("libllvm" ~ major_ver, max_pin="x.x") }}  # [unix]
     requirements:
       build:
       host:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
-        - libxml2
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}     # [unix]
+        - libxml2-devel
         - zlib
         - zstd
-      run:                                                            # [not win]
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
+      run:                                                            # [unix]
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}     # [unix]
       run_constrained:
         - llvmdev     {{ version }}
         - llvm-tools  {{ version }}
@@ -189,11 +189,11 @@ outputs:
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
-        - libxml2
+        - libxml2-devel
         - zlib
         - zstd
       run:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
     test:
       commands:
         - $PREFIX/bin/llc-{{ major_ver }} -version                               # [not win]
@@ -223,14 +223,14 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [not win]
-        - libxml2
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
+        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [unix]
+        - libxml2-devel
         - zlib
         - zstd
       run:
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [not win]
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
+        - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [unix]
       run_constrained:
         - llvm        {{ version }}
         - llvmdev     {{ version }}
@@ -252,7 +252,7 @@ outputs:
     script: install_llvm.bat  # [win]
     build:
       run_exports:
-        - {{ pin_subpackage("libllvm-c" + major_ver, max_pin="x.x") }}
+        - {{ pin_subpackage("libllvm-c" ~ major_ver, max_pin="x.x") }}
       activate_in_script: true
       track_features:
         - root         # [variant and variant.startswith("root_")]
@@ -270,8 +270,8 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
-        - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libxml2
+        - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
+        - libxml2-devel
         - zlib
         - zstd
       run_constrained:
