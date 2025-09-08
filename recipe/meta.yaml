@@ -1,7 +1,7 @@
 {% set version = "18.1.8" %}
 {% set major_ver = version.split(".")[0] %}
 {% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
-{% set build_number = 9 %}
+{% set build_number = 10 %}
 
 # as of LLVM 17, we expect an "rc" suffix for the release candidates
 {% set extra = "rc" if version.split(".")[-1] not in "0123456789" else "" %}
@@ -45,7 +45,7 @@ requirements:
     - libcxx {{ cxx_compiler_version }}  # [osx]
     # needs aarch/ppc/arm (re)build of conda-forge/backtrace-feedstock
     - backtrace                          # [unix and x86]
-    - libxml2
+    - libxml2-devel
     - zlib
     - zstd
 
@@ -73,7 +73,7 @@ outputs:
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - {{ pin_subpackage("libllvm-c" ~ major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - libxml2
+        - libxml2-devel
         - zlib
         - zstd
       run:
@@ -125,7 +125,7 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
-        - libxml2
+        - libxml2-devel
         - zlib
         - zstd
       run:
@@ -152,7 +152,7 @@ outputs:
       build:
       host:
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}     # [unix]
-        - libxml2
+        - libxml2-devel
         - zlib
         - zstd
       run:                                                            # [unix]
@@ -189,7 +189,7 @@ outputs:
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
-        - libxml2
+        - libxml2-devel
         - zlib
         - zstd
       run:
@@ -225,7 +225,7 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [unix]
-        - libxml2
+        - libxml2-devel
         - zlib
         - zstd
       run:
@@ -271,7 +271,7 @@ outputs:
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
-        - libxml2
+        - libxml2-devel
         - zlib
         - zstd
       run_constrained:
