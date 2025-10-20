@@ -18,7 +18,7 @@ source:
     - patches/0003-RuntimeDyldELF-Clear-GOTOffsetMap-when-resetting-GOT.patch
 
 build:
-  number: 4
+  number: 5
   merge_build_host: false
 
 requirements:
