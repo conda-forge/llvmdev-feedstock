@@ -12,24 +12,24 @@ jobs:
         CONFIG: linux_64_variantdefault
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
-      linux_64_variantroot_63604:
-        CONFIG: linux_64_variantroot_63604
+      linux_64_variantroot_63606:
+        CONFIG: linux_64_variantroot_63606
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
       linux_aarch64_variantdefault:
         CONFIG: linux_aarch64_variantdefault
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
-      linux_aarch64_variantroot_63604:
-        CONFIG: linux_aarch64_variantroot_63604
+      linux_aarch64_variantroot_63606:
+        CONFIG: linux_aarch64_variantroot_63606
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
       linux_ppc64le_variantdefault:
         CONFIG: linux_ppc64le_variantdefault
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
-      linux_ppc64le_variantroot_63604:
-        CONFIG: linux_ppc64le_variantroot_63604
+      linux_ppc64le_variantroot_63606:
+        CONFIG: linux_ppc64le_variantroot_63606
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
   timeoutInMinutes: 360
