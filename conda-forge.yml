@@ -6,8 +6,8 @@ azure:
       SET_PAGEFILE: 'True'
 bot:
   abi_migration_branches:
-  - 18.x
-  - 17.x
+  - 20.x
+  - 19.x
 build_platform:
   linux_aarch64: linux_64
   linux_ppc64le: linux_64

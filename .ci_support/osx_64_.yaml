@@ -14,12 +14,12 @@ cxx_compiler:
 - clang_bootstrap
 cxx_compiler_version:
 - '19'
-libxml2:
-- '2.13'
+libxml2_devel:
+- '2.14'
 macos_machine:
 - x86_64-apple-darwin13.4.0
 python_min:
-- '3.9'
+- '3.10'
 target_platform:
 - osx-64
 zlib:
