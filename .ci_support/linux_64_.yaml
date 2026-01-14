@@ -5,7 +5,7 @@ c_stdlib_version:
 channel_sources:
 - conda-forge
 channel_targets:
-- conda-forge main
+- conda-forge llvm_rc
 cxx_compiler:
 - gxx
 cxx_compiler_version:
