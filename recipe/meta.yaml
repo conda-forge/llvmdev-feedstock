@@ -23,6 +23,8 @@ source:
 build:
   number: 0
   merge_build_host: false
+  # debug
+  skip: true  # [not win]
 
 requirements:
   build:
