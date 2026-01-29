@@ -32,9 +32,6 @@ if [[ "$target_platform" == "linux-ppc64le" ]]; then
   CXXFLAGS="$(echo $CXXFLAGS | sed 's/-fno-plt //g')"
 fi
 
-# delete failing test until https://github.com/llvm/llvm-project/issues/176840 is solved
-rm -f ../llvm/test/ExecutionEngine/JITLink/x86-64/ELF_vtune.s
-
 cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_LIBRARY_PATH="${PREFIX}" \

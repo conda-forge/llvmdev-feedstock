@@ -1,0 +1,69 @@
+From 0403fb27a14a6d04a87e3b64e88fb684dc60155c Mon Sep 17 00:00:00 2001
+From: Min Hsu <min.hsu@sifive.com>
+Date: Wed, 28 Jan 2026 15:16:49 -0800
+Subject: [PATCH 2/2] [JITLink][ELFDebugObjectPlugin] Fix incorrect waiting on
+ std::future in post-fixup phase
+
+---
+ .../Orc/Debugging/ELFDebugObjectPlugin.cpp    | 12 ++++++++++-
+ .../JITLink/x86-64/ELF_simple.s               | 21 +++++++++++++++++++
+ 2 files changed, 32 insertions(+), 1 deletion(-)
+ create mode 100644 llvm/test/ExecutionEngine/JITLink/x86-64/ELF_simple.s
+
+diff --git a/llvm/lib/ExecutionEngine/Orc/Debugging/ELFDebugObjectPlugin.cpp b/llvm/lib/ExecutionEngine/Orc/Debugging/ELFDebugObjectPlugin.cpp
+index e67eb323c354..4d491a5d6bae 100644
+--- a/llvm/lib/ExecutionEngine/Orc/Debugging/ELFDebugObjectPlugin.cpp
++++ b/llvm/lib/ExecutionEngine/Orc/Debugging/ELFDebugObjectPlugin.cpp
+@@ -75,7 +75,14 @@ public:
+ 
+   void trackFinalizedAlloc(FinalizedAlloc FA) { Alloc = std::move(FA); }
+ 
+-  Expected<ExecutorAddrRange> awaitTargetMem() { return FinalizeFuture.get(); }
++  bool hasPendingTargetMem() const { return FinalizeFuture.valid(); }
++
++  Expected<ExecutorAddrRange> awaitTargetMem() {
++    assert(FinalizeFuture.valid() &&
++           "FinalizeFuture is not valid. Perhaps there is no pending target "
++           "memory transaction?");
++    return FinalizeFuture.get();
++  }
+ 
+   void reportTargetMem(ExecutorAddrRange TargetMem) {
+     FinalizePromise.set_value(TargetMem);
+@@ -342,6 +349,9 @@ void ELFDebugObjectPlugin::modifyPassConfig(MaterializationResponsibility &MR,
+     // register the memory range with the GDB JIT Interface in an allocation
+     // action of the LinkGraph's own allocation
+     DebugObject *DebugObj = getPendingDebugObj(MR);
++    assert(DebugObj && "no debug object?");
++    if (!DebugObj->hasPendingTargetMem())
++      return Error::success();
+     Expected<ExecutorAddrRange> R = DebugObj->awaitTargetMem();
+     if (!R)
+       return R.takeError();
+diff --git a/llvm/test/ExecutionEngine/JITLink/x86-64/ELF_simple.s b/llvm/test/ExecutionEngine/JITLink/x86-64/ELF_simple.s
+new file mode 100644
+index 000000000000..6638bcdbff31
+--- /dev/null
++++ b/llvm/test/ExecutionEngine/JITLink/x86-64/ELF_simple.s
+@@ -0,0 +1,21 @@
++# REQUIRES: native && x86_64-linux
++
++# RUN: rm -rf %t && mkdir %t
++# RUN: llvm-mc -triple=x86_64-unknown-linux \
++# RUN:     -filetype=obj -o %t/ELF_x86-64_simple.o %s
++# RUN: llvm-jitlink %t/ELF_x86-64_simple.o
++
++# Test with the most basic function. Also check if everything works
++# in the absent of any debug information.
++
++	.text
++	.globl	main                            # -- Begin function main
++	.p2align	4
++	.type	main,@function
++main:                                   # @main
++	pushq	%rbp
++	movq	%rsp, %rbp
++	movl	$0, -4(%rbp)
++	movl	$0, %eax
++	popq	%rbp
++	retq
