@@ -18,4 +18,11 @@ conda_forge_output_validation: true
 github:
   branch_name: main
   tooling_branch_name: main
+github_actions:
+  self_hosted: true
+  triggers:
+  - push
+  - pull_request
+provider:
+  win_64: github_actions
 test: native_and_emulated

@@ -3,9 +3,11 @@ c_stdlib:
 channel_sources:
 - conda-forge
 channel_targets:
-- conda-forge main
+- conda-forge llvm_rc
 cxx_compiler:
 - vs2022
+github_actions_labels:
+- cirun-azure-windows-2xlarge
 libxml2_devel:
 - '2.14'
 python_min:
