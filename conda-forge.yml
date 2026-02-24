@@ -6,6 +6,7 @@ azure:
       SET_PAGEFILE: 'True'
 bot:
   abi_migration_branches:
+  - 21.x
   - 20.x
   - 19.x
 build_platform:
