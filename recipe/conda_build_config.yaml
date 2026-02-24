@@ -5,6 +5,3 @@ cxx_compiler:          # [osx]
 
 github_actions_labels:              # [win]
   - cirun-azure-windows-2xlarge     # [win]
-
-channel_targets:
-  - conda-forge llvm_rc
