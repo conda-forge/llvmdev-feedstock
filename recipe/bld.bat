@@ -8,7 +8,7 @@ set "CXXFLAGS=-MD"
 set "CC=cl.exe"
 set "CXX=cl.exe"
 
-cmake -G "Ninja" ^
+cmake %CMAKE_ARGS% -G "Ninja" ^
     -DCMAKE_BUILD_TYPE="Release" ^
     -DCMAKE_PREFIX_PATH=%LIBRARY_PREFIX% ^
     -DCMAKE_INSTALL_PREFIX:PATH=%LIBRARY_PREFIX% ^
