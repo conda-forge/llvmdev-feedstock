@@ -26,6 +26,6 @@ github_actions:
   triggers:
   - push
   - pull_request
-provider:
-  win_64: github_actions
+# provider:
+#   win_64: github_actions
 test: native_and_emulated

@@ -20,6 +20,7 @@ source:
 build:
   number: 0
   merge_build_host: false
+  skip: true  # [not (win and arm64)]
 
 requirements:
   build:
