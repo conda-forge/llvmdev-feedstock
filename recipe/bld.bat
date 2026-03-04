@@ -9,13 +9,21 @@ set "CXXFLAGS=-MD"
 set "CC=cl.exe"
 set "CXX=cl.exe"
 
-
 if NOT "%target_platform%"=="%build_platform%" (
-    set "NATIVE_FLAGS=-DCMAKE_C_COMPILER=%CC_FOR_BUILD%;-DCMAKE_CXX_COMPILER=%CXX_FOR_BUILD%;-DCMAKE_C_FLAGS=;-DCMAKE_CXX_FLAGS="
-    set "NATIVE_FLAGS=!NATIVE_FLAGS!;-DCMAKE_EXE_LINKER_FLAGS=/MACHINE:X64;-DCMAKE_MODULE_LINKER_FLAGS=;-DCMAKE_SHARED_LINKER_FLAGS="
-    set "NATIVE_FLAGS=!NATIVE_FLAGS!;-DCMAKE_STATIC_LINKER_FLAGS=;-DLLVM_INCLUDE_BENCHMARKS=OFF"
-    set "NATIVE_FLAGS=!NATIVE_FLAGS!;-DLLVM_ENABLE_ZSTD=OFF;-DLLVM_ENABLE_LIBXML2=OFF;-DLLVM_ENABLE_ZLIB=OFF;"
-    set "CMAKE_ARGS=%CMAKE_ARGS% -DCROSS_TOOLCHAIN_FLAGS_NATIVE=!NATIVE_FLAGS!"
+    echo set(CMAKE_C_COMPILER %CC_FOR_BUILD%)             >> cross-toolchain.cmake
+    echo set(CMAKE_C_FLAGS "")                            >> cross-toolchain.cmake
+    echo set(CMAKE_CXX_FLAGS "")                          >> cross-toolchain.cmake
+    echo set(CMAKE_EXE_LINKER_FLAGS "/MACHINE:X64")       >> cross-toolchain.cmake
+    echo set(CMAKE_MODULE_LINKER_FLAGS "")                >> cross-toolchain.cmake
+    echo set(CMAKE_SHARED_LINKER_FLAGS "")                >> cross-toolchain.cmake
+    echo set(CMAKE_STATIC_LINKER_FLAGS "")                >> cross-toolchain.cmake
+    echo set(LLVM_INCLUDE_BENCHMARKS "OFF")               >> cross-toolchain.cmake
+    echo set(LLVM_ENABLE_ZSTD "OFF")                      >> cross-toolchain.cmake
+    echo set(LLVM_ENABLE_LIBXML2 "OFF")                   >> cross-toolchain.cmake
+    echo set(LLVM_ENABLE_ZLIB "OFF")                      >> cross-toolchain.cmake
+    echo set(CMAKE_LIBRARY_PATH "%LIB_FOR_BUILD")         >> cross-toolchain.cmake
+    echo set(CMAKE_INCLUDE_PATH "%INCLUDE_FOR_BUILD")     >> cross-toolchain.cmake
+    set "CMAKE_ARGS=%CMAKE_ARGS% -DCROSS_TOOLCHAIN_FLAGS_NATIVE=-DCMAKE_TOOLCHAIN_FILE=%PWD%\\cross-toolchain.cmake"
 )
 
 :: debug
