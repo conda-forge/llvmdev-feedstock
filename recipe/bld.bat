@@ -10,7 +10,7 @@ set "CC=cl.exe"
 set "CXX=cl.exe"
 
 if NOT "%target_platform%"=="%build_platform%" (
-    echo set(CMAKE_C_COMPILER %CC_FOR_BUILD%)             >> cross-toolchain.cmake
+    echo set(CMAKE_C_COMPILER "%CC_FOR_BUILD%")           >> cross-toolchain.cmake
     echo set(CMAKE_C_FLAGS "")                            >> cross-toolchain.cmake
     echo set(CMAKE_CXX_FLAGS "")                          >> cross-toolchain.cmake
     echo set(CMAKE_EXE_LINKER_FLAGS "/MACHINE:X64")       >> cross-toolchain.cmake
