@@ -10,6 +10,8 @@ set "CC=cl.exe"
 set "CXX=cl.exe"
 
 if NOT "%target_platform%"=="%build_platform%" (
+    echo "LIB: %LIB%"
+    echo "LIB_FOR_BUILD: %LIB_FOR_BUILD%"
     echo set^(CMAKE_C_COMPILER "%CC_FOR_BUILD:\=/%"^)       >> cross-toolchain.cmake
     echo set^(CMAKE_C_FLAGS ""^)                            >> cross-toolchain.cmake
     echo set^(CMAKE_CXX_FLAGS ""^)                          >> cross-toolchain.cmake
