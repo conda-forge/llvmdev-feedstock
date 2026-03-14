@@ -17,9 +17,9 @@ libxml2_devel:
 python_min:
 - '3.10'
 target_platform:
-- linux-ppc64le
+- linux-aarch64
 variant:
-- root_63606
+- root_63610
 zlib:
 - '1'
 zstd:
