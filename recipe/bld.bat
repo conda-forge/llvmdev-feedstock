@@ -25,8 +25,8 @@ if NOT "%target_platform%"=="%build_platform%" (
     echo set^(LLVM_ENABLE_ZLIB "OFF"^)                      >> cross-toolchain.cmake
     echo set^(CMAKE_LIBRARY_PATH "%LIB_FOR_BUILD:\=/%"^)        >> cross-toolchain.cmake
     echo set^(CMAKE_INCLUDE_PATH "%INCLUDE_FOR_BUILD:\=/%"^)    >> cross-toolchain.cmake
-    echo set^($ENV{INCLUDE} "%INCLUDE_FOR_BUILD:\=/%"^)     >> cross-toolchain.cmake
-    echo set^($ENV{LIB} "%LIB_FOR_BUILD:\=/%"^)             >> cross-toolchain.cmake
+    echo set^(ENV{INCLUDE} "%INCLUDE_FOR_BUILD:\=/%"^)      >> cross-toolchain.cmake
+    echo set^(ENV{LIB} "%LIB_FOR_BUILD:\=/%"^)              >> cross-toolchain.cmake
     type cross-toolchain.cmake
     set "CMAKE_ARGS=%CMAKE_ARGS% -DCROSS_TOOLCHAIN_FLAGS_NATIVE=-DCMAKE_TOOLCHAIN_FILE=%cd%\\cross-toolchain.cmake"
 )
