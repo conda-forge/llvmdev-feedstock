@@ -4,6 +4,8 @@ setlocal enabledelayedexpansion
 mkdir build
 cd build
 
+set
+
 REM remove GL flag for now
 set "CXXFLAGS=-MD"
 set "CC=cl.exe"
@@ -13,6 +15,7 @@ if NOT "%target_platform%"=="%build_platform%" (
     echo "LIB: %LIB%"
     echo "LIB_FOR_BUILD: %LIB_FOR_BUILD%"
     echo set^(CMAKE_C_COMPILER "%CC_FOR_BUILD:\=/%"^)       >> cross-toolchain.cmake
+    echo set^(CMAKE_CXX_COMPILER "%CXX_FOR_BUILD:\=/%"^)   >> cross-toolchain.cmake
     echo set^(CMAKE_C_FLAGS ""^)                            >> cross-toolchain.cmake
     echo set^(CMAKE_CXX_FLAGS ""^)                          >> cross-toolchain.cmake
     echo set^(CMAKE_EXE_LINKER_FLAGS "/MACHINE:X64"^)       >> cross-toolchain.cmake
