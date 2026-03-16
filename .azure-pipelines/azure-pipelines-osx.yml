@@ -5,21 +5,25 @@
 jobs:
 - job: osx
   pool:
-    vmImage: macOS-15
+    vmImage: $(VMIMAGE)
   strategy:
     matrix:
       osx_64_variantdefault:
         CONFIG: osx_64_variantdefault
         UPLOAD_PACKAGES: 'True'
-      osx_64_variantroot_63606:
-        CONFIG: osx_64_variantroot_63606
+        VMIMAGE: macOS-15
+      osx_64_variantroot_63610:
+        CONFIG: osx_64_variantroot_63610
         UPLOAD_PACKAGES: 'True'
+        VMIMAGE: macOS-15
       osx_arm64_variantdefault:
         CONFIG: osx_arm64_variantdefault
         UPLOAD_PACKAGES: 'True'
-      osx_arm64_variantroot_63606:
-        CONFIG: osx_arm64_variantroot_63606
+        VMIMAGE: macOS-15
+      osx_arm64_variantroot_63610:
+        CONFIG: osx_arm64_variantroot_63610
         UPLOAD_PACKAGES: 'True'
+        VMIMAGE: macOS-15
   timeoutInMinutes: 360
   variables: {}
 
