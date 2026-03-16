@@ -18,10 +18,6 @@ if NOT "%target_platform%"=="%build_platform%" (
     echo set^(CMAKE_CXX_COMPILER "%CXX_FOR_BUILD:\=/%"^)   >> cross-toolchain.cmake
     echo set^(CMAKE_C_FLAGS ""^)                            >> cross-toolchain.cmake
     echo set^(CMAKE_CXX_FLAGS ""^)                          >> cross-toolchain.cmake
-    echo set^(CMAKE_EXE_LINKER_FLAGS "/MACHINE:X64"^)       >> cross-toolchain.cmake
-    echo set^(CMAKE_MODULE_LINKER_FLAGS ""^)                >> cross-toolchain.cmake
-    echo set^(CMAKE_SHARED_LINKER_FLAGS ""^)                >> cross-toolchain.cmake
-    echo set^(CMAKE_STATIC_LINKER_FLAGS ""^)                >> cross-toolchain.cmake
     echo set^(LLVM_INCLUDE_BENCHMARKS "OFF"^)               >> cross-toolchain.cmake
     echo set^(LLVM_ENABLE_ZSTD "OFF"^)                      >> cross-toolchain.cmake
     echo set^(LLVM_ENABLE_LIBXML2 "OFF"^)                   >> cross-toolchain.cmake
@@ -30,6 +26,20 @@ if NOT "%target_platform%"=="%build_platform%" (
     echo set^(CMAKE_INCLUDE_PATH "%INCLUDE_FOR_BUILD:\=/%"^)    >> cross-toolchain.cmake
     echo set^(ENV{INCLUDE} "%INCLUDE_FOR_BUILD:\=/%"^)      >> cross-toolchain.cmake
     echo set^(ENV{LIB} "%LIB_FOR_BUILD:\=/%"^)              >> cross-toolchain.cmake
+    REM Build /LIBPATH: flags from LIB_FOR_BUILD so they are baked into
+    REM the ninja build files and used at build time, not just configure time.
+    set "LIBPATH_FLAGS=/MACHINE:X64"
+    for %%p in ("!LIB_FOR_BUILD:;=" "!") do (
+        if not "%%~p"=="" (
+            set "_fwd=%%~p"
+            set "_fwd=!_fwd:\=/!"
+            set "LIBPATH_FLAGS=!LIBPATH_FLAGS! /LIBPATH:\"!_fwd!\""
+        )
+    )
+    echo set^(CMAKE_EXE_LINKER_FLAGS "!LIBPATH_FLAGS!"^)    >> cross-toolchain.cmake
+    echo set^(CMAKE_MODULE_LINKER_FLAGS "!LIBPATH_FLAGS!"^)  >> cross-toolchain.cmake
+    echo set^(CMAKE_SHARED_LINKER_FLAGS "!LIBPATH_FLAGS!"^)  >> cross-toolchain.cmake
+    echo set^(CMAKE_STATIC_LINKER_FLAGS ""^)                >> cross-toolchain.cmake
     type cross-toolchain.cmake
     set "CMAKE_ARGS=%CMAKE_ARGS% -DCROSS_TOOLCHAIN_FLAGS_NATIVE=-DCMAKE_TOOLCHAIN_FILE=%cd%\\cross-toolchain.cmake"
 )
