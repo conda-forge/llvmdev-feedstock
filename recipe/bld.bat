@@ -22,6 +22,11 @@ if NOT "%target_platform%"=="%build_platform%" (
     echo set^(LLVM_ENABLE_ZSTD "OFF"^)                      >> cross-toolchain.cmake
     echo set^(LLVM_ENABLE_LIBXML2 "OFF"^)                   >> cross-toolchain.cmake
     echo set^(LLVM_ENABLE_ZLIB "OFF"^)                      >> cross-toolchain.cmake
+    REM Disable DIA SDK in the native (x64) build. The native build only
+    REM produces helper tools (e.g. llvm-nm) for cross-compilation, so PDB
+    REM debug support is not needed. Without this, CMake finds the ARM64
+    REM diaguids.lib instead of the x64 one, causing unresolved externals.
+    echo set^(LLVM_ENABLE_DIA_SDK "OFF"^)                   >> cross-toolchain.cmake
     echo set^(CMAKE_LIBRARY_PATH "%LIB_FOR_BUILD:\=/%"^)        >> cross-toolchain.cmake
     echo set^(CMAKE_INCLUDE_PATH "%INCLUDE_FOR_BUILD:\=/%"^)    >> cross-toolchain.cmake
     echo set^(ENV{INCLUDE} "%INCLUDE_FOR_BUILD:\=/%"^)      >> cross-toolchain.cmake
