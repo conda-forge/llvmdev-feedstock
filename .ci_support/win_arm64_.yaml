@@ -1,0 +1,20 @@
+c_stdlib:
+- vs
+channel_sources:
+- conda-forge
+channel_targets:
+- conda-forge main
+cxx_compiler:
+- vs2022
+github_actions_labels:
+- cirun-azure-windows-2xlarge
+libxml2_devel:
+- '2.14'
+python_min:
+- '3.14'
+target_platform:
+- win-arm64
+zlib:
+- '1'
+zstd:
+- '1.5'
