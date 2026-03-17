@@ -4,8 +4,6 @@ setlocal enabledelayedexpansion
 mkdir build
 cd build
 
-set
-
 REM remove GL flag for now
 set "CXXFLAGS=-MD"
 set "CC=cl.exe"
@@ -48,9 +46,6 @@ if NOT "%target_platform%"=="%build_platform%" (
     type cross-toolchain.cmake
     set "CMAKE_ARGS=%CMAKE_ARGS% -DCROSS_TOOLCHAIN_FLAGS_NATIVE=-DCMAKE_TOOLCHAIN_FILE=%cd%\\cross-toolchain.cmake"
 )
-
-:: debug
-echo CMAKE_ARGS=!CMAKE_ARGS!
 
 cmake !CMAKE_ARGS! -G "Ninja" ^
     -DCMAKE_BUILD_TYPE="Release" ^
