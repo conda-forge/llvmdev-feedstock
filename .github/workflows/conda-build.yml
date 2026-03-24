@@ -22,14 +22,29 @@ jobs:
       max-parallel: 50
       matrix:
         include:
+          - CONFIG: linux_64_
+            UPLOAD_PACKAGES: True
+            os: ubuntu
+            runs_on: ['ubuntu-latest']
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
+          - CONFIG: linux_aarch64_
+            UPLOAD_PACKAGES: True
+            os: ubuntu
+            runs_on: ['ubuntu-latest']
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
+          - CONFIG: linux_ppc64le_
+            UPLOAD_PACKAGES: True
+            os: ubuntu
+            runs_on: ['ubuntu-latest']
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
           - CONFIG: win_64_
             UPLOAD_PACKAGES: True
             os: windows
-            runs_on: ['cirun-azure-windows-2xlarge--${{ github.run_id }}-win_64_', 'windows', 'x64', 'self-hosted']
+            runs_on: ['cirun-azure-windows-2xlarge--${{ github.run_id }}-win_64_']
           - CONFIG: win_arm64_
             UPLOAD_PACKAGES: True
             os: windows
-            runs_on: ['cirun-azure-windows-2xlarge--${{ github.run_id }}-win_arm64_', 'windows', 'x64', 'self-hosted']
+            runs_on: ['cirun-azure-windows-2xlarge--${{ github.run_id }}-win_arm64_']
     steps:
 
     - name: Checkout code
@@ -103,7 +118,7 @@ jobs:
         # default value; make it explicit, as it needs to match with artefact
         # generation below. Not configurable for now, can be revisited later
         CONDA_BLD_DIR: C:\bld
-        MINIFORGE_HOME: D:\Miniforge
+        MINIFORGE_HOME: ${{ contains(runner.arch, 'ARM') && 'C' || 'D' }}:\Miniforge
         PYTHONUNBUFFERED: 1
         CONFIG: ${{ matrix.CONFIG }}
         CI: github_actions
