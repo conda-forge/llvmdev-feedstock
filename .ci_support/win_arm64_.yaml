@@ -7,7 +7,7 @@ channel_targets:
 cxx_compiler:
 - vs2022
 github_actions_labels:
-- cirun-azure-windows-2xlarge
+- self-hosted@cirun-azure-windows-2xlarge
 libxml2_devel:
 - '2.14'
 python_min:
