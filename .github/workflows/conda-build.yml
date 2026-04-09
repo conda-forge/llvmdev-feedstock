@@ -40,11 +40,11 @@ jobs:
           - CONFIG: win_64_
             UPLOAD_PACKAGES: True
             os: windows
-            runs_on: ['cirun-azure-windows-2xlarge--${{ github.run_id }}-win_64_', 'windows', 'x64', 'self-hosted']
+            runs_on: ['cirun-azure-windows-2xlarge-ng--${{ github.run_id }}-win_64_', 'windows', 'x64', 'self-hosted']
           - CONFIG: win_arm64_
             UPLOAD_PACKAGES: True
             os: windows
-            runs_on: ['cirun-azure-windows-2xlarge--${{ github.run_id }}-win_arm64_', 'windows', 'x64', 'self-hosted']
+            runs_on: ['cirun-azure-windows-2xlarge-ng--${{ github.run_id }}-win_arm64_', 'windows', 'x64', 'self-hosted']
     steps:
 
     - name: Checkout code

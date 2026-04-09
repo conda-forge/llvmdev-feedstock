@@ -4,4 +4,4 @@ cxx_compiler:          # [osx]
   - clang_bootstrap    # [osx]
 
 github_actions_labels:                          # [win]
-  - self-hosted@cirun-azure-windows-2xlarge     # [win]
+  - self-hosted@cirun-azure-windows-2xlarge-ng  # [win]
