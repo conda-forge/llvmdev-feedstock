@@ -23,25 +23,30 @@ jobs:
       matrix:
         include:
           - CONFIG: linux_64_
+            STORE_BUILD_ARTIFACTS: False
             UPLOAD_PACKAGES: True
             os: ubuntu
             runs_on: ['ubuntu-latest']
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
           - CONFIG: linux_aarch64_
+            STORE_BUILD_ARTIFACTS: False
             UPLOAD_PACKAGES: True
             os: ubuntu
             runs_on: ['ubuntu-latest']
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
           - CONFIG: linux_ppc64le_
+            STORE_BUILD_ARTIFACTS: False
             UPLOAD_PACKAGES: True
             os: ubuntu
             runs_on: ['ubuntu-latest']
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
           - CONFIG: win_64_
+            STORE_BUILD_ARTIFACTS: False
             UPLOAD_PACKAGES: True
             os: windows
             runs_on: ['cirun-azure-windows-2xlarge--${{ github.run_id }}-win_64_', 'windows', 'x64', 'self-hosted']
           - CONFIG: win_arm64_
+            STORE_BUILD_ARTIFACTS: False
             UPLOAD_PACKAGES: True
             os: windows
             runs_on: ['cirun-azure-windows-2xlarge--${{ github.run_id }}-win_arm64_', 'windows', 'x64', 'self-hosted']
@@ -117,7 +122,7 @@ jobs:
       env:
         # default value; make it explicit, as it needs to match with artefact
         # generation below. Not configurable for now, can be revisited later
-        CONDA_BLD_DIR: C:\bld
+        CONDA_BLD_PATH: C:\bld
         MINIFORGE_HOME: ${{ contains(runner.arch, 'ARM') && 'C' || 'D' }}:\Miniforge
         PYTHONUNBUFFERED: 1
         CONFIG: ${{ matrix.CONFIG }}
