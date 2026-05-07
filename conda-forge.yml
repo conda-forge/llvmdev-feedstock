@@ -10,9 +10,7 @@ bot:
   - 20.x
   - 19.x
 build_platform:
-  linux_aarch64: linux_64
   linux_ppc64le: linux_64
-  osx_arm64: osx_64
   win_arm64: win_64
 conda_build:
   pkg_format: '2'
@@ -24,5 +22,7 @@ github:
   branch_name: main
   tooling_branch_name: main
 provider:
+  linux_aarch64: default
+  osx_arm64: default
   win_64: github_actions
 test: native_and_emulated
