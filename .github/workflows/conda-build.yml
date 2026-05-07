@@ -32,8 +32,8 @@ jobs:
             STORE_BUILD_ARTIFACTS: False
             UPLOAD_PACKAGES: True
             os: ubuntu
-            runs_on: ['ubuntu-latest']
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
+            runs_on: ['ubuntu-24.04-arm']
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64:alma9
           - CONFIG: linux_ppc64le_
             STORE_BUILD_ARTIFACTS: False
             UPLOAD_PACKAGES: True
