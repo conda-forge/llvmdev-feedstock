@@ -18,7 +18,7 @@ source:
     - patches/0003-RuntimeDyldELF-Clear-GOTOffsetMap-when-resetting-GOT.patch
 
 build:
-  number: 4
+  number: 5
   merge_build_host: false
 
 requirements:
@@ -33,7 +33,7 @@ requirements:
     - libcxx {{ cxx_compiler_version }}  # [osx]
     # needs aarch/ppc/arm (re)build of conda-forge/backtrace-feedstock
     - backtrace                          # [unix and x86]
-    - libxml2
+    - libxml2-devel
     - zlib
     - zstd
 
@@ -58,7 +58,7 @@ outputs:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
         - {{ pin_subpackage("libllvm-c" + major_ver, exact=True) }}     # [win]
         - {{ pin_subpackage("llvm-tools", exact=True) }}
-        - libxml2
+        - libxml2-devel
         - zlib
         - zstd
       run:
@@ -102,7 +102,7 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
-        - libxml2
+        - libxml2-devel
         - zlib
         - zstd
       run:
@@ -121,7 +121,7 @@ outputs:
       build:
       host:
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}     # [not win]
-        - libxml2
+        - libxml2-devel
         - zlib
         - zstd
       run:                                                            # [not win]
@@ -149,7 +149,7 @@ outputs:
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libxml2
+        - libxml2-devel
         - zlib
         - zstd
       run:
@@ -184,7 +184,7 @@ outputs:
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
         - {{ pin_subpackage("libllvm" + major_ver, exact=True) }}
-        - libxml2
+        - libxml2-devel
         - zlib
         - zstd
       run_constrained:
