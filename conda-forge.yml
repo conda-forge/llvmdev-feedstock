@@ -13,6 +13,7 @@ github:
 provider:
   linux_aarch64: default
   osx_arm64: default
+  win_64: github_actions
 test: native_and_emulated
 workflow_settings:
   build_workspace_dir:
