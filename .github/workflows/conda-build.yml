@@ -67,7 +67,7 @@ jobs:
             os: windows
             pagefile_size: 16
             resize_partitions: False
-            runs_on: ['cirun-azure-windows-2xlarge--${{ github.run_id }}-win_64_', 'windows', 'x64', 'self-hosted']
+            runs_on: ['namespace-profile-8cpu-on-win-64']
             tools_install_dir: C:\Miniforge
           - CONFIG: win_arm64_
             STORE_BUILD_ARTIFACTS: False
@@ -78,7 +78,7 @@ jobs:
             os: windows
             pagefile_size: 16
             resize_partitions: False
-            runs_on: ['cirun-azure-windows-2xlarge--${{ github.run_id }}-win_arm64_', 'windows', 'x64', 'self-hosted']
+            runs_on: ['namespace-profile-8cpu-on-win-64']
             tools_install_dir: C:\Miniforge
     steps:
 
