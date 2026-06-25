@@ -1,0 +1,21 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Isuru Fernando <isuruf@gmail.com>
+Date: Tue, 4 Aug 2020 21:06:30 -0500
+Subject: [PATCH] pass through QEMU_LD_PREFIX & SDKROOT
+
+---
+ utils/lit/lit/TestingConfig.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/utils/lit/lit/TestingConfig.py b/utils/lit/lit/TestingConfig.py
+index e7e545cc8e30..db2ea7bab9df 100644
+--- a/utils/lit/lit/TestingConfig.py
++++ b/utils/lit/lit/TestingConfig.py
+@@ -22,6 +22,7 @@ class TestingConfig:
+             }
+
+         pass_vars = ['LIBRARY_PATH', 'LD_LIBRARY_PATH', 'SYSTEMROOT', 'TERM',
++                     'QEMU_LD_PREFIX', 'SDKROOT',
+                      'CLANG', 'LD_PRELOAD', 'ASAN_OPTIONS', 'UBSAN_OPTIONS',
+                      'LSAN_OPTIONS', 'ADB', 'ANDROID_SERIAL',
+                      'SANITIZER_IGNORE_CVE_2016_2143', 'TMPDIR', 'TMP', 'TEMP',
