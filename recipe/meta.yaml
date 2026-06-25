@@ -24,7 +24,7 @@ source:
 
 build:
   number: {{ build_number }}
-  skip:  true  # [(win and vc<14) or aarch64 or ppc64le]
+  skip:  true  # [not (win or linux)]
   merge_build_host: False
 
 requirements:
