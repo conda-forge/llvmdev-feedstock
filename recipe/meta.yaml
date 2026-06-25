@@ -32,9 +32,9 @@ requirements:
     - cmake  {{ cmake }}
     - ninja
     - python    >=3
-    - libcxx {{cxx_compiler_version}}  # [osx]
+    - libcxx {{ cxx_compiler_version }}  # [osx]
   host:
-    - libcxx {{cxx_compiler_version}}  # [osx]
+    - libcxx {{ cxx_compiler_version }}  # [osx]
 
 outputs:
   # Contains everything
@@ -149,6 +149,8 @@ outputs:
       run:
         - python >={{ python_min }}
     test:
+      requires:
+        - python {{ python_min }}
       imports:
         - lit
 
