@@ -1,0 +1,50 @@
+Fix getTypeName() for GCC 14+: move __PRETTY_FUNCTION__ capture to a named
+helper namespace outside llvm so template arguments use fully-qualified names.
+
+GCC 14+ abbreviates 'llvm::Foo' to 'Foo' in __PRETTY_FUNCTION__ when the
+enclosing function is defined inside namespace llvm. This causes the pass
+manager debug output to print "Module" instead of "llvm::Module", breaking
+ten regression tests (new-pass-manager.ll, new-pm-defaults.ll, etc.).
+
+Using an anonymous namespace helper avoids the llvm:: abbreviation but causes
+GCC to drop the '{anonymous}::' prefix from types that are themselves in an
+anonymous namespace, breaking TypeNameTest.Names.
+
+The correct fix is a named (non-llvm, non-anonymous) helper namespace:
+llvm_typename_detail::get<T>() is in neither namespace llvm nor an anonymous
+namespace, so GCC must use fully-qualified names in both cases.
+
+diff --git a/include/llvm/Support/TypeName.h b/include/llvm/Support/TypeName.h
+--- a/include/llvm/Support/TypeName.h
++++ b/include/llvm/Support/TypeName.h
+@@ -12,6 +12,18 @@
+
+ #include "llvm/ADT/StringRef.h"
+
++#if defined(__clang__) || defined(__GNUC__)
++// Helper in a named (non-llvm) namespace so that __PRETTY_FUNCTION__ uses
++// fully qualified type names. GCC 14+ abbreviates 'llvm::Foo' to 'Foo' when
++// the enclosing function is inside namespace llvm, and also drops the
++// '{anonymous}::' prefix when the helper is in an anonymous namespace.
++// Using a distinct named namespace avoids both abbreviation behaviors.
++namespace llvm_typename_detail {
++template <typename LLVMTypeNameExtractor>
++inline const char *get() { return __PRETTY_FUNCTION__; }
++} // namespace llvm_typename_detail
++#endif
++
+ namespace llvm {
+
+ /// We provide a function which tries to compute the (demangled) name of a type
+@@ -27,9 +39,9 @@
+ template <typename DesiredTypeName>
+ inline StringRef getTypeName() {
+ #if defined(__clang__) || defined(__GNUC__)
+-  StringRef Name = __PRETTY_FUNCTION__;
++  StringRef Name = llvm_typename_detail::get<DesiredTypeName>();
+
+-  StringRef Key = "DesiredTypeName = ";
++  StringRef Key = "LLVMTypeNameExtractor = ";
+   Name = Name.substr(Name.find(Key));
+   assert(!Name.empty() && "Unable to find the template parameter!");
+   Name = Name.drop_front(Key.size());
