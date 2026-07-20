@@ -16,6 +16,8 @@ source:
   sha256: b981ddc5e205f4366ce507e8a3f169b5406db1a911eafce191bd2a5ef98d7829
   patches:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
+    # fix for https://github.com/llvm/llvm-project/issues/210691
+    - patches/0002-fix-LLVM_VERSION_SUFFIX.patch
 
 build:
   number: 0
