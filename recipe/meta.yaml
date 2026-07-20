@@ -1,4 +1,4 @@
-{% set version = "22.1.0.rc2" %}
+{% set version = "23.1.0.rc1" %}
 {% set major_ver = version.split(".")[0] %}
 {% set tail_ver = version.split(".")[-1] %}
 {% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
@@ -13,14 +13,11 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-  sha256: 3134a77d4f980207994e0409119ef417f2897776854e432cea3fd5a0433405ac
+  sha256: b981ddc5e205f4366ce507e8a3f169b5406db1a911eafce191bd2a5ef98d7829
   patches:
-    # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
-    # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
-    # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
-    # backport https://github.com/llvm/llvm-project/pull/178541
-    - patches/0002-JITLink-ELFDebugObjectPlugin-Fix-incorrect-waiting-o.patch
+    # fix for https://github.com/llvm/llvm-project/issues/210691
+    - patches/0002-fix-LLVM_VERSION_SUFFIX.patch
 
 build:
   number: 0
@@ -89,10 +86,6 @@ outputs:
         - if not exist "%LIBRARY_PREFIX%"\\libexec\llvm\not.exe exit 1  # [win]
         - if not exist "%LIBRARY_BIN%"\\llvm-nm.exe exit 1              # [win]
         - llvm-nm.exe --help                                            # [win]
-
-        # ensure we've correctly inserted %VSINSTALLDIR% into the CMake metadata for LLVM;
-        # we're looking for: `INTERFACE_LINK_LIBRARIES "$ENV{VSINSTALLDIR}/DIA SDK/lib/amd64/diaguids.lib;[...]`instead
-        - rg -e "INTERFACE_LINK_LIBRARIES\s\"\$ENV\{VSINSTALLDIR\}[/\w\s]+/diaguids\.lib" %LIBRARY_LIB%\cmake\llvm\LLVMExports.cmake  # [win]
 
   # Contains the shared libraries. To make different LLVM libraries co-installable
   # soversion is appended to the package name.

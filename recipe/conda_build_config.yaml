@@ -3,8 +3,8 @@ c_compiler:            # [osx]
 cxx_compiler:          # [osx]
   - clang_bootstrap    # [osx]
 
-github_actions_labels:              # [win]
-  - cirun-azure-windows-2xlarge     # [win]
+github_actions_labels:                   # [win]
+  - namespace-profile-8cpu-on-win-64     # [win]
 
 channel_targets:
   - conda-forge llvm_rc

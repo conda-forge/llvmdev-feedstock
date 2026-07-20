@@ -1,28 +1,32 @@
-azure:
-  settings_win:
-    variables:
-      CONDA_BLD_PATH: C:\\bld\\
-      MINIFORGE_HOME: C:\\Miniforge
-      SET_PAGEFILE: 'True'
 bot:
   abi_migration_branches:
+  - 21.x
   - 20.x
   - 19.x
 build_platform:
-  linux_aarch64: linux_64
   linux_ppc64le: linux_64
-  osx_arm64: osx_64
+  win_arm64: win_64
 conda_build:
   pkg_format: '2'
+  # use highest possible compression (smaller package -> less upload time) to try to
+  # combat timouts on windows see https://github.com/conda/infrastructure/issues/1159
+  zstd_compression_level: 22
 conda_forge_output_validation: true
 github:
   branch_name: main
   tooling_branch_name: main
-github_actions:
-  self_hosted: true
-  triggers:
-  - push
-  - pull_request
 provider:
+  linux_aarch64: default
+  osx_arm64: default
   win_64: github_actions
 test: native_and_emulated
+workflow_settings:
+  build_workspace_dir:
+    - value: C:\bld
+      os: win
+  pagefile_size:
+    - value: 16
+      os: win
+  tools_install_dir:
+    - value: C:\Miniforge
+      os: win
