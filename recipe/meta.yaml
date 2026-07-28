@@ -20,7 +20,7 @@ source:
     - patches/0002-fix-LLVM_VERSION_SUFFIX.patch
 
 build:
-  number: 0
+  number: 1
   merge_build_host: false
 
 requirements:
@@ -118,7 +118,9 @@ outputs:
         - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.dylib  # [osx]
         # new style
         - test -f $PREFIX/lib/libLLVM.so.{{ maj_min }}{{ extra }}       # [linux]
+        - test -f $PREFIX/lib/libLTO.so.{{ maj_min }}{{ extra }}        # [linux]
         - test -f $PREFIX/lib/libLLVM.{{ maj_min }}{{ extra }}.dylib    # [osx]
+        - test -f $PREFIX/lib/libLTO.{{ maj_min }}{{ extra }}.dylib     # [osx]
 
   # This is a meta package so that people can use the latest libllvm and also
   # for run_exports
