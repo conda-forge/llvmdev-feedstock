@@ -73,10 +73,10 @@ Current release info
 Installing llvmdev
 ==================
 
-Installing `llvmdev` from the `conda-forge/label/llvm_rc` channel can be achieved by adding `conda-forge/label/llvm_rc` to your channels with:
+Installing `llvmdev` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
 
 ```
-conda config --add channels conda-forge/label/llvm_rc
+conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
@@ -122,7 +122,7 @@ It is possible to list all of the versions of `libllvm-c23` available on your pl
 <summary>With conda</summary>
 
 ```
-conda search libllvm-c23 --channel conda-forge/label/llvm_rc
+conda search libllvm-c23 --channel conda-forge
 ```
 
 </details>
@@ -131,7 +131,7 @@ conda search libllvm-c23 --channel conda-forge/label/llvm_rc
 <summary>With mamba</summary>
 
 ```
-mamba search libllvm-c23 --channel conda-forge/label/llvm_rc
+mamba search libllvm-c23 --channel conda-forge
 ```
 
 </details>
@@ -140,7 +140,7 @@ mamba search libllvm-c23 --channel conda-forge/label/llvm_rc
 <summary>With pixi</summary>
 
 ```
-pixi search libllvm-c23 --channel conda-forge/label/llvm_rc
+pixi search libllvm-c23 --channel conda-forge
 ```
 
 </details>
@@ -150,13 +150,13 @@ pixi search libllvm-c23 --channel conda-forge/label/llvm_rc
 
 ```
 # Search all versions available on your platform:
-mamba repoquery search libllvm-c23 --channel conda-forge/label/llvm_rc
+mamba repoquery search libllvm-c23 --channel conda-forge
 
 # List packages depending on `libllvm-c23`:
-mamba repoquery whoneeds libllvm-c23 --channel conda-forge/label/llvm_rc
+mamba repoquery whoneeds libllvm-c23 --channel conda-forge
 
 # List dependencies of `libllvm-c23`:
-mamba repoquery depends libllvm-c23 --channel conda-forge/label/llvm_rc
+mamba repoquery depends libllvm-c23 --channel conda-forge
 ```
 
 </details>
