@@ -1,4 +1,4 @@
-{% set version = "22.1.8" %}
+{% set version = "23.1.0.rc3" %}
 {% set major_ver = version.split(".")[0] %}
 {% set tail_ver = version.split(".")[-1] %}
 {% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
@@ -13,12 +13,12 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-  sha256: ad18b70e287954c3d62bc7e0b86e7b7af2adf87bcfce21c15fe717f101d7aace
+  sha256: b5fc14bcddd06013688a1f537a75cd4087042c94d82c3c562221b57ce526ca62
   patches:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
 
 build:
-  number: 2
+  number: 0
   merge_build_host: false
 
 requirements:
@@ -85,10 +85,6 @@ outputs:
         - if not exist "%LIBRARY_BIN%"\\llvm-nm.exe exit 1              # [win]
         - llvm-nm.exe --help                                            # [win]
 
-        # ensure we've correctly inserted %VSINSTALLDIR% into the CMake metadata for LLVM;
-        # we're looking for: `INTERFACE_LINK_LIBRARIES "$ENV{VSINSTALLDIR}/DIA SDK/lib/amd64/diaguids.lib;[...]`instead
-        - rg -e "INTERFACE_LINK_LIBRARIES\s\"\$ENV\{VSINSTALLDIR\}[/\w\s]+/diaguids\.lib" %LIBRARY_LIB%\cmake\llvm\LLVMExports.cmake  # [win]
-
   # Contains the shared libraries. To make different LLVM libraries co-installable
   # soversion is appended to the package name.
   - name: libllvm{{ major_ver }}
@@ -120,7 +116,9 @@ outputs:
         - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.dylib  # [osx]
         # new style
         - test -f $PREFIX/lib/libLLVM.so.{{ maj_min }}{{ extra }}       # [linux]
+        - test -f $PREFIX/lib/libLTO.so.{{ maj_min }}{{ extra }}        # [linux]
         - test -f $PREFIX/lib/libLLVM.{{ maj_min }}{{ extra }}.dylib    # [osx]
+        - test -f $PREFIX/lib/libLTO.{{ maj_min }}{{ extra }}.dylib     # [osx]
 
   # This is a meta package so that people can use the latest libllvm and also
   # for run_exports

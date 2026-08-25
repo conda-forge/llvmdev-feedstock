@@ -15,7 +15,7 @@ elif [[ "$target_platform" == osx-* ]]; then
   # https://github.com/llvm/llvm-project/blob/llvmorg-16.0.6/llvm/tools/llvm-shlib/CMakeLists.txt#L82-L85
   # currently off though, because it doesn't build yet
   # CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_BUILD_LLVM_C_DYLIB=ON"
-  true
+  CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_VERSIONED_DYLIB_NAME_ON_DARWIN=ON -DLLVM_UNVERSIONED_LIBLTO_ON_DARWIN=OFF"
 fi
 
 if [[ "$CC_FOR_BUILD" != "" && "$CC_FOR_BUILD" != "$CC" ]]; then

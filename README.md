@@ -62,21 +62,21 @@ Current release info
 
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm--c22-green.svg)](https://anaconda.org/conda-forge/libllvm-c22) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm-c22.svg)](https://anaconda.org/conda-forge/libllvm-c22) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm-c22.svg)](https://anaconda.org/conda-forge/libllvm-c22) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm-c22.svg)](https://anaconda.org/conda-forge/libllvm-c22) |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm22-green.svg)](https://anaconda.org/conda-forge/libllvm22) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm22.svg)](https://anaconda.org/conda-forge/libllvm22) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm22.svg)](https://anaconda.org/conda-forge/libllvm22) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm22.svg)](https://anaconda.org/conda-forge/libllvm22) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm--c23-green.svg)](https://anaconda.org/conda-forge/libllvm-c23) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm-c23.svg)](https://anaconda.org/conda-forge/libllvm-c23) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm-c23.svg)](https://anaconda.org/conda-forge/libllvm-c23) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm-c23.svg)](https://anaconda.org/conda-forge/libllvm-c23) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm23-green.svg)](https://anaconda.org/conda-forge/libllvm23) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm23.svg)](https://anaconda.org/conda-forge/libllvm23) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm23.svg)](https://anaconda.org/conda-forge/libllvm23) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm23.svg)](https://anaconda.org/conda-forge/libllvm23) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-lit-green.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvm-green.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvm--tools-green.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-llvm--tools--22-green.svg)](https://anaconda.org/conda-forge/llvm-tools-22) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm-tools-22.svg)](https://anaconda.org/conda-forge/llvm-tools-22) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm-tools-22.svg)](https://anaconda.org/conda-forge/llvm-tools-22) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm-tools-22.svg)](https://anaconda.org/conda-forge/llvm-tools-22) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-llvm--tools--23-green.svg)](https://anaconda.org/conda-forge/llvm-tools-23) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm-tools-23.svg)](https://anaconda.org/conda-forge/llvm-tools-23) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm-tools-23.svg)](https://anaconda.org/conda-forge/llvm-tools-23) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm-tools-23.svg)](https://anaconda.org/conda-forge/llvm-tools-23) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvmdev-green.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) |
 
 Installing llvmdev
 ==================
 
-Installing `llvmdev` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
+Installing `llvmdev` from the `conda-forge/label/llvm_rc` channel can be achieved by adding `conda-forge/label/llvm_rc` to your channels with:
 
 ```
-conda config --add channels conda-forge
+conda config --add channels conda-forge/label/llvm_rc
 conda config --set channel_priority strict
 ```
 
@@ -87,7 +87,7 @@ How to use
 <summary>With conda</summary>
 
 ```
-conda install libllvm-c22 libllvm22 lit llvm llvm-tools llvm-tools-22 llvmdev
+conda install libllvm-c23 libllvm23 lit llvm llvm-tools llvm-tools-23 llvmdev
 ```
 
 </details>
@@ -96,7 +96,7 @@ conda install libllvm-c22 libllvm22 lit llvm llvm-tools llvm-tools-22 llvmdev
 <summary>With mamba</summary>
 
 ```
-mamba install libllvm-c22 libllvm22 lit llvm llvm-tools llvm-tools-22 llvmdev
+mamba install libllvm-c23 libllvm23 lit llvm llvm-tools llvm-tools-23 llvmdev
 ```
 
 </details>
@@ -106,9 +106,9 @@ mamba install libllvm-c22 libllvm22 lit llvm llvm-tools llvm-tools-22 llvmdev
 
 ```
 # for adding to your local project
-pixi add libllvm-c22 libllvm22 lit llvm llvm-tools llvm-tools-22 llvmdev
+pixi add libllvm-c23 libllvm23 lit llvm llvm-tools llvm-tools-23 llvmdev
 # for installing globally
-pixi global install libllvm-c22 libllvm22 lit llvm llvm-tools llvm-tools-22 llvmdev
+pixi global install libllvm-c23 libllvm23 lit llvm llvm-tools llvm-tools-23 llvmdev
 ```
 
 </details>
@@ -116,13 +116,13 @@ pixi global install libllvm-c22 libllvm22 lit llvm llvm-tools llvm-tools-22 llvm
 Search package versions
 -----------------------
 
-It is possible to list all of the versions of `libllvm-c22` available on your platform:
+It is possible to list all of the versions of `libllvm-c23` available on your platform:
 
 <details>
 <summary>With conda</summary>
 
 ```
-conda search libllvm-c22 --channel conda-forge
+conda search libllvm-c23 --channel conda-forge/label/llvm_rc
 ```
 
 </details>
@@ -131,7 +131,7 @@ conda search libllvm-c22 --channel conda-forge
 <summary>With mamba</summary>
 
 ```
-mamba search libllvm-c22 --channel conda-forge
+mamba search libllvm-c23 --channel conda-forge/label/llvm_rc
 ```
 
 </details>
@@ -140,7 +140,7 @@ mamba search libllvm-c22 --channel conda-forge
 <summary>With pixi</summary>
 
 ```
-pixi search libllvm-c22 --channel conda-forge
+pixi search libllvm-c23 --channel conda-forge/label/llvm_rc
 ```
 
 </details>
@@ -150,13 +150,13 @@ pixi search libllvm-c22 --channel conda-forge
 
 ```
 # Search all versions available on your platform:
-mamba repoquery search libllvm-c22 --channel conda-forge
+mamba repoquery search libllvm-c23 --channel conda-forge/label/llvm_rc
 
-# List packages depending on `libllvm-c22`:
-mamba repoquery whoneeds libllvm-c22 --channel conda-forge
+# List packages depending on `libllvm-c23`:
+mamba repoquery whoneeds libllvm-c23 --channel conda-forge/label/llvm_rc
 
-# List dependencies of `libllvm-c22`:
-mamba repoquery depends libllvm-c22 --channel conda-forge
+# List dependencies of `libllvm-c23`:
+mamba repoquery depends libllvm-c23 --channel conda-forge/label/llvm_rc
 ```
 
 </details>
