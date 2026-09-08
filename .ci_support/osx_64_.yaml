@@ -19,7 +19,7 @@ libxml2_devel:
 macos_machine:
 - x86_64-apple-darwin13.4.0
 python_min:
-- '3.10'
+- '3.11'
 target_platform:
 - osx-64
 zlib:
