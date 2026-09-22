@@ -1,0 +1,67 @@
+Description: [AMDGPU] Fix insertSimulatedTrap to return correct continuation block
+ Backport of llvm/llvm-project@9429a1e809fd (PR #174774).
+ .
+ `insertSimulatedTrap` was returning `HaltLoopBB` when the trap was in a block
+ with no successors and was the last instruction. Since `HaltLoopBB` gets
+ appended to the end of the function, `FinalizeISel` would jump there and skip
+ any intermediate blocks, leaving their pseudos unexpanded. Those unexpanded
+ pseudos then reach the MC layer, which has no encoding for them, producing:
+ .
+     LLVM ERROR: Unsupported instruction : <MCInst NNNN ...>
+ .
+ The failure is deterministic on gfx1100/gfx1101/gfx1102 (RDNA3 desktop:
+ RX 7900/7800/7700/7600) for any HIP TU that contains an amdgpu_kernel whose
+ CFG matches the fix precondition. PyTorch 2.12's
+ aten/src/ATen/native/hip/Loss.hip (NLL loss backward) is one such TU and
+ FTBFSes on ROCm 7.2 without this fix.
+ .
+ Fix by returning `MBB.getNextNode()` unconditionally:
+   - After splitAt(): getNextNode() returns the split-off block (ContBB)
+   - No split, MBB in middle: getNextNode() returns the next original block
+   - No split, MBB was last: getNextNode() returns HaltLoopBB (just pushed)
+ .
+ Since we always push_back(HaltLoopBB) before returning, getNextNode() can
+ never be nullptr: if MBB was the last block, HaltLoopBB is now after it.
+From: Talha Can Havadar <havadartalha@gmail.com>
+Author: Prasoon Mishra <Prasoon.Mishra@amd.com>
+Origin: upstream, https://github.com/llvm/llvm-project/commit/9429a1e809fd
+Bug: https://github.com/llvm/llvm-project/issues/208912
+Applied-Upstream: https://github.com/llvm/llvm-project/pull/174774
+Last-Update: 2026-07-11
+
+Index: llvm-toolchain-22/llvm/lib/Target/AMDGPU/SIInstrInfo.cpp
+===================================================================
+--- llvm-toolchain-22.orig/llvm/lib/Target/AMDGPU/SIInstrInfo.cpp
++++ llvm-toolchain-22/llvm/lib/Target/AMDGPU/SIInstrInfo.cpp
+@@ -1970,21 +1970,15 @@ MachineBasicBlock *SIInstrInfo::insertSi
+   constexpr unsigned ECQueueWaveAbort = 0x400;
+ 
+   MachineBasicBlock *TrapBB = &MBB;
+-  MachineBasicBlock *ContBB = &MBB;
+   MachineBasicBlock *HaltLoopBB = MF->CreateMachineBasicBlock();
+ 
+   if (!MBB.succ_empty() || std::next(MI.getIterator()) != MBB.end()) {
+-    ContBB = MBB.splitAt(MI, /*UpdateLiveIns=*/false);
++    MBB.splitAt(MI, /*UpdateLiveIns=*/false);
+     TrapBB = MF->CreateMachineBasicBlock();
+     BuildMI(MBB, MI, DL, get(AMDGPU::S_CBRANCH_EXECNZ)).addMBB(TrapBB);
+     MF->push_back(TrapBB);
+     MBB.addSuccessor(TrapBB);
+-  } else {
+-    // Since we're adding HaltLoopBB and modifying the CFG, we must return a
+-    // different block to signal the change.
+-    ContBB = HaltLoopBB;
+   }
+-
+   // Start with a `s_trap 2`, if we're in PRIV=1 and we need the workaround this
+   // will be a nop.
+   BuildMI(*TrapBB, TrapBB->end(), DL, get(AMDGPU::S_TRAP))
+@@ -2020,7 +2014,7 @@ MachineBasicBlock *SIInstrInfo::insertSi
+   MF->push_back(HaltLoopBB);
+   HaltLoopBB->addSuccessor(HaltLoopBB);
+ 
+-  return ContBB;
++  return MBB.getNextNode();
+ }
+ 
+ unsigned SIInstrInfo::getNumWaitStates(const MachineInstr &MI) {

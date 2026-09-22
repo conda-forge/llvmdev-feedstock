@@ -16,9 +16,11 @@ source:
   sha256: ad18b70e287954c3d62bc7e0b86e7b7af2adf87bcfce21c15fe717f101d7aace
   patches:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
+    # Backport https://github.com/llvm/llvm-project/pull/174774
+    - patches/0002-amdgpu-fix-simulated-trap-continuation-block.patch
 
 build:
-  number: 2
+  number: 3
   merge_build_host: false
 
 requirements:
