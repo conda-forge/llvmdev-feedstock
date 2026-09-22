@@ -11,7 +11,7 @@ github_actions_labels:
 libxml2_devel:
 - '2.15'
 python_min:
-- '3.10'
+- '3.11'
 target_platform:
 - win-64
 zlib:
