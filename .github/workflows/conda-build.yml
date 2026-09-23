@@ -59,7 +59,7 @@ jobs:
             runs_on: ['ubuntu-latest']
             tools_install_dir: ~/miniforge3
           - CONFIG: linux_riscv64_
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma10
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-riscv64:rocky10
             STORE_BUILD_ARTIFACTS: False
             UPLOAD_PACKAGES: True
             build_workspace_dir: build_artifacts
@@ -68,7 +68,7 @@ jobs:
             os: ubuntu
             pagefile_size: 0
             resize_partitions: False
-            runs_on: ['ubuntu-latest']
+            runs_on: ['ubuntu-24.04-riscv']
             tools_install_dir: ~/miniforge3
           - CONFIG: win_64_
             STORE_BUILD_ARTIFACTS: False
@@ -114,6 +114,33 @@ jobs:
           docker run --rm --privileged multiarch/qemu-user-static:register --reset --credential yes
         fi
 
+    # TEST ONLY, not part of the rendered workflow: measure what a native
+    # riscv64 build actually needs, to size node swap (riseproject-dev/riscv-runner#114).
+    - name: Start resource sampler
+      if: matrix.os == 'ubuntu'
+      shell: bash
+      run: |
+        cat > /tmp/sampler.sh <<'EOS'
+        #!/bin/bash
+        anon_peak=0; cur_peak=0; swap_peak=0
+        while [ -r /sys/fs/cgroup/memory.stat ]; do
+          anon=$(awk '/^anon /{print $2}' /sys/fs/cgroup/memory.stat 2>/dev/null || echo 0)
+          cur=$(cat /sys/fs/cgroup/memory.current 2>/dev/null || echo 0)
+          swap=$(cat /sys/fs/cgroup/memory.swap.current 2>/dev/null || echo 0)
+          [ "${anon:-0}" -gt "$anon_peak" ] && anon_peak=$anon
+          [ "${cur:-0}" -gt "$cur_peak" ] && cur_peak=$cur
+          [ "${swap:-0}" -gt "$swap_peak" ] && swap_peak=$swap
+          printf '%s %s %s\n' "$anon_peak" "$cur_peak" "$swap_peak" > /tmp/mem-peaks
+          sleep 10
+        done
+        EOS
+        chmod +x /tmp/sampler.sh
+        nohup setsid /tmp/sampler.sh >/dev/null 2>&1 &
+        echo "machine: $(uname -m), $(nproc) cores, $(free -g | awk '/^Mem:/{print $2}') GiB RAM"
+        echo "node swap: $(swapon --show --noheadings || echo none)"
+        echo "cgroup memory.swap.max: $(cat /sys/fs/cgroup/memory.swap.max 2>/dev/null || echo n/a)"
+        echo "disk free before build: $(df -h / | awk 'NR==2{print $4}')"
+
     - name: Build on Linux
       id: build-linux
       if: matrix.os == 'ubuntu'
@@ -145,6 +172,27 @@ jobs:
           export IS_PR_BUILD="False"
         fi
         ./.scripts/run_docker_build.sh
+
+
+    - name: Report resource usage
+      if: always() && matrix.os == 'ubuntu'
+      shell: bash
+      run: |
+        gib() { awk -v b="${1:-0}" 'BEGIN { printf "%.2f", b / 1073741824 }'; }
+        read -r anon cur swap < /tmp/mem-peaks 2>/dev/null || { echo "no samples collected"; exit 0; }
+        {
+          echo "### ${{ matrix.CONFIG }} on $(uname -m)"
+          echo ""
+          echo "| metric | value |"
+          echo "|---|---|"
+          echo "| peak anonymous memory | $(gib "$anon") GiB |"
+          echo "| peak memory.current (incl. page cache) | $(gib "$cur") GiB |"
+          echo "| peak swap used | $(gib "$swap") GiB |"
+          echo "| cgroup memory.swap.max | $(cat /sys/fs/cgroup/memory.swap.max 2>/dev/null || echo n/a) |"
+          echo "| node swap | $(swapon --show=NAME,SIZE --noheadings | tr '\n' ' ' || echo none) |"
+          echo "| cores / RAM | $(nproc) / $(free -g | awk '/^Mem:/{print $2}') GiB |"
+          echo "| disk free after build | $(df -h / | awk 'NR==2{print $4}') |"
+        } | tee -a "$GITHUB_STEP_SUMMARY"
 
     - name: Build on macOS
       id: build-macos
