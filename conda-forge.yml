@@ -5,6 +5,9 @@ bot:
 build_platform:
   linux_ppc64le: linux_64
   linux_riscv64: linux_64
+  osx_64: osx_arm64
+  # no native large win-arm64 runners yet:
+  # https://github.com/conda-forge/admin-requests/issues/2361
   win_arm64: win_64
 conda_build:
   pkg_format: '2'
