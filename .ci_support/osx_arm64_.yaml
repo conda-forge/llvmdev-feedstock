@@ -1,5 +1,3 @@
-MACOSX_DEPLOYMENT_TARGET:
-- '11.0'
 MACOSX_SDK_VERSION:
 - '11.0'
 c_stdlib:
@@ -13,13 +11,13 @@ channel_targets:
 cxx_compiler:
 - clang_bootstrap
 cxx_compiler_version:
-- '18'
-libxml2:
-- '2.13'
+- '21'
+libxml2_devel:
+- '2.15'
 macos_machine:
 - arm64-apple-darwin20.0.0
 python_min:
-- '3.9'
+- '3.11'
 target_platform:
 - osx-arm64
 zlib:
