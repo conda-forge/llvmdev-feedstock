@@ -68,7 +68,7 @@ jobs:
             os: ubuntu
             pagefile_size: 0
             resize_partitions: False
-            runs_on: ['ubuntu-24.04-riscv']
+            runs_on: ['ubuntu-24.04-riscv', 'ur']
             tools_install_dir: ~/miniforge3
           - CONFIG: win_64_
             STORE_BUILD_ARTIFACTS: False
