@@ -15,7 +15,14 @@ Current build status
 ====================
 
 
-<table>
+<table><tr>
+    <td>GitHub Actions</td>
+    <td>
+      <a href="https://github.com/conda-forge/llvmdev-feedstock/actions/workflows/conda-build.yml">
+        <img src="https://github.com/conda-forge/llvmdev-feedstock/actions/workflows/conda-build.yml/badge.svg?event=push&branch=main">
+      </a>
+    </td>
+  </tr>
     
   <tr>
     <td>Azure</td>
@@ -29,27 +36,6 @@ Current build status
         <table>
           <thead><tr><th>Variant</th><th>Status</th></tr></thead>
           <tbody><tr>
-              <td>linux_64</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>linux_aarch64</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>linux_ppc64le</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_ppc64le_" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
               <td>osx_64</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
@@ -61,13 +47,6 @@ Current build status
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
                   <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_arm64_" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>win_64</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=593&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/llvmdev-feedstock?branchName=main&jobName=win&configuration=win%20win_64_" alt="variant">
                 </a>
               </td>
             </tr>
@@ -83,12 +62,12 @@ Current release info
 
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm--c21-green.svg)](https://anaconda.org/conda-forge/libllvm-c21) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm-c21.svg)](https://anaconda.org/conda-forge/libllvm-c21) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm-c21.svg)](https://anaconda.org/conda-forge/libllvm-c21) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm-c21.svg)](https://anaconda.org/conda-forge/libllvm-c21) |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm21-green.svg)](https://anaconda.org/conda-forge/libllvm21) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm21.svg)](https://anaconda.org/conda-forge/libllvm21) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm21.svg)](https://anaconda.org/conda-forge/libllvm21) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm21.svg)](https://anaconda.org/conda-forge/libllvm21) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm--c24-green.svg)](https://anaconda.org/conda-forge/libllvm-c24) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm-c24.svg)](https://anaconda.org/conda-forge/libllvm-c24) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm-c24.svg)](https://anaconda.org/conda-forge/libllvm-c24) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm-c24.svg)](https://anaconda.org/conda-forge/libllvm-c24) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libllvm24-green.svg)](https://anaconda.org/conda-forge/libllvm24) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libllvm24.svg)](https://anaconda.org/conda-forge/libllvm24) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libllvm24.svg)](https://anaconda.org/conda-forge/libllvm24) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libllvm24.svg)](https://anaconda.org/conda-forge/libllvm24) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-lit-green.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/lit.svg)](https://anaconda.org/conda-forge/lit) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvm-green.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm.svg)](https://anaconda.org/conda-forge/llvm) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvm--tools-green.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm-tools.svg)](https://anaconda.org/conda-forge/llvm-tools) |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-llvm--tools--21-green.svg)](https://anaconda.org/conda-forge/llvm-tools-21) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm-tools-21.svg)](https://anaconda.org/conda-forge/llvm-tools-21) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm-tools-21.svg)](https://anaconda.org/conda-forge/llvm-tools-21) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm-tools-21.svg)](https://anaconda.org/conda-forge/llvm-tools-21) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-llvm--tools--24-green.svg)](https://anaconda.org/conda-forge/llvm-tools-24) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvm-tools-24.svg)](https://anaconda.org/conda-forge/llvm-tools-24) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvm-tools-24.svg)](https://anaconda.org/conda-forge/llvm-tools-24) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvm-tools-24.svg)](https://anaconda.org/conda-forge/llvm-tools-24) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-llvmdev-green.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/llvmdev.svg)](https://anaconda.org/conda-forge/llvmdev) |
 
 Installing llvmdev
@@ -101,42 +80,87 @@ conda config --add channels conda-forge/label/llvm_dev
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge/label/llvm_dev` channel has been enabled, `libllvm-c21, libllvm21, lit, llvm, llvm-tools, llvm-tools-21, llvmdev` can be installed with `conda`:
+How to use
+----------
+
+<details>
+<summary>With conda</summary>
 
 ```
-conda install libllvm-c21 libllvm21 lit llvm llvm-tools llvm-tools-21 llvmdev
+conda install libllvm-c24 libllvm24 lit llvm llvm-tools llvm-tools-24 llvmdev
 ```
 
-or with `mamba`:
+</details>
+
+<details>
+<summary>With mamba</summary>
 
 ```
-mamba install libllvm-c21 libllvm21 lit llvm llvm-tools llvm-tools-21 llvmdev
+mamba install libllvm-c24 libllvm24 lit llvm llvm-tools llvm-tools-24 llvmdev
 ```
 
-It is possible to list all of the versions of `libllvm-c21` available on your platform with `conda`:
+</details>
+
+<details>
+<summary>With pixi</summary>
 
 ```
-conda search libllvm-c21 --channel conda-forge/label/llvm_dev
+# for adding to your local project
+pixi add libllvm-c24 libllvm24 lit llvm llvm-tools llvm-tools-24 llvmdev
+# for installing globally
+pixi global install libllvm-c24 libllvm24 lit llvm llvm-tools llvm-tools-24 llvmdev
 ```
 
-or with `mamba`:
+</details>
+
+Search package versions
+-----------------------
+
+It is possible to list all of the versions of `libllvm-c24` available on your platform:
+
+<details>
+<summary>With conda</summary>
 
 ```
-mamba search libllvm-c21 --channel conda-forge/label/llvm_dev
+conda search libllvm-c24 --channel conda-forge/label/llvm_dev
 ```
 
-Alternatively, `mamba repoquery` may provide more information:
+</details>
+
+<details>
+<summary>With mamba</summary>
+
+```
+mamba search libllvm-c24 --channel conda-forge/label/llvm_dev
+```
+
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+pixi search libllvm-c24 --channel conda-forge/label/llvm_dev
+```
+
+</details>
+
+<details>
+<summary>With mamba repoquery, which may provide more information</summary>
 
 ```
 # Search all versions available on your platform:
-mamba repoquery search libllvm-c21 --channel conda-forge/label/llvm_dev
+mamba repoquery search libllvm-c24 --channel conda-forge/label/llvm_dev
 
-# List packages depending on `libllvm-c21`:
-mamba repoquery whoneeds libllvm-c21 --channel conda-forge/label/llvm_dev
+# List packages depending on `libllvm-c24`:
+mamba repoquery whoneeds libllvm-c24 --channel conda-forge/label/llvm_dev
 
-# List dependencies of `libllvm-c21`:
-mamba repoquery depends libllvm-c21 --channel conda-forge/label/llvm_dev
+# List dependencies of `libllvm-c24`:
+mamba repoquery depends libllvm-c24 --channel conda-forge/label/llvm_dev
 ```
+
+</details>
+
 
 
 About conda-forge
@@ -153,19 +177,17 @@ for each of the installable packages. Such a repository is known as a *feedstock
 A feedstock is made up of a conda recipe (the instructions on what and how to build
 the package) and the necessary configurations for automatic building using freely
 available continuous integration services. Thanks to the awesome service provided by
-[Azure](https://azure.microsoft.com/en-us/services/devops/), [GitHub](https://github.com/),
-[CircleCI](https://circleci.com/), [AppVeyor](https://www.appveyor.com/),
-[Drone](https://cloud.drone.io/welcome), and [TravisCI](https://travis-ci.com/)
+[Azure](https://azure.microsoft.com/en-us/services/devops/) and [GitHub](https://github.com/)
 it is possible to build and upload installable packages to the
 [conda-forge](https://anaconda.org/conda-forge) [anaconda.org](https://anaconda.org/)
 channel for Linux, Windows and OSX respectively.
 
-To manage the continuous integration and simplify feedstock maintenance
+To manage the continuous integration and simplify feedstock maintenance,
 [conda-smithy](https://github.com/conda-forge/conda-smithy) has been developed.
 Using the ``conda-forge.yml`` within this repository, it is possible to re-render all of
 this feedstock's supporting files (e.g. the CI configuration files) with ``conda smithy rerender``.
 
-For more information please check the [conda-forge documentation](https://conda-forge.org/docs/).
+For more information, please check the [conda-forge documentation](https://conda-forge.org/docs/).
 
 Terminology
 ===========
@@ -192,7 +214,7 @@ merged, the recipe will be re-built and uploaded automatically to the
 everybody to install and use from the `conda-forge` channel.
 Note that all branches in the conda-forge/llvmdev-feedstock are
 immediately built and any created packages are uploaded, so PRs should be based
-on branches in forks and branches in the main repository should only be used to
+on branches in forks, and branches in the main repository should only be used to
 build distinct package versions.
 
 In order to produce a uniquely identifiable distribution:
@@ -211,7 +233,6 @@ Feedstock Maintainers
 * [@inducer](https://github.com/inducer/)
 * [@isuruf](https://github.com/isuruf/)
 * [@jakirkham](https://github.com/jakirkham/)
-* [@mingwandroid](https://github.com/mingwandroid/)
 * [@timsnyder](https://github.com/timsnyder/)
 * [@xhochy](https://github.com/xhochy/)
 
