@@ -17,6 +17,8 @@ source:
   sha256: caab53af0743e12c0bb4d3c616c29d9f275c9c35da61853f35f46755b037e9c8
   patches:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
+    # suggested fixup for https://github.com/llvm/llvm-project/pull/223351
+    - patches/0002-add-REQUIRES-asserts-to-inst-select-extendedLLTs-err.patch
 
 build:
   number: 0
