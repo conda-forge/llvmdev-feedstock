@@ -6,5 +6,8 @@ cxx_compiler:          # [osx]
 github_actions_labels:                   # [win]
   - namespace-profile-8cpu-on-win-64     # [win]
 
+c_stdlib_version:           # [osx]
+  - 15.5                    # [osx]
+
 channel_targets:
   - conda-forge llvm_dev
