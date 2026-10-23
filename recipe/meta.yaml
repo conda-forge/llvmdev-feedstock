@@ -1,4 +1,4 @@
-{% set version = "21.0.0.dev2" %}
+{% set version = "24.0.0.dev1" %}
 {% set major_ver = version.split(".")[0] %}
 {% set tail_ver = version.split(".")[-1] %}
 {% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
@@ -13,12 +13,9 @@ package:
 
 source:
   # url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-  url: https://github.com/llvm/llvm-project/archive/eb0f1dc00e5d0e591fe912c1aaf9dd9d01d94b8d.tar.gz
-  sha256: 76ff464edb800d21d041dfe9fcfdbd05063ad71c000a2a6d9c04dd638d315e1f
+  url: https://github.com/llvm/llvm-project/archive/272c1100586b9edc0276e4594f95f3b34446eb83.tar.gz
+  sha256: c567a1a10697c85d10366733d4ae09bda62b10e150cb3831415ee345cac4d4f3
   patches:
-    # - patches/intel-D47188-svml-VF.patch    # Fixes vectorizer and extends SVML support
-    # - patches/expect-fastmath-entrypoints-in-add-TLI-mappings.ll.patch # adjusts test added in 10.0.0 for intel-D47188-svml-VF.patch effects
-    # - patches/amd-roc-2.7.0.diff
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
 
 build:
@@ -37,7 +34,7 @@ requirements:
     - libcxx {{ cxx_compiler_version }}  # [osx]
     # needs aarch/ppc/arm (re)build of conda-forge/backtrace-feedstock
     - backtrace                          # [unix and x86]
-    - libxml2
+    - libxml2-devel
     - zlib
     - zstd
 
@@ -89,10 +86,6 @@ outputs:
         - if not exist %LIBRARY_BIN%\llvm-nm.exe exit 1                 # [win]
         - llvm-nm.exe --help                                            # [win]
 
-        # ensure we've correctly inserted %VSINSTALLDIR% into the CMake metadata for LLVM;
-        # we're looking for: `INTERFACE_LINK_LIBRARIES "$ENV{VSINSTALLDIR}/DIA SDK/lib/amd64/diaguids.lib;[...]`instead
-        - rg -e "INTERFACE_LINK_LIBRARIES\s\"\$ENV\{VSINSTALLDIR\}[/\w\s]+/diaguids\.lib" %LIBRARY_LIB%\cmake\llvm\LLVMExports.cmake  # [win]
-
   # Contains the shared libraries. To make different LLVM libraries co-installable
   # soversion is appended to the package name.
   - name: libllvm{{ major_ver }}
@@ -111,7 +104,7 @@ outputs:
         - libcxx {{ cxx_compiler_version }}  # [osx]
       host:
         - libcxx {{ cxx_compiler_version }}  # [osx]
-        - libxml2   # [unix]
+        - libxml2-devel                      # [unix]
         - zlib
         - zstd
       run:
@@ -124,7 +117,9 @@ outputs:
         - test -f $PREFIX/lib/libLLVM-{{ major_ver }}{{ extra }}.dylib  # [osx]
         # new style
         - test -f $PREFIX/lib/libLLVM.so.{{ maj_min }}{{ extra }}       # [linux]
+        - test -f $PREFIX/lib/libLTO.so.{{ maj_min }}{{ extra }}        # [linux]
         - test -f $PREFIX/lib/libLLVM.{{ maj_min }}{{ extra }}.dylib    # [osx]
+        - test -f $PREFIX/lib/libLTO.{{ maj_min }}{{ extra }}.dylib     # [osx]
 
   # This is a meta package so that people can use the latest libllvm and also
   # for run_exports
@@ -136,7 +131,7 @@ outputs:
       build:
       host:
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}     # [not win]
-        - libxml2
+        - libxml2-devel
         - zlib
         - zstd
       run:                                                            # [not win]
@@ -204,9 +199,9 @@ outputs:
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [not win]
         # on unix, there's only symlinks
-        - libxml2   # [win]
-        - zlib      # [win]
-        - zstd      # [win]
+        - libxml2-devel     # [win]
+        - zlib              # [win]
+        - zstd              # [win]
       run:
         - {{ pin_subpackage("libllvm" ~ major_ver, exact=True) }}
         - {{ pin_subpackage("llvm-tools-" ~ major_ver, exact=True) }}   # [not win]
@@ -297,7 +292,6 @@ extra:
     - JohanMabille
     - inducer
     - jakirkham
-    - mingwandroid
     - SylvainCorlay
     - isuruf
     - timsnyder
