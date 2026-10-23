@@ -13,8 +13,8 @@ package:
 
 source:
   # url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-  url: https://github.com/llvm/llvm-project/archive/10e68db7b852869cbaf96d0f565b2b91a615093a.tar.gz
-  sha256: 60fb1be5492f2bb98b6cf543df6078b8979ca2b2f12a15c42939e9b33250993f
+  url: https://github.com/llvm/llvm-project/archive/2e750162eb4396715dbeb06fc97a8bd1e29adda8.tar.gz
+  sha256: caab53af0743e12c0bb4d3c616c29d9f275c9c35da61853f35f46755b037e9c8
   patches:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
 

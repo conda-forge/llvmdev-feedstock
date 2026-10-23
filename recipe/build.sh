@@ -73,6 +73,8 @@ if [[ ${CONDA_BUILD_CROSS_COMPILATION:-0} != "1" ]]; then
 
   if [[ "$target_platform" == linux* ]]; then
     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
+    # currently fails; see https://github.com/llvm/llvm-project/pull/234199
+    rm ../llvm/test/CodeGen/AMDGPU/dead-mi-elim-require-ssa.mir
     # check-llvm takes >1.5h to build & run on osx
     ninja -j${CPU_COUNT} check-llvm
   else
