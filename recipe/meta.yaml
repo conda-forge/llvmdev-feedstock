@@ -13,12 +13,10 @@ package:
 
 source:
   # url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-  url: https://github.com/llvm/llvm-project/archive/2e750162eb4396715dbeb06fc97a8bd1e29adda8.tar.gz
-  sha256: caab53af0743e12c0bb4d3c616c29d9f275c9c35da61853f35f46755b037e9c8
+  url: https://github.com/llvm/llvm-project/archive/272c1100586b9edc0276e4594f95f3b34446eb83.tar.gz
+  sha256: c567a1a10697c85d10366733d4ae09bda62b10e150cb3831415ee345cac4d4f3
   patches:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
-    # suggested fixup for https://github.com/llvm/llvm-project/pull/223351
-    - patches/0002-add-REQUIRES-asserts-to-inst-select-extendedLLTs-err.patch
 
 build:
   number: 0
