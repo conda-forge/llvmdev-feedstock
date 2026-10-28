@@ -35,7 +35,8 @@ fi
 # native riscv64 runners have ~2 GiB RAM per core and no swap; too many
 # concurrent GNU ld links of libLLVM and the tools can run out of memory
 if [[ "$target_platform" == "linux-riscv64" ]]; then
-  CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_PARALLEL_LINK_JOBS=4"
+  CMAKE_ARGS="${CMAKE_ARGS} -DLLVM_PARALLEL_LINK_JOBS=1"
+  export CMAKE_BUILD_PARALLEL_LEVEL=1
 fi
 
 cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
