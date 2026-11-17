@@ -1,4 +1,4 @@
-{% set version = "23.1.5" %}
+{% set version = "23.1.6" %}
 {% set major_ver = version.split(".")[0] %}
 {% set tail_ver = version.split(".")[-1] %}
 {% set maj_min = major_ver ~ "." ~ version.split(".")[1] %}
@@ -13,7 +13,7 @@ package:
 
 source:
   url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ version.replace(".rc", "-rc") }}.tar.gz
-  sha256: 70642a7e44e63c0ceff6624e5fd077b87766e4ed0bcd4a3ea8e3ffa3827ba538
+  sha256: 66b37a51976c46ad86f49a2304c4dfd64be971f858846dfffaa8a32632474bb8
   patches:
     - patches/0001-pass-through-QEMU_LD_PREFIX-SDKROOT.patch
 
