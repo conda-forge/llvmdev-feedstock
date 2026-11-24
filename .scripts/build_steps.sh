@@ -53,6 +53,12 @@ echo > "${MINIFORGE_HOME}"/conda-meta/history
     --override-channels --channel conda-forge --strict-channel-priority \
     pip  python=3.14 conda-build conda-forge-ci-setup=4 "conda-build>=26.3"
 
+# TEST ONLY, not part of the rendered script: conda-build with
+# zstd_compression_threads (conda/conda-build#6242), not yet released.
+SETUPTOOLS_SCM_PRETEND_VERSION=26.11.0.dev0 "${MINIFORGE_HOME}/bin/python" -m pip install --no-deps \
+    "https://github.com/conda/conda-build/archive/e3e0cd4563cf228bfa6712372810f92758ad2a31.tar.gz"
+"${MINIFORGE_HOME}/bin/conda-build" --help | grep -- --zstd-compression-threads
+
 ( endgroup "Provisioning base env with micromamba" ) 2> /dev/null
 
 ( startgroup "Configuring conda" ) 2> /dev/null
