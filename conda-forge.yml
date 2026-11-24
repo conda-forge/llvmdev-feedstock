@@ -13,6 +13,8 @@ conda_build:
   # use highest possible compression (smaller package -> less upload time) to try to
   # combat timouts on windows see https://github.com/conda/infrastructure/issues/1159
   zstd_compression_level: 22
+  # multi-threaded compression (conda/conda-build#6242); -1 = all CPUs
+  zstd_compression_threads: -1
 conda_forge_output_validation: true
 github:
   branch_name: main
