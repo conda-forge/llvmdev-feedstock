@@ -1,3 +1,5 @@
+DOCKER_PLATFORM:
+- linux/aarch64
 c_stdlib:
 - sysroot
 c_stdlib_version:
@@ -11,11 +13,11 @@ cxx_compiler:
 cxx_compiler_version:
 - '14'
 docker_image:
-- quay.io/condaforge/linux-anvil-x86_64:alma9
+- quay.io/condaforge/linux-anvil-aarch64:alma10
 libxml2_devel:
-- '2.14'
+- '2.15'
 python_min:
-- '3.10'
+- '3.11'
 target_platform:
 - linux-aarch64
 variant:
@@ -23,4 +25,4 @@ variant:
 zlib:
 - '1'
 zstd:
-- '1.5'
+- '1.6'
