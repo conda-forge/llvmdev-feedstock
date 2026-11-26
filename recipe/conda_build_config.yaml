@@ -1,4 +1,8 @@
 c_compiler:            # [osx]
   - clang_bootstrap    # [osx]
+c_compiler_version:    # [osx]
+  - 19                 # [osx]
 cxx_compiler:          # [osx]
   - clang_bootstrap    # [osx]
+cxx_compiler_version:  # [osx]
+  - 19                 # [osx]
