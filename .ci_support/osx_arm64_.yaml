@@ -11,7 +11,7 @@ channel_targets:
 cxx_compiler:
 - clang_bootstrap
 cxx_compiler_version:
-- '22'
+- '21'
 libxml2_devel:
 - '2.15'
 macos_machine:
