@@ -5,16 +5,18 @@ channel_sources:
 channel_targets:
 - conda-forge main
 cxx_compiler:
-- vs2022
+- vs
+cxx_compiler_version:
+- '2022'
 github_actions_labels:
 - namespace-profile-8cpu-on-win-64
 libxml2_devel:
 - '2.15'
 python_min:
-- '3.10'
+- '3.11'
 target_platform:
 - win-64
 zlib:
 - '1'
 zstd:
-- '1.5'
+- '1.6'
