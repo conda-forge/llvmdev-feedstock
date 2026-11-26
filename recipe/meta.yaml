@@ -20,7 +20,7 @@ source:
     - patches/0002-amdgpu-fix-simulated-trap-continuation-block.patch
 
 build:
-  number: 3
+  number: 4
   merge_build_host: false
 
 requirements:
