@@ -4,7 +4,6 @@ bot:
   - 21.x
 build_platform:
   linux_ppc64le: linux_64
-  linux_riscv64: linux_64
   osx_64: osx_arm64
   # no native large win-arm64 runners yet:
   # https://github.com/conda-forge/admin-requests/issues/2361
@@ -14,12 +13,15 @@ conda_build:
   # use highest possible compression (smaller package -> less upload time) to try to
   # combat timouts on windows see https://github.com/conda/infrastructure/issues/1159
   zstd_compression_level: 22
+  # multi-threaded compression (conda/conda-build#6242); -1 = all CPUs
+  zstd_compression_threads: -1
 conda_forge_output_validation: true
 github:
   branch_name: main
   tooling_branch_name: main
 provider:
   linux_aarch64: default
+  linux_riscv64: default
   osx_arm64: default
   win_64: github_actions
 test: native_and_emulated

@@ -71,7 +71,8 @@ fi
 if [[ ${CONDA_BUILD_CROSS_COMPILATION:-0} != "1" ]]; then
   # bin/opt -S -vector-library=SVML $TEST_CPU_FLAG -O3 $RECIPE_DIR/numba-3016.ll | bin/FileCheck $RECIPE_DIR/numba-3016.ll || exit $?
 
-  if [[ "$target_platform" == linux* ]]; then
+  # avoid full test suite on riscv due to runtime & resource constraints
+  if [[ "$target_platform" == linux* && "$target_platform" != "linux-riscv64" ]]; then
     ln -s $(which $CC) $BUILD_PREFIX/bin/gcc
     # check-llvm takes >1.5h to build & run on osx
     ninja -j${CPU_COUNT} check-llvm
